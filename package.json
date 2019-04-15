@@ -1,0 +1,75 @@
+{
+  "name": "psmfc-pmep",
+  "description": "A simple tool to explore various characteristics of estuaries along the U.S. West Coast.",
+  "version": "0.6.0",
+  "author": "Brendan C. Ward <bcward@consbio.org>",
+  "dependencies": {
+    "@mapbox/geo-viewport": "^0.4.0",
+    "@rebass/grid": "^6.0.0",
+    "babel-plugin-styled-components": "^1.10.0",
+    "gatsby": "^2.3.23",
+    "gatsby-background-image": "^0.3.3",
+    "gatsby-image": "^2.0.39",
+    "gatsby-plugin-catch-links": "^2.0.13",
+    "gatsby-plugin-google-analytics": "^2.0.18",
+    "gatsby-plugin-manifest": "^2.0.29",
+    "gatsby-plugin-offline": "^2.0.25",
+    "gatsby-plugin-react-helmet": "^3.0.12",
+    "gatsby-plugin-sharp": "^2.0.34",
+    "gatsby-plugin-sitemap": "^2.0.12",
+    "gatsby-plugin-styled-components": "^3.0.7",
+    "gatsby-plugin-typography": "^2.2.13",
+    "gatsby-source-filesystem": "^2.0.29",
+    "gatsby-transformer-sharp": "^2.1.18",
+    "immutable": "^4.0.0-rc.12",
+    "mapbox-gl": "^0.53.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-ga": "^2.5.7",
+    "react-helmet": "^5.2.0",
+    "react-icons": "^3.5.0",
+    "react-typography": "^0.16.19",
+    "rebass": "^3.1.0",
+    "styled-components": "^4.2.0",
+    "styled-system": "^4.1.0",
+    "typography": "^0.16.19",
+    "typography-theme-noriega": "^0.16.19"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "format": "prettier --write \"src/**/*.js\"",
+    "lint:scripts": "eslint './src/**/*.jsx' './src/**/*.js'",
+    "lint:styles": "stylelint './src/**/*.jsx' './src/**/*.js'",
+    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-plugin-import": "^2.17.1",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "prettier": "^1.17.0",
+    "pretty-quick": "^1.10.0",
+    "stylelint": "^9.10.1",
+    "stylelint-config-recommended": "^2.2.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/consbio/psmfc-pmep"
+  },
+  "bugs": {
+    "url": "https://github.com/consbio/psmfc-pmep/issues"
+  }
+}
