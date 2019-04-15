@@ -1,6 +1,8 @@
 import Typography from 'typography'
 import theme from 'typography-theme-noriega'
 
+import { theme as style } from 'util/style'
+
 theme.overrideThemeStyles = () => ({
   html: {
     overflowY: 'hidden',
@@ -20,6 +22,10 @@ theme.overrideThemeStyles = () => ({
   button: {
     outline: 'none',
     cursor: 'pointer',
+  },
+  'a, a:visited': {
+    color: '#3273dc',
+    textDecoration: 'none',
   },
 })
 

@@ -12,7 +12,7 @@ import styled, { themeGet } from 'util/style'
 const Content = styled(Container)`
   min-height: 20rem;
   height: 100%;
-  background-color: ${themeGet('colors.black')};
+  background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
 
   a {

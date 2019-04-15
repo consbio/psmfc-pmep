@@ -8,12 +8,7 @@ const Background = ({ fluid, children, credits, ...props }) => (
   <BackgroundImage fluid={fluid} {...props}>
     {children}
 
-    {credits && (
-      <Credits
-        author="stokes rx"
-        url="https://www.flickr.com/photos/stokesrx/6307999051"
-      />
-    )}
+    {credits && <Credits author={credits.author} url={credits.url} />}
   </BackgroundImage>
 )
 
