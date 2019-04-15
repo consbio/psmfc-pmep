@@ -3,7 +3,7 @@ import theme from 'typography-theme-noriega'
 
 theme.overrideThemeStyles = () => ({
   html: {
-    //   overflowY: 'scroll',
+    overflowY: 'hidden',
     height: '100%',
   },
   body: {

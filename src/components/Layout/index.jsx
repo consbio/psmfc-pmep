@@ -17,6 +17,7 @@ const Wrapper = styled(Flex).attrs({ flexDirection: 'column' })`
 
 const Content = styled.div`
   flex: 1 1 auto;
+  overflow-y: auto;
 `
 
 const Layout = ({ children }) => (

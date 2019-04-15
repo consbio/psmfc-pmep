@@ -21,7 +21,7 @@ const Wrapper = styled(Flex).attrs({
 
 const Title = styled.h1`
   margin: 0;
-  character-spacing: 0.1em;
+  font-weight: normal;
   flex-grow: 1;
 
   & * {
