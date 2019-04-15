@@ -1,8 +1,6 @@
 import Typography from 'typography'
 import theme from 'typography-theme-noriega'
 
-import { theme as style } from 'util/style'
-
 theme.overrideThemeStyles = () => ({
   html: {
     overflowY: 'hidden',

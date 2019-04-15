@@ -42,8 +42,7 @@ const SiteLogo = styled.img.attrs({
 `
 
 const NavLink = styled(Link)`
-  // margin-left: 2em;
-  color: #fff;
+  color: #fff !important;
   text-decoration: none;
   font-weight: 100;
   padding: 0.5em 1em;
