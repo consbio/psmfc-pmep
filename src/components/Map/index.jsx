@@ -84,9 +84,7 @@ const Map = ({ bounds, grid, location, onSelectFeature }) => {
 
       // add layers
       layers.forEach(layer => {
-        // add layer last so that outlines are on top of highlight
         map.addLayer(layer)
-        console.log('added layer', layer)
       })
     })
 

@@ -1,6 +1,8 @@
 // import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 
+import { isDebug } from 'util/dom'
+
 /**
  * Custom react hook to wrap getting data using GraphQL in gatsby
  * Returns [data, index]
@@ -54,9 +56,10 @@ export const useData = () => {
     return result
   }, {})
 
-  // debugging only!
-  window.data = data
-  window.index = index
+  if (isDebug) {
+    window.data = data
+    window.index = index
+  }
 
   return [data, index]
 }

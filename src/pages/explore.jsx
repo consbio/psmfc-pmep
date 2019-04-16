@@ -22,6 +22,8 @@ const Explore = () => {
 
   const filteredData = data.slice() // TODO: filter
 
+  const handleQueryChange = () => {}
+
   return (
     <Layout>
       <SEO title="Home" />
@@ -34,7 +36,10 @@ const Explore = () => {
             visible in the map.
           </HelpText>
 
-          <EstuariesList data={filteredData} />
+          <EstuariesList
+            data={filteredData}
+            onQueryChange={handleQueryChange}
+          />
         </Sidebar>
         <Map />
       </Wrapper>

@@ -2,6 +2,8 @@ import { useReducer } from 'react'
 import Crossfilter from 'crossfilter2'
 import { Map, List } from 'immutable'
 
+import { isDebug } from 'util/dom'
+
 // // Get counts based on current filters
 // const countByDimension = dimensions => {
 //     let dimCounts = Map()
@@ -79,9 +81,10 @@ export const useCrossfilter = (data, filters) => {
     return dimension
   })
 
-  // debugging only!
-  window.crossfilter = crossfilter
-  window.dimensions = dimensions
+  if (isDebug) {
+    window.crossfilter = crossfilter
+    window.dimensions = dimensions
+  }
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
