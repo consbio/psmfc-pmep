@@ -7,13 +7,13 @@ import styled, { themeGet } from 'util/style'
 const Wrapper = styled.div`
   font-size: smaller;
   text-align: right;
-  margin-right: 1rem;
   position: absolute;
   bottom: 0;
   right: 0;
   color: ${themeGet('colors.white')};
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 1rem;
   text-shadow: 1px 1px 3px ${themeGet('colors.black')};
+  background-color: rgba(0, 0, 0, 0.4);
 
   a {
     color: ${themeGet('colors.white')};
