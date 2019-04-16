@@ -33,7 +33,7 @@ const BioticList = styled.ul`
 const Background = () => {
   const data = useStaticQuery(graphql`
     query BackgroundSectionQuery {
-      image: file(relativePath: { eq: "Salmon_River_mouth_Oregon.jpg" }) {
+      image: file(relativePath: { eq: "5452214882_af06b1e896_o.jpg" }) {
         childImageSharp {
           fluid(maxWidth: 3200) {
             ...GatsbyImageSharpFluid_withWebp

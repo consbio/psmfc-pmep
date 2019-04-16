@@ -1,9 +1,10 @@
 import Typography from 'typography'
 import theme from 'typography-theme-noriega'
+import { theme as style } from 'util/style'
 
 theme.overrideThemeStyles = () => ({
   html: {
-    overflowY: 'hidden',
+    'overflow-y': 'hidden !important',
     height: '100%',
   },
   body: {
@@ -22,7 +23,7 @@ theme.overrideThemeStyles = () => ({
     cursor: 'pointer',
   },
   'a, a:visited': {
-    color: '#3273dc',
+    color: style.colors.link,
     textDecoration: 'none',
   },
 })

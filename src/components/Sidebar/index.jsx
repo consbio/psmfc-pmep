@@ -12,6 +12,7 @@ const Wrapper = styled(Box).attrs({
   flex: 0 0 auto;
   border-right: 1px solid ${themeGet('colors.grey.800')};
   padding: 1rem;
+  overflow-y: auto;
 `
 
 const Header = styled(Flex).attrs({

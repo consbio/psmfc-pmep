@@ -24,6 +24,7 @@ const mapboxToken =
 
 // extract biotic code and color info into Mapbox style expression
 // so that we can style the layer based on code
+// structure is: [code, color, code2, color2, ...]
 let bioticStyle = []
 Object.values(bioticInfo).forEach(({ vtID, color }) => {
   bioticStyle = bioticStyle.concat([vtID, color])
