@@ -9,7 +9,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'util/style'
 import { hasWindow } from 'util/dom'
 import { getCenterAndZoom } from 'util/map'
-import { config } from './config'
+import { config } from '../../../config/map'
 
 const Relative = styled.div`
   position: relative;

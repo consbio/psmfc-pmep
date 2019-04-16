@@ -1,10 +1,29 @@
-import { bioticInfo } from '../../../config/constants'
+import { bioticInfo } from './constants'
 
 export const transparentColor = 'rgba(0,0,0,0)'
 export const boundaryColor = '#a18ac9'
 export const selectedColor = '#ee7d14'
 
-// extract biotic info into Mapbox style expression
+// Boundaries vector tile source information
+const boundaries = {
+  tileURL:
+    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  sourceLayer: 'PMEP Estuary Extent:1',
+}
+
+// CMECS biotics vector tile source information
+const biotics = {
+  tileURL:
+    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
+}
+
+// Mapbox public token.  TODO: migrate to .env setting
+const mapboxToken =
+  'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
+
+// extract biotic code and color info into Mapbox style expression
+// so that we can style the layer based on code
 let bioticStyle = []
 Object.values(bioticInfo).forEach(({ vtID, color }) => {
   bioticStyle = bioticStyle.concat([vtID, color])
@@ -12,10 +31,11 @@ Object.values(bioticInfo).forEach(({ vtID, color }) => {
 // final entry must be the default color
 bioticStyle.push(transparentColor)
 
+/**
+ * Map configuration information used to construct map and populate layers
+ */
 export const config = {
-  // Mapbox public token.  TODO: migrate to .env setting
-  accessToken:
-    'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ',
+  accessToken: mapboxToken,
   center: [-120.9, 40.75],
   zoom: 4,
   minZoom: 1.75,
@@ -24,18 +44,14 @@ export const config = {
   sources: {
     boundaries: {
       type: 'vector',
-      tiles: [
-        'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-      ],
+      tiles: [boundaries.tileURL],
       minzoom: 4,
       maxzoom: 19,
       tileSize: 512,
     },
     biotics: {
       type: 'vector',
-      tiles: [
-        'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-      ],
+      tiles: [biotics.tileURL],
       minzoom: 5,
       maxzoom: 14,
       tileSize: 512,
@@ -45,7 +61,7 @@ export const config = {
     {
       id: 'boundaries-fill',
       source: 'boundaries',
-      'source-layer': 'PMEP Estuary Extent:1',
+      'source-layer': boundaries.sourceLayer,
       minzoom: 4,
       maxzoom: 22,
       type: 'fill',
@@ -59,7 +75,7 @@ export const config = {
     {
       id: 'boundaries-outline',
       source: 'boundaries',
-      'source-layer': 'PMEP Estuary Extent:1',
+      'source-layer': boundaries.sourceLayer,
       minzoom: 4,
       maxzoom: 22,
       type: 'line',
@@ -77,7 +93,7 @@ export const config = {
     {
       id: 'biotics-fill',
       source: 'biotics',
-      'source-layer': 'West Coast USA Estuarine Biotic Habitat',
+      'source-layer': biotics.sourceLayer,
       minzoom: 10,
       maxzoom: 22,
       type: 'fill',
