@@ -16,6 +16,10 @@ const Wrapper = styled(Flex)`
   height: 100%;
 `
 
+const StyledHelpText = styled(HelpText)`
+  padding: 0 1rem;
+`
+
 const Explore = () => {
   const [data, index] = useData()
   const [state, dispatch] = useCrossfilter(data, filters)
@@ -29,15 +33,15 @@ const Explore = () => {
       <SEO title="Home" />
       <Wrapper>
         <Sidebar icon="binoculars" title="Explore Estuaries">
-          <HelpText>
+          <StyledHelpText>
             Click on an estuary in the list below or in the map for more
             detailed information. Estuary boundaries will show on the map when
             you have zoomed far enough in. This list only shows estuaries
             visible in the map.
-          </HelpText>
+          </StyledHelpText>
 
           <EstuariesList
-            data={filteredData}
+            data={filteredData.slice()}
             onQueryChange={handleQueryChange}
           />
         </Sidebar>

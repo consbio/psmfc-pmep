@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { FaSearch } from 'react-icons/fa'
 import { Text } from 'rebass'
+import { FixedSizeList as List } from 'react-window'
+import useDimensions from 'react-use-dimensions'
 
 import { Flex, Box, Columns, Column } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
@@ -16,16 +18,22 @@ const sortOptions = [
   { label: 'north to south', sortFunc: (a, b) => b.lat - a.lat },
 ]
 
-const Wrapper = styled.div``
+const Wrapper = styled(Flex).attrs({
+  flex: '1 1 auto',
+  flexDirection: 'column',
+})``
 
 const Count = styled(Column)`
   color: ${themeGet('colors.grey.600')};
   font-size: 0.8em;
+  line-height: 1.2;
 `
 
 const SortOptions = styled(Column)`
   color: ${themeGet('colors.grey.600')};
   font-size: 0.8rem;
+  padding: 0 1rem;
+  line-height: 1.2;
 `
 
 const SortOption = styled.span`
@@ -42,7 +50,6 @@ const ActiveSortOption = styled(SortOption)`
 `
 
 const SearchBar = styled.div`
-  margin: 0 -1rem;
   background-color: ${themeGet('colors.grey.200')};
   padding: 0.25rem 1rem;
 `
@@ -65,48 +72,50 @@ const Input = styled.input`
   border: none;
 `
 
-const List = styled.ul`
-  padding: 0;
-  margin: 0;
-  list-style: none;
+const ListWrapper = styled.div`
+  flex: 1 1 auto;
 `
 
 const NoResults = styled(Box)`
   color: ${themeGet('colors.grey.600')};
   margin-top: 2rem;
+  text-align: center;
 `
 
 const EstuariesList = ({ data, onQueryChange }) => {
-  console.log('rerender estuaries list')
-
+  const listRef = useRef(null)
+  const [listWrapperRef, { height: listHeight }] = useDimensions()
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState(2) // default: north to south
 
   const handleQueryChange = ({ target: { value } }) => {
+    console.log(value)
     setQuery(value)
     // TODO: debounce
     // onQueryChange(value)
   }
 
-  //   const handleSortChange = (idx) => {
-  //       setSort(sortOptions[idx])
-  //   }
+  const handleSortChange = value => {
+    setSort(value)
+    listRef.current.scrollTo(0)
+  }
 
-  // make light copy here so that sort doesn't alter original data
-  const sortedData = data.slice().sort(sortOptions[sort].sortFunc)
+  const sortedData = data.sort(sortOptions[sort].sortFunc)
 
   return (
     <Wrapper>
-      <Columns>
+      <Columns px="1rem">
         <Count>{data.length} currently visible</Count>
         <SortOptions>
           <Text textAlign={['left', 'right']}>
             sort:&nbsp;
             {sortOptions.map(({ label }, idx) =>
               idx === sort ? (
-                <ActiveSortOption>{label}</ActiveSortOption>
+                <ActiveSortOption key={label}>{label}</ActiveSortOption>
               ) : (
-                <SortOption onClick={() => setSort(idx)}>{label}</SortOption>
+                <SortOption key={label} onClick={() => handleSortChange(idx)}>
+                  {label}
+                </SortOption>
               )
             )}
           </Text>
@@ -125,11 +134,20 @@ const EstuariesList = ({ data, onQueryChange }) => {
       </SearchBar>
 
       {sortedData.length ? (
-        <List>
-          {sortedData.map(({ id, ...props }) => (
-            <ListItem key={id} id={id} {...props} />
-          ))}
-        </List>
+        <ListWrapper ref={listWrapperRef}>
+          <List
+            ref={listRef}
+            itemData={sortedData}
+            height={listHeight || 100}
+            itemSize={72}
+            itemCount={sortedData.length}
+            itemKey={(i, items) => items[i].id}
+          >
+            {({ index, data: listData, style }) => (
+              <ListItem {...listData[index]} style={style} />
+            )}
+          </List>
+        </ListWrapper>
       ) : (
         <NoResults>No visible estuaries...</NoResults>
       )}

@@ -8,11 +8,19 @@ import styled, { themeGet } from 'util/style'
 
 const Wrapper = styled(Box).attrs({
   width: ['100%', '350px', '470px'],
+  flex: '0 0 auto',
 })`
-  flex: 0 0 auto;
   border-right: 1px solid ${themeGet('colors.grey.800')};
-  padding: 1rem;
-  overflow-y: auto;
+  height: 100%;
+`
+
+const InnerWrapper = styled(Flex).attrs({
+  flexDirection: 'column',
+  flex: '1 1 auto',
+})`
+  overflow-y: hidden; // handle this instead in inner components
+  overflow-x: hidden;
+  height: 100%;
 `
 
 const Header = styled(Flex).attrs({
@@ -20,7 +28,7 @@ const Header = styled(Flex).attrs({
   flexWrap: 'nowrap',
 })`
   line-height: 1;
-  margin-bottom: 1rem;
+  padding: 1rem;
 `
 
 const Icon = styled(FaIcon).attrs({})`
@@ -36,13 +44,15 @@ const Title = styled(Text).attrs({
 
 const Sidebar = ({ icon, title, children }) => (
   <Wrapper>
-    <Header>
-      <Text fontSize={['1.5rem', '1.75rem']}>
-        <Icon name={icon} />
-      </Text>
-      <Title>{title}</Title>
-    </Header>
-    {children}
+    <InnerWrapper>
+      <Header>
+        <Text fontSize={['1.5rem', '1.75rem']}>
+          <Icon name={icon} />
+        </Text>
+        <Title>{title}</Title>
+      </Header>
+      {children}
+    </InnerWrapper>
   </Wrapper>
 )
 

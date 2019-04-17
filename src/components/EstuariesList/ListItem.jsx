@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 
@@ -7,10 +7,15 @@ import styled, { themeGet, theme } from 'util/style'
 import { formatNumber } from 'util/format'
 import { stateNames } from '../../../config/constants'
 
-const Wrapper = styled.li`
-  margin: 0 -1rem;
-  padding: 0 1rem 0.5rem;
+const Wrapper = styled(Text).attrs({
+  fontSize: ['0.9rem', '0.8rem', '0.9rem'],
+})`
+  line-height: 1.2;
+  padding: 0.5rem 1rem;
   cursor: pointer;
+
+  color: ${themeGet('colors.grey.600')};
+  font-weight: 100;
 
   &:hover {
     background-color: ${theme.colors.primary[100]}50;
@@ -22,30 +27,24 @@ const Wrapper = styled.li`
   }
 `
 
-const Name = styled(Text)`
+const Name = styled.div`
   color: ${themeGet('colors.link')};
+  font-size: 1rem;
+  font-weight: normal;
 `
 
-const Info = styled(Text).attrs({
-  fontSize: ['0.8rem', '0.9rem'],
-})`
-  color: ${themeGet('colors.grey.600')};
-  font-weight: 100;
-`
-
-const RightInfo = styled(Info).attrs({ textAlign: ['left', 'right'] })``
-
-const ListItem = ({ id, name, type, state, acres, ...props }) => (
+const ListItem = ({ name, type, state, acres, ...props }) => (
   <Wrapper {...props}>
     <Columns>
       <Column>
         <Name>{name}</Name>
-        <Info>{stateNames[state] || ''}</Info>
+        {stateNames[state] || ''}
       </Column>
-
       <Column>
-        <RightInfo>{type}</RightInfo>
-        <RightInfo>({formatNumber(acres, 0)} acres)</RightInfo>
+        <Text textAlign="right">
+          {type}
+          <br />({formatNumber(acres, 0)} acres)
+        </Text>
       </Column>
     </Columns>
   </Wrapper>
@@ -57,7 +56,9 @@ ListItem.propTypes = {
   type: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
   acres: PropTypes.number.isRequired,
-  onSelectID: PropTypes.func.isRequired,
 }
 
-export default ListItem
+export default memo(
+  ListItem,
+  ({ id: prevID }, { id: nextID }) => nextID === prevID
+)
