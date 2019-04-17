@@ -16,7 +16,6 @@ const Wrapper = styled(Flex)`
 
 const Compare = () => {
   const [data, index] = useData()
-  console.log(data)
 
   return (
     <Layout>

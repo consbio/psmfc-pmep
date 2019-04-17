@@ -16,6 +16,7 @@ export const filters = [
     field: 'name',
     internal: true,
     getValue: ({ name }) => name.toLowerCase(),
+    filterFunc: value => name => name.includes(value),
   },
   {
     field: 'bounds',

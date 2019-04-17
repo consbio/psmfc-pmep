@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { useData } from 'components/Data'
-import { useCrossfilter } from 'components/Crossfilter'
+import { useCrossfilter, SET_FILTER } from 'components/Crossfilter'
 import Layout from 'components/Layout'
 import SEO from 'components/SEO'
 import Map from 'components/Map'
@@ -18,15 +18,38 @@ const Wrapper = styled(Flex)`
 
 const StyledHelpText = styled(HelpText)`
   padding: 0 1rem;
+  margin-bottom: 1rem;
 `
 
 const Explore = () => {
+  console.log('render explore')
+
   const [data, index] = useData()
   const [state, dispatch] = useCrossfilter(data, filters)
 
-  const filteredData = data.slice() // TODO: filter
+  console.log('dispatch', dispatch)
 
-  const handleQueryChange = () => {}
+  const filteredData = state
+    .get('data')
+    .toJS()
+    .slice() // slice into a new copy since we are sorting data elsewhere
+
+  console.log('filtered data', filteredData)
+
+  const handleQueryChange = query => {
+    console.log('query', query)
+    dispatch({
+      type: SET_FILTER,
+      payload: {
+        field: 'name',
+        filterValue: query,
+      },
+    })
+  }
+
+  const handleSelect = id => {
+    console.log('onSelect', id)
+  }
 
   return (
     <Layout>
@@ -43,6 +66,7 @@ const Explore = () => {
           <EstuariesList
             data={filteredData.slice()}
             onQueryChange={handleQueryChange}
+            onSelect={handleSelect}
           />
         </Sidebar>
         <Map />

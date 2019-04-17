@@ -51,7 +51,8 @@ const ActiveSortOption = styled(SortOption)`
 
 const SearchBar = styled.div`
   background-color: ${themeGet('colors.grey.200')};
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.25rem;
 `
 
 const SearchIcon = styled(FaSearch).attrs({
@@ -82,7 +83,7 @@ const NoResults = styled(Box)`
   text-align: center;
 `
 
-const EstuariesList = ({ data, onQueryChange }) => {
+const EstuariesList = ({ data, onQueryChange, onSelect }) => {
   const listRef = useRef(null)
   const [listWrapperRef, { height: listHeight }] = useDimensions()
   const [query, setQuery] = useState('')
@@ -92,7 +93,7 @@ const EstuariesList = ({ data, onQueryChange }) => {
     console.log(value)
     setQuery(value)
     // TODO: debounce
-    // onQueryChange(value)
+    onQueryChange(value.toLowerCase())
   }
 
   const handleSortChange = value => {
@@ -135,18 +136,27 @@ const EstuariesList = ({ data, onQueryChange }) => {
 
       {sortedData.length ? (
         <ListWrapper ref={listWrapperRef}>
-          <List
-            ref={listRef}
-            itemData={sortedData}
-            height={listHeight || 100}
-            itemSize={72}
-            itemCount={sortedData.length}
-            itemKey={(i, items) => items[i].id}
-          >
-            {({ index, data: listData, style }) => (
-              <ListItem {...listData[index]} style={style} />
-            )}
-          </List>
+          {listHeight ? (
+            <List
+              ref={listRef}
+              itemData={sortedData}
+              height={listHeight}
+              itemSize={72}
+              itemCount={sortedData.length}
+              itemKey={(i, items) => items[i].id}
+            >
+              {({ index, data: listData, style }) => {
+                const item = listData[index]
+                return (
+                  <ListItem
+                    onClick={() => onSelect(item.id)}
+                    {...item}
+                    style={style}
+                  />
+                )
+              }}
+            </List>
+          ) : null}
         </ListWrapper>
       ) : (
         <NoResults>No visible estuaries...</NoResults>
@@ -166,6 +176,7 @@ EstuariesList.propTypes = {
     })
   ).isRequired,
   onQueryChange: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 }
 
 export default EstuariesList
