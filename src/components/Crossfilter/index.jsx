@@ -1,26 +1,34 @@
-import { useEffect, useReducer } from 'react'
+import { useReducer, useRef } from 'react'
 import Crossfilter from 'crossfilter2'
-import { Map, List, fromJS } from 'immutable'
+import { Map, fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
+
+// Actions
+export const CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS'
+export const SET_FILTER = 'SET_FILTER' // payload is {field, filterValue}
+export const RESET_FILTER = 'RESET_FILTER'
 
 // Get counts based on current filters
 const countByDimension = dimensions => {
   let dimCounts = Map()
 
-  dimensions.forEach(d => {
-    const grouped = d.group().all()
+  // only generate counts for the non-internal filters
+  Object.values(dimensions)
+    .filter(({ config: { internal } }) => !internal)
+    .forEach(dimension => {
+      const grouped = dimension.group().all()
 
-    // Convert the array of key:count returned by crossfilter to a Map
-    const counts = grouped.reduce((result, item) => {
-      if (item) {
-        return result.set(item.key, item.value)
-      }
-      return result
-    }, Map())
+      // Convert the array of key:count returned by crossfilter to a Map
+      const counts = grouped.reduce((result, item) => {
+        if (item) {
+          return result.set(item.key, item.value)
+        }
+        return result
+      }, Map())
 
-    dimCounts = dimCounts.set(d.config.field, counts)
-  })
+      dimCounts = dimCounts.set(dimension.config.field, counts)
+    })
   return dimCounts
 }
 
@@ -30,58 +38,33 @@ const countFiltered = cf =>
     .reduceCount()
     .value()
 
-export const CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS'
-export const SET_FILTER = 'SET_FILTER' // payload is {field, filterValue}
-export const RESET_FILTER = 'RESET_FILTER'
-
-/**
- *
- * @param {object} state - state object
- * @param {object} action - object containing type and payload: {type: "SOME_TYPE", payload: <the_data>}
- */
-
+// TODO: memoize this
 export const useCrossfilter = (data, filters) => {
-  console.log('setting up crossfilter')
+  console.log('in custom hook')
 
-  useEffect(() => {
-    console.log('in crossfilter effect')
-  }, [data, filters])
+  const crossfilterRef = useRef(null)
+  const dimensionsRef = useRef(null)
 
-  const crossfilter = Crossfilter(data)
-
-  const dimensionIndex = {}
-  const dimensions = filters.map(
-    ({ field, dimensionIsArray = false, getValue, ...config }) => {
-      // default is identify function for field
-      const dimensionFunction = getValue || (d => d[field])
-      const dimension = crossfilter.dimension(
-        dimensionFunction,
-        !!dimensionIsArray
-      )
-      dimension.config = config
-      dimensionIndex[field] = dimension
-
-      return dimension
-    }
-  )
-
-  if (isDebug) {
-    window.crossfilter = crossfilter
-    window.dimensions = dimensions
-  }
-
+  /**
+   *
+   * @param {object} state - state object
+   * @param {object} action - object containing type and payload: {type: "SOME_TYPE", payload: <the_data>}
+   */
   const reducer = (
     state,
     { type, payload: { field, filterValue, ...payload } }
   ) => {
+    const { current: crossfilter } = crossfilterRef
+    const { current: dimensions } = dimensionsRef
+
     console.log(`Handling ${type}`, payload)
     console.log('Prev state', state.toJS())
 
-    const newState = state
+    let newState = state
 
     switch (type) {
       case SET_FILTER: {
-        const dimension = dimensionIndex[field]
+        const dimension = dimensions[field]
         const filterFunc = dimension.config.filterFunc(filterValue)
         if (filterValue) {
           dimension.filterFunction(filterFunc)
@@ -90,12 +73,12 @@ export const useCrossfilter = (data, filters) => {
           dimension.filterAll()
         }
 
-        // newState = state.merge({
-        //   data: fromJS(crossfilter.allFiltered()),
-        //   dimensionCounts: countByDimension(dimensions),
-        //   filteredCount: countFiltered(crossfilter),
-        //   filters: state.get('filters').set(field, filterValue),
-        // })
+        newState = state.merge({
+          data: fromJS(crossfilter.allFiltered()),
+          dimensionCounts: countByDimension(dimensions),
+          filteredCount: countFiltered(crossfilter),
+          filters: state.get('filters').set(field, filterValue),
+        })
         break
       }
 
@@ -117,13 +100,40 @@ export const useCrossfilter = (data, filters) => {
     return newState
   }
 
-  const initialState = Map({
-    data: fromJS(data),
-    filters: Map(),
-    dimensionCounts: Map(),
-    filteredCount: countFiltered(crossfilter),
-    total: 0,
-  })
+  // Initialize crossfilter and dimensions when useReducer is first setup
+  const initialize = () => {
+    const crossfilter = Crossfilter(data)
 
-  return useReducer(reducer, initialState)
+    const dimensions = {}
+    filters.forEach(filter => {
+      const { field, dimensionIsArray = false, getValue } = filter
+      // default is identify function for field
+      const dimensionFunction = getValue || (d => d[field])
+      const dimension = crossfilter.dimension(
+        dimensionFunction,
+        !!dimensionIsArray
+      )
+      dimension.config = filter
+      dimensions[field] = dimension
+    })
+
+    crossfilterRef.current = crossfilter
+    dimensionsRef.current = dimensions
+
+    if (isDebug) {
+      window.crossfilter = crossfilter
+      window.dimensions = dimensions
+    }
+
+    // initial state
+    return Map({
+      data: fromJS(data),
+      filters: Map(),
+      dimensionCounts: Map(),
+      filteredCount: countFiltered(crossfilter),
+      total: data.length,
+    })
+  }
+
+  return useReducer(reducer, undefined, initialize)
 }

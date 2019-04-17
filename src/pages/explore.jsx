@@ -27,8 +27,6 @@ const Explore = () => {
   const [data, index] = useData()
   const [state, dispatch] = useCrossfilter(data, filters)
 
-  console.log('dispatch', dispatch)
-
   const filteredData = state
     .get('data')
     .toJS()

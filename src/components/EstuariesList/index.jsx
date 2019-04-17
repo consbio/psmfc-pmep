@@ -90,7 +90,6 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
   const [sort, setSort] = useState(2) // default: north to south
 
   const handleQueryChange = ({ target: { value } }) => {
-    console.log(value)
     setQuery(value)
     // TODO: debounce
     onQueryChange(value.toLowerCase())
