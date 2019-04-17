@@ -1,3 +1,5 @@
+import { boundsOverlap } from 'util/map'
+
 // const getIntKeys = obj =>
 // Object.keys(obj)
 //     .map(k => parseInt(k, 10))
@@ -21,5 +23,7 @@ export const filters = [
   {
     field: 'bounds',
     internal: true,
+    filterFunc: mapBounds => estuaryBounds =>
+      boundsOverlap(mapBounds, estuaryBounds),
   },
 ]

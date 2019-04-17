@@ -32,15 +32,22 @@ const Explore = () => {
     .toJS()
     .slice() // slice into a new copy since we are sorting data elsewhere
 
-  console.log('filtered data', filteredData)
-
   const handleQueryChange = query => {
-    console.log('query', query)
     dispatch({
       type: SET_FILTER,
       payload: {
         field: 'name',
         filterValue: query,
+      },
+    })
+  }
+
+  const handleBoundsChange = bounds => {
+    dispatch({
+      type: SET_FILTER,
+      payload: {
+        field: 'bounds',
+        filterValue: bounds,
       },
     })
   }
@@ -67,7 +74,7 @@ const Explore = () => {
             onSelect={handleSelect}
           />
         </Sidebar>
-        <Map />
+        <Map onBoundsChange={handleBoundsChange} />
       </Wrapper>
     </Layout>
   )

@@ -97,7 +97,9 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
 
   const handleSortChange = value => {
     setSort(value)
-    listRef.current.scrollTo(0)
+    if (listRef.current) {
+      listRef.current.scrollTo(0)
+    }
   }
 
   const sortedData = data.sort(sortOptions[sort].sortFunc)

@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-underscore-dangle */
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { fromJS } from 'immutable'
+import { List, fromJS } from 'immutable'
 
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -28,13 +28,20 @@ const MapNote = styled.div`
   box-shadow: 0 2px 6px #666;
 `
 
-const Map = ({ bounds, grid, location, onSelectFeature }) => {
+const Map = ({ bounds, grid, location, onSelectFeature, onBoundsChange }) => {
   // if there is no window, we cannot render this component
   if (!hasWindow) {
     return null
   }
 
-  const { accessToken, styleID, padding, sources, layers } = config
+  const {
+    accessToken,
+    styleID,
+    padding,
+    sources,
+    layers,
+    bounds: initBounds,
+  } = config
 
   const mapNode = useRef(null)
   const noteNode = useRef(null)
@@ -49,11 +56,16 @@ const Map = ({ bounds, grid, location, onSelectFeature }) => {
     let center = null
     let zoom = null
 
-    // If bounds are available, use these to establish center and zoom when map first
-    if (bounds && bounds.size === 4) {
-      const { offsetWidth, offsetHeight } = mapNode
+    const targetBounds = bounds ? bounds.toJS() : initBounds
+
+    // If bounds are available, use these to establish center and zoom when map first loads
+    if (targetBounds && targetBounds.length === 4) {
+      const {
+        current: { offsetWidth, offsetHeight },
+      } = mapNode
+
       const { center: boundsCenter, zoom: boundsZoom } = getCenterAndZoom(
-        bounds,
+        targetBounds,
         offsetWidth,
         offsetHeight,
         padding
@@ -68,7 +80,7 @@ const Map = ({ bounds, grid, location, onSelectFeature }) => {
       container: mapNode.current,
       style: `mapbox://styles/mapbox/${styleID}`,
       center: center || config.center,
-      zoom: zoom || config.zoom,
+      zoom: zoom || config.zoom || 0,
       minZoom: config.minZoom || 0,
     })
     mapRef.current = map
@@ -110,6 +122,11 @@ const Map = ({ bounds, grid, location, onSelectFeature }) => {
     //     noteNode.current.innerHTML = ''
     //   }
     // })
+
+    map.on('moveend', () => {
+      const [lowerLeft, upperRight] = map.getBounds().toArray()
+      onBoundsChange(lowerLeft.concat(upperRight))
+    })
 
     return () => {
       map.remove()
@@ -224,6 +241,7 @@ Map.propTypes = {
     longitude: PropTypes.number.isRequired,
   }),
   onSelectFeature: PropTypes.func,
+  onBoundsChange: PropTypes.func,
 }
 
 Map.defaultProps = {
@@ -231,6 +249,7 @@ Map.defaultProps = {
   grid: null,
   location: null,
   onSelectFeature: () => {},
+  onBoundsChange: () => {},
 }
 
 export default Map

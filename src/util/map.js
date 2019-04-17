@@ -23,3 +23,10 @@ export const getCenterAndZoom = (bounds, width, height, padding = 0) => {
 
   return { center: viewport.center, zoom }
 }
+
+export const boundsOverlap = (
+  [xmin, ymin, xmax, ymax],
+  [xmin2, ymin2, xmax2, ymax2]
+) => ymax2 >= ymin && ymin2 <= ymax && xmax2 >= xmin && xmin2 <= xmax
+
+window.test = boundsOverlap
