@@ -58,6 +58,7 @@ ListItem.propTypes = {
   acres: PropTypes.number.isRequired,
 }
 
+// only rerender on ID change
 export default memo(
   ListItem,
   ({ id: prevID }, { id: nextID }) => nextID === prevID

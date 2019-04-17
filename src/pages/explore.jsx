@@ -25,15 +25,12 @@ const Explore = () => {
   console.log('render explore')
 
   const [data, index] = useData()
-  const [state, dispatch] = useCrossfilter(data, filters)
+  const [filterState, filterDispatch] = useCrossfilter(data, filters)
 
-  const filteredData = state
-    .get('data')
-    .toJS()
-    .slice() // slice into a new copy since we are sorting data elsewhere
+  const filteredData = filterState.get('data')
 
   const handleQueryChange = query => {
-    dispatch({
+    filterDispatch({
       type: SET_FILTER,
       payload: {
         field: 'name',
@@ -43,7 +40,8 @@ const Explore = () => {
   }
 
   const handleBoundsChange = bounds => {
-    dispatch({
+    // TODO: persist bounds and convert to immutable throughout stack
+    filterDispatch({
       type: SET_FILTER,
       payload: {
         field: 'bounds',
@@ -69,12 +67,12 @@ const Explore = () => {
           </StyledHelpText>
 
           <EstuariesList
-            data={filteredData.slice()}
+            data={filteredData}
             onQueryChange={handleQueryChange}
             onSelect={handleSelect}
           />
         </Sidebar>
-        <Map onBoundsChange={handleBoundsChange} />
+        <Map data={filteredData} onBoundsChange={handleBoundsChange} />
       </Wrapper>
     </Layout>
   )

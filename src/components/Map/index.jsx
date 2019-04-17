@@ -2,13 +2,14 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { List, fromJS } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import styled from 'util/style'
 import { hasWindow } from 'util/dom'
-import { getCenterAndZoom } from 'util/map'
+import { getCenterAndZoom, toGeoJSONPoints } from 'util/map'
 import { config } from '../../../config/map'
 
 const Relative = styled.div`
@@ -28,7 +29,7 @@ const MapNote = styled.div`
   box-shadow: 0 2px 6px #666;
 `
 
-const Map = ({ bounds, grid, location, onSelectFeature, onBoundsChange }) => {
+const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   // if there is no window, we cannot render this component
   if (!hasWindow) {
     return null
@@ -44,13 +45,10 @@ const Map = ({ bounds, grid, location, onSelectFeature, onBoundsChange }) => {
   } = config
 
   const mapNode = useRef(null)
+  const mapRef = useRef(null)
+  const pointsRef = useRef(null) // handle on points layer from data
   const noteNode = useRef(null)
   const markerRef = useRef(null)
-  const mapRef = useRef(null)
-  const gridRef = useRef(grid)
-
-  // set updated grid value to incoming prop so we can use it in the click handler below
-  gridRef.current = grid
 
   useEffect(() => {
     let center = null
@@ -87,6 +85,15 @@ const Map = ({ bounds, grid, location, onSelectFeature, onBoundsChange }) => {
     window.map = map
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+
+    console.log('data', data)
+    sources.points.data = data ? toGeoJSONPoints(data.toJS()) : []
+    // if (data) {
+
+    //   const geoJSON =
+    //   console.log('geoJSON', geoJSON)
+    //   map.getSource('points').setData(geoJSON)
+    // }
 
     map.on('load', () => {
       // add sources
@@ -234,8 +241,14 @@ const Map = ({ bounds, grid, location, onSelectFeature, onBoundsChange }) => {
 }
 
 Map.propTypes = {
-  bounds: PropTypes.arrayOf(PropTypes.number),
-  grid: PropTypes.string,
+  data: ImmutablePropTypes.listOf(
+    ImmutablePropTypes.mapContains({
+      id: PropTypes.number.isRequired,
+      lat: PropTypes.number.isRequired,
+      lon: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  bounds: ImmutablePropTypes.listOf(PropTypes.number),
   location: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,

@@ -29,4 +29,25 @@ export const boundsOverlap = (
   [xmin2, ymin2, xmax2, ymax2]
 ) => ymax2 >= ymin && ymin2 <= ymax && xmax2 >= xmin && xmin2 <= xmax
 
-window.test = boundsOverlap
+export const toGeoJSONPoint = (record, x = 'lon', y = 'lat') => {
+  const properties = {}
+  Object.keys(record)
+    .filter(f => f !== x && f !== y)
+    .forEach(f => {
+      properties[f] = record[f]
+    })
+
+  return {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [record[x], record[y]],
+    },
+    properties,
+  }
+}
+
+export const toGeoJSONPoints = records => ({
+  type: 'FeatureCollection',
+  features: records.map(r => toGeoJSONPoint(r)),
+})
