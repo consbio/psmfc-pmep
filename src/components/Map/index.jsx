@@ -120,6 +120,83 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       // }
     })
 
+    // clicking on clusters zooms in
+    map.on('click', 'clusters', e => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['clusters'],
+      })
+      const clusterId = features[0].properties.cluster_id
+      map
+        .getSource('points')
+        .getClusterExpansionZoom(clusterId, (err, targetZoom) => {
+          console.log(targetZoom)
+
+          if (err) return
+
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: targetZoom + 1,
+          })
+        })
+    })
+
+    // show tooltip for clusters
+    const tooltip = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      anchor: 'left',
+      offset: 12,
+    })
+    map.on('mouseenter', 'clusters', e => {
+      map.getCanvas().style.cursor = 'pointer'
+
+      const [feature] = map.queryRenderedFeatures(e.point, {
+        layers: ['clusters'],
+      })
+      const clusterId = feature.properties.cluster_id
+
+      map
+        .getSource('points')
+        .getClusterLeaves(clusterId, Infinity, 0, (err, children) => {
+          if (err) return
+
+          let names = children
+            .slice(0, 5)
+            .map(({ properties: { name } }) => name)
+            .join('<br/>')
+          if (children.length > 5) {
+            names += `<br/>and ${children.length - 5} more...`
+          }
+
+          tooltip
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML(names)
+            .addTo(map)
+        })
+    })
+    map.on('mouseleave', 'clusters', () => {
+      map.getCanvas().style.cursor = ''
+      tooltip.remove()
+    })
+
+    // show tooltip for single points
+    map.on('mouseenter', 'points', e => {
+      map.getCanvas().style.cursor = 'pointer'
+
+      const [feature] = map.queryRenderedFeatures(e.point, {
+        layers: ['points'],
+      })
+
+      tooltip
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(feature.properties.name)
+        .addTo(map)
+    })
+    map.on('mouseleave', 'points', () => {
+      map.getCanvas().style.cursor = ''
+      tooltip.remove()
+    })
+
     // map.on('zoomend', () => {
     //   console.log('zoom', map.getZoom())
 

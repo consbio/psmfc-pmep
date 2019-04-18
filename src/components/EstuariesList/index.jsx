@@ -42,6 +42,8 @@ export const NoResults = styled(Box)`
 `
 
 const EstuariesList = ({ data, onQueryChange, onSelect }) => {
+  console.log('render estuaries list')
+
   const listRef = useRef(null)
   const [listWrapperRef, { height: listHeight }] = useDimensions()
   const [query, setQuery] = useState('')
@@ -65,7 +67,6 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
   }
 
   const sortedData = data.sort(sortOptions[sortIdx].sortFunc)
-  console.log('sorted', sortIdx, sortedData.toJS())
 
   return (
     <Wrapper>

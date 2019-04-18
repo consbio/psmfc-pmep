@@ -62,8 +62,8 @@ export const config = {
       type: 'geojson',
       data: {},
       cluster: true,
-      clusterMaxZoom: 14, // Max zoom to cluster points on
-      clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+      clusterMaxZoom: 14,
+      clusterRadius: 45,
     },
   },
   layers: [
@@ -112,37 +112,49 @@ export const config = {
       },
     },
     {
-      id: 'point-clusters',
+      id: 'clusters',
       type: 'circle',
       source: 'points',
       filter: ['has', 'point_count'], // field added by mapbox GL
       paint: {
-        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-        // with three steps to implement three types of circles:
-        //   * Blue, 20px circles when point count is less than 100
-        //   * Yellow, 30px circles when point count is between 100 and 750
-        //   * Pink, 40px circles when point count is greater than or equal to 750
         'circle-color': [
           'step',
           ['get', 'point_count'],
-          '#51bbd6',
+          '#74a9cf',
+          10,
+          '#2b8cbe',
           100,
-          '#f1f075',
-          750,
-          '#f28cb1',
+          '#045a8d',
         ],
-        'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+        'circle-stroke-color': [
+          'step',
+          ['get', 'point_count'],
+          '#2b8cbe',
+          10,
+          '#045a8d',
+          100,
+          '#000',
+        ],
+        'circle-stroke-width': 1,
+        'circle-radius': ['step', ['get', 'point_count'], 12, 10, 20, 100, 25],
       },
     },
     {
-      id: 'cluster-count',
+      id: 'clusters-count',
       type: 'symbol',
       source: 'points',
       filter: ['has', 'point_count'],
       layout: {
         'text-field': '{point_count_abbreviated}',
-        // "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
         'text-size': 12,
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      },
+      paint: {
+        'text-color': '#FFFFFF',
+        'text-opacity': 1,
+        'text-halo-color': '#000',
+        'text-halo-blur': 1,
+        'text-halo-width': 0.5,
       },
     },
     {
@@ -151,8 +163,8 @@ export const config = {
       source: 'points',
       filter: ['!', ['has', 'point_count']],
       paint: {
-        'circle-color': '#11b4da',
-        'circle-radius': 4,
+        'circle-color': '#a18ac9',
+        'circle-radius': 12,
         'circle-stroke-width': 1,
         'circle-stroke-color': '#fff',
       },

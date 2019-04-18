@@ -37,7 +37,7 @@ export const toGeoJSONPoint = (record, x = 'lon', y = 'lat') => {
       properties[f] = record[f]
     })
 
-  return {
+  const feature = {
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -45,6 +45,13 @@ export const toGeoJSONPoint = (record, x = 'lon', y = 'lat') => {
     },
     properties,
   }
+
+  const { id } = record
+  if (id !== undefined && id !== null) {
+    feature.id = id
+  }
+
+  return feature
 }
 
 export const toGeoJSONPoints = records => ({
