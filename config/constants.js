@@ -9,6 +9,13 @@ export const stateNames = {
   CA: 'California',
 }
 
+export const regions = [
+  'Salish Sea',
+  'Washington, Oregon, Northern California Coast',
+  'Central California',
+  'Southern California Bight',
+]
+
 export const estuaryTypes = [
   'Embayment/Bay',
   'Major River Delta',
@@ -58,14 +65,14 @@ export const lifeStageLabels = {
 }
 
 export const nfhpCodes = [0, 1, 2, 3, 4, 5]
-export const nfhpLabels = {
-  0: 'Very High',
-  1: 'High',
-  2: 'Moderate',
-  3: 'Low',
-  4: 'Very Low',
-  5: 'Not assessed in the 2015 National Fish Habitat Assessment', // includes nodata, not scored by NFHAP, etc
-}
+export const nfhpLabels = [
+  'Very High',
+  'High',
+  'Moderate',
+  'Low',
+  'Very Low',
+  'Not assessed in the 2015 National Fish Habitat Assessment', // includes nodata, not scored by NFHAP, etc
+]
 
 // Size classes adapted from page 127 in SoK, converted to acres
 export const sizeClasses = [[0, 25], [25, 250], [250, 2500], [2500, Infinity]]

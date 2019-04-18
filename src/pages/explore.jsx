@@ -53,7 +53,11 @@ const Explore = () => {
     <Layout>
       <SEO title="Home" />
       <Wrapper>
-        <Sidebar icon="binoculars" title="Explore Estuaries">
+        <Sidebar
+          icon="binoculars"
+          title="Explore Estuaries"
+          allowScroll={false}
+        >
           <HelpText mb="1rem" px="1rem">
             Click on an estuary in the list below or in the map for more
             detailed information. Estuary boundaries will show on the map when

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import PropTypes from 'prop-types'
 import { Map, Set } from 'immutable'
 import { FaRegTimesCircle, FaCaretDown, FaCaretRight } from 'react-icons/fa'
 
@@ -48,15 +49,19 @@ const CaretRight = styled(FaCaretRight).attrs({
   margin-right: 0.25rem;
 `
 
-const Filter = ({ field, label, values, help }) => {
-  const [isOpen, setIsOpen] = useState(true)
+const Bars = styled.div`
+  padding: 0.5rem 0 0 1rem;
+`
+
+const Filter = ({ field, title, values, labels, help, open }) => {
+  const [isOpen, setIsOpen] = useState(open)
   const { state, dispatch } = useContext(Crossfilter)
 
   const filterValues = state.get('filters').get(field, Set()) // TODO: general default type
   const counts = state.get('dimensionCounts').get(field, Map())
   const total = state.get('total') // TODO: get the right number
 
-  console.log('filter values', filterValues)
+  console.log('filter values', field, filterValues.toJS())
 
   const isFiltered = filterValues.size > 0 // TODO
 
@@ -92,7 +97,7 @@ const Filter = ({ field, label, values, help }) => {
       <Header>
         <Title onClick={toggle}>
           {isOpen ? <CaretDown /> : <CaretRight />}
-          <div>{label}</div>
+          <div>{title}</div>
         </Title>
         {
           <ResetIcon
@@ -103,21 +108,39 @@ const Filter = ({ field, label, values, help }) => {
       </Header>
 
       {isOpen && (
-        <div>
-          {values.map(value => (
+        <Bars>
+          {values.map((value, idx) => (
             <Bar
               key={value}
               isFiltered={filterValues.has(value)}
-              label={value}
+              isExcluded={filterValues.size > 0 && !filterValues.has(value)}
+              label={labels && labels[idx] ? labels[idx] : value}
               count={counts.get(value, 0)}
               total={total}
               onClick={() => handleFilterClick(value)}
             />
           ))}
-        </div>
+
+          {/* TODO: help text */}
+        </Bars>
       )}
     </Wrapper>
   )
+}
+
+Filter.propTypes = {
+  field: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  values: PropTypes.array.isRequired,
+  labels: PropTypes.array,
+  help: PropTypes.string,
+  open: PropTypes.bool,
+}
+
+Filter.defaultProps = {
+  labels: null,
+  help: null,
+  open: false,
 }
 
 export default Filter

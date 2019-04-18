@@ -1,5 +1,14 @@
 import { boundsOverlap } from 'util/map'
-import { estuaryTypes } from './constants'
+import {
+  estuaryTypes,
+  sizeClasses,
+  sizeClassLabels,
+  regions,
+  states,
+  stateNames,
+  nfhpCodes,
+  nfhpLabels,
+} from './constants'
 
 // const getIntKeys = obj =>
 // Object.keys(obj)
@@ -15,6 +24,7 @@ import { estuaryTypes } from './constants'
  * `internal` (bool) - if `true` will not be displayed in the list of filters, but will still be added as a filter.
  */
 
+// TODO: migrate this into crossfilter reducer as the default
 // returns true if passed in values contains the value
 // values must be a Set
 const hasValue = values => value => values.has(value)
@@ -34,8 +44,38 @@ export const filters = [
   },
   {
     field: 'type',
-    label: 'Estuary Type',
+    title: 'Estuary Type',
     values: estuaryTypes,
+    labels: estuaryTypes,
     filterFunc: hasValue,
+  },
+  {
+    field: 'sizeClass',
+    title: 'Estuary Size Class',
+    values: sizeClasses.map((_, idx) => idx), // we only need to know the index
+    labels: sizeClassLabels,
+    filterFunc: hasValue,
+  },
+  {
+    field: 'region',
+    title: 'PMEP Region',
+    values: regions,
+    labels: regions,
+    filterFunc: hasValue,
+  },
+  {
+    field: 'state',
+    title: 'State',
+    values: states,
+    labels: states.map(state => stateNames[state]),
+    filterFunc: hasValue,
+  },
+  {
+    field: 'Rating_2015',
+    title: 'Risk of Fish Habitat Degradation (2015)',
+    values: nfhpCodes,
+    labels: nfhpLabels,
+    filterFunc: hasValue,
+    open: true,
   },
 ]

@@ -18,8 +18,8 @@ const InnerWrapper = styled(Flex).attrs({
   flexDirection: 'column',
   flex: '1 1 auto',
 })`
-  overflow-y: hidden; // handle this instead in inner components
   overflow-x: hidden;
+  overflow-y: ${({ allowScroll }) => (allowScroll ? 'auto' : 'hidden')};
   height: 100%;
 `
 
@@ -42,9 +42,9 @@ const Title = styled(Text).attrs({
   margin: 0;
 `
 
-const Sidebar = ({ icon, title, children }) => (
+const Sidebar = ({ icon, title, children, allowScroll }) => (
   <Wrapper>
-    <InnerWrapper>
+    <InnerWrapper allowScroll={allowScroll}>
       <Header>
         <Text fontSize={['1.5rem', '1.75rem']}>
           <Icon name={icon} />
@@ -60,6 +60,11 @@ Sidebar.propTypes = {
   icon: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  allowScroll: PropTypes.bool,
+}
+
+Sidebar.defaultProps = {
+  allowScroll: true,
 }
 
 export default Sidebar

@@ -3,6 +3,8 @@ import { graphql, useStaticQuery } from 'gatsby'
 import { fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
+import { classify } from 'util/data'
+import { sizeClasses } from '../../../config/constants'
 
 /**
  * Custom react hook to wrap getting data using GraphQL in gatsby
@@ -26,6 +28,7 @@ export const useData = () => {
             state
             lon
             lat
+            Rating_2015
           }
         }
       }
@@ -33,7 +36,9 @@ export const useData = () => {
   `).allEstuariesCsv.edges.map(({ node }) => {
     // parse data types
     // TODO: convert to using JSON for data, then we won't need to parse data
-    const { id, lat, lon, minx, miny, maxx, maxy, acres } = node
+    const { id, lat, lon, minx, miny, maxx, maxy, acres, Rating_2015 } = node
+
+    // TODO: classify in Python preprocessing
 
     return {
       ...node,
@@ -47,6 +52,8 @@ export const useData = () => {
         parseFloat(maxy),
       ],
       acres: parseFloat(acres),
+      sizeClass: classify(acres, sizeClasses),
+      Rating_2015: parseInt(Rating_2015, 10),
     }
   })
 
