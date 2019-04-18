@@ -99,6 +99,26 @@ export const config = {
         'line-color': boundaryColor,
       },
     },
+    // TODO: when boundaries have an ID
+    // {
+    //   id: 'boundaries-outline-highlight',
+    //   source: 'boundaries',
+    //   'source-layer': boundaries.sourceLayer,
+    //   minzoom: 4,
+    //   maxzoom: 22,
+    //   type: 'line',
+    //   filter: ['==', ['get', 'id'], Infinity],
+    //   paint: {
+    //     'line-width': {
+    //       base: 1,
+    //       stops: [[5, 1], [12, 3]],
+    //     },
+    //     'line-opacity': {
+    //       stops: [[5, 0.1], [7, 0.5], [10, 1]],
+    //     },
+    //     'line-color': boundaryColor,
+    //   },
+    // },
     {
       id: 'biotics-fill',
       source: 'biotics',
@@ -139,8 +159,40 @@ export const config = {
         'circle-radius': ['step', ['get', 'point_count'], 12, 10, 20, 100, 25],
       },
     },
+
     {
-      id: 'clusters-count',
+      id: 'points', // unclustered points
+      type: 'circle',
+      source: 'points',
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        'circle-color': '#a18ac9',
+        'circle-radius': 12,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff',
+      },
+    },
+    {
+      id: 'points-highlight',
+      type: 'circle',
+      source: 'points',
+      // filter: ['has', 'point_count'],
+      filter: ['==', 'id', Infinity],
+      paint: {
+        'circle-color': '#ee7d14',
+        'circle-stroke-color': '#ee7d14',
+        'circle-stroke-width': 4,
+        // if a cluster, use cluser sizes above, else use the point size above
+        'circle-radius': [
+          'case',
+          ['has', 'point_count'],
+          ['step', ['get', 'point_count'], 12, 10, 20, 100, 25],
+          12,
+        ],
+      },
+    },
+    {
+      id: 'clusters-label',
       type: 'symbol',
       source: 'points',
       filter: ['has', 'point_count'],
@@ -155,18 +207,6 @@ export const config = {
         'text-halo-color': '#000',
         'text-halo-blur': 1,
         'text-halo-width': 0.5,
-      },
-    },
-    {
-      id: 'points', // unclustered points
-      type: 'circle',
-      source: 'points',
-      filter: ['!', ['has', 'point_count']],
-      paint: {
-        'circle-color': '#a18ac9',
-        'circle-radius': 12,
-        'circle-stroke-width': 1,
-        'circle-stroke-color': '#fff',
       },
     },
   ],

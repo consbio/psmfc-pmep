@@ -38,18 +38,11 @@ const countFiltered = cf =>
     .reduceCount()
     .value()
 
-// TODO: memoize this
 export const useCrossfilter = (data, filters) => {
-  console.log('in custom hook')
-
   const crossfilterRef = useRef(null)
   const dimensionsRef = useRef(null)
 
-  /**
-   *
-   * @param {object} state - state object
-   * @param {object} action - object containing type and payload: {type: "SOME_TYPE", payload: <the_data>}
-   */
+  // payload: {type: "SOME_TYPE", payload: <the_data>}
   const reducer = (
     state,
     { type, payload: { field, filterValue, ...payload } }

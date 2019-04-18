@@ -120,24 +120,47 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       // }
     })
 
+    // TDOO: features must have an ID
+    // highlight boundaries on hover
+    // map.on('mouseenter', 'boundaries-fill', e => {
+    //   const [feature] = map.queryRenderedFeatures(e.point, {
+    //     layers: ['boundaries-fill'],
+    //   })
+
+    //   map.setFilter('boundaries-outline-highlight', [
+    //     '==',
+    //     ['get', 'id'],
+    //     feature.properties.id,
+    //   ])
+    // })
+    // map.on('mouseleave', 'boundaries-fill', () => {
+    //   map.setFilter('boundaries-outline-highlight', [
+    //     '==',
+    //     ['get', 'id'],
+    //     Infinity,
+    //   ])
+    // })
+
     // clicking on clusters zooms in
     map.on('click', 'clusters', e => {
-      const features = map.queryRenderedFeatures(e.point, {
+      const [feature] = map.queryRenderedFeatures(e.point, {
         layers: ['clusters'],
       })
-      const clusterId = features[0].properties.cluster_id
       map
         .getSource('points')
-        .getClusterExpansionZoom(clusterId, (err, targetZoom) => {
-          console.log(targetZoom)
+        .getClusterExpansionZoom(
+          feature.properties.cluster_id,
+          (err, targetZoom) => {
+            console.log(targetZoom)
 
-          if (err) return
+            if (err) return
 
-          map.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: targetZoom + 1,
-          })
-        })
+            map.easeTo({
+              center: feature.geometry.coordinates,
+              zoom: targetZoom + 1,
+            })
+          }
+        )
     })
 
     // show tooltip for clusters
@@ -145,7 +168,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       closeButton: false,
       closeOnClick: false,
       anchor: 'left',
-      offset: 12,
+      offset: 20,
     })
     map.on('mouseenter', 'clusters', e => {
       map.getCanvas().style.cursor = 'pointer'
@@ -154,6 +177,13 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
         layers: ['clusters'],
       })
       const clusterId = feature.properties.cluster_id
+
+      // highlight
+      map.setFilter('points-highlight', [
+        '==',
+        ['get', 'cluster_id'],
+        clusterId,
+      ])
 
       map
         .getSource('points')
@@ -176,6 +206,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     map.on('mouseleave', 'clusters', () => {
       map.getCanvas().style.cursor = ''
+      map.setFilter('points-highlight', ['==', 'id', Infinity])
       tooltip.remove()
     })
 
@@ -187,6 +218,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
         layers: ['points'],
       })
 
+      map.setFilter('points-highlight', ['==', 'id', feature.properties.id])
+
       tooltip
         .setLngLat(feature.geometry.coordinates)
         .setHTML(feature.properties.name)
@@ -194,6 +227,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     map.on('mouseleave', 'points', () => {
       map.getCanvas().style.cursor = ''
+      map.setFilter('points-highlight', ['==', 'id', Infinity])
       tooltip.remove()
     })
 
