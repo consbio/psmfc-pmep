@@ -11,7 +11,7 @@ import { hasWindow } from 'util/dom'
 import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 
 import Legend from './Legend'
-import { config } from '../../../config/map'
+import { config, sources, layers, legends } from '../../../config/map'
 
 const Relative = styled.div`
   position: relative;
@@ -31,19 +31,12 @@ const MapNote = styled.div`
 `
 
 const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
+  console.log('map render')
+
   // if there is no window, we cannot render this component
   if (!hasWindow) {
     return null
   }
-
-  const {
-    accessToken,
-    styleID,
-    padding,
-    sources,
-    layers,
-    bounds: initBounds,
-  } = config
 
   const mapNode = useRef(null)
   const mapRef = useRef(null)
@@ -51,11 +44,12 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   const noteNode = useRef(null)
   const markerRef = useRef(null)
   const [mapZoom, setMapZoom] = useState(0)
-  const [legendEntries, setLegendEntries] = useState([]) // TODO: clusters visible by default
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    let center = null
-    let zoom = null
+    const { accessToken, styleID, padding, bounds: initBounds } = config
+
+    let { center, zoom } = config
 
     const targetBounds = bounds ? bounds.toJS() : initBounds
 
@@ -80,8 +74,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     const map = new mapboxgl.Map({
       container: mapNode.current,
       style: `mapbox://styles/mapbox/${styleID}`,
-      center: center || config.center,
-      zoom: zoom || config.zoom || 0,
+      center: center || [0, 0],
+      zoom: zoom || 0,
       minZoom: config.minZoom || 0,
     })
     mapRef.current = map
@@ -89,14 +83,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
-    console.log('data', data)
+    // Construct GeoJSON points from data
     sources.points.data = data ? toGeoJSONPoints(data.toJS()) : []
-    // if (data) {
-
-    //   const geoJSON =
-    //   console.log('geoJSON', geoJSON)
-    //   map.getSource('points').setData(geoJSON)
-    // }
 
     map.on('load', () => {
       // add sources
@@ -108,41 +96,17 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       layers.forEach(layer => {
         map.addLayer(layer)
       })
+
+      // wait a second to force rerender with legend
+      setTimeout(() => setIsLoaded(true), 1000)
     })
 
     map.on('click', e => {
       const features = map.queryRenderedFeatures(e.point, {
-        layers: ['boundaries-fill', 'biotics-fill'],
+        layers: ['estuaries-fill', 'biotics-fill'],
       })
-
       console.log('clicked features', features)
-      // if (feature) {
-      //   const { id } = feature.properties
-      //   updateHighlight(curGrid, id)
-      //   onSelectFeature(feature.properties)
-      // }
     })
-
-    // TDOO: features must have an ID
-    // highlight boundaries on hover
-    // map.on('mouseenter', 'boundaries-fill', e => {
-    //   const [feature] = map.queryRenderedFeatures(e.point, {
-    //     layers: ['boundaries-fill'],
-    //   })
-
-    //   map.setFilter('boundaries-outline-highlight', [
-    //     '==',
-    //     ['get', 'id'],
-    //     feature.properties.id,
-    //   ])
-    // })
-    // map.on('mouseleave', 'boundaries-fill', () => {
-    //   map.setFilter('boundaries-outline-highlight', [
-    //     '==',
-    //     ['get', 'id'],
-    //     Infinity,
-    //   ])
-    // })
 
     // clicking on clusters zooms in
     map.on('click', 'clusters', e => {
@@ -154,8 +118,6 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
         .getClusterExpansionZoom(
           feature.properties.cluster_id,
           (err, targetZoom) => {
-            console.log(targetZoom)
-
             if (err) return
 
             map.easeTo({
@@ -235,21 +197,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
 
     map.on('zoomend', () => {
-      console.log('map zoom end')
       setMapZoom(map.getZoom())
-
-      // what layers have visible features?
-      const features = mapRef.current.queryRenderedFeatures({
-        layers: ['clusters', 'points', 'boundaries-fill'],
-      })
-
-      const grouped = groupByLayer(features, {
-        clusters: ({ point_count }) => point_count,
-      })
-      console.log(grouped)
-
-      // TODO:
-      // setLegendEntries()
     })
 
     map.on('moveend', () => {
@@ -265,45 +213,51 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   }, [])
 
   useEffect(() => {
+    console.log('map on data change')
+
+    if (!isLoaded) return
+
     const { current: map } = mapRef
-    const { current: marker } = markerRef
+    // if (!(map && map.isStyleLoaded())) return
 
-    if (!map.loaded()) return
+    const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
+    map.getSource('points').setData(geoJSON)
+  }, [data])
 
-    if (location !== null) {
-      onSelectFeature(null)
-      const { latitude, longitude } = location
-      map.flyTo({ center: [longitude, latitude], zoom: 10 })
+  // memoize this?
+  const getLegendEntries = () => {
+    if (!isLoaded) return []
 
-      map.once('moveend', () => {
-        const point = map.project([longitude, latitude])
-        const feature = getFeatureAtPoint(point)
-        // source may still be loading, try again in 1 second
-        if (!feature) {
-          setTimeout(() => {
-            getFeatureAtPoint(point)
-          }, 1000)
+    const { current: map } = mapRef
+
+    // Group layers with visible features
+    const visibleFeatures = map.queryRenderedFeatures({
+      layers: ['clusters', 'points', 'estuaries-fill', 'biotics-fill'],
+    })
+    const grouped = groupByLayer(visibleFeatures)
+
+    // only show point or boundary for estuaries when in view
+    if (grouped.points && grouped['estuaries-fill']) {
+      delete grouped.points
+    }
+
+    let entries = []
+    Object.entries(grouped)
+      .sort(([leftLayer], [rightLayer]) => (leftLayer > rightLayer ? 1 : -1))
+      .forEach(([layer, features]) => {
+        if (legends[layer]) {
+          entries = entries.concat(legends[layer].getLegend(features))
         }
       })
 
-      if (!marker) {
-        markerRef.current = new mapboxgl.Marker()
-          .setLngLat([longitude, latitude])
-          .addTo(map)
-      } else {
-        marker.setLngLat([longitude, latitude])
-      }
-    } else if (marker) {
-      marker.remove()
-      markerRef.current = null
-    }
-  }, [location])
+    return entries
+  }
 
   return (
     <Relative>
       {/* <MapNote ref={noteNode} /> */}
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
-      <Legend entries={legendEntries} />
+      <Legend entries={getLegendEntries()} />
     </Relative>
   )
 }
@@ -333,6 +287,27 @@ Map.defaultProps = {
 }
 
 export default Map
+
+// T0DO: features must have an ID
+// highlight boundaries on hover
+// map.on('mouseenter', 'boundaries-fill', e => {
+//   const [feature] = map.queryRenderedFeatures(e.point, {
+//     layers: ['boundaries-fill'],
+//   })
+
+//   map.setFilter('boundaries-outline-highlight', [
+//     '==',
+//     ['get', 'id'],
+//     feature.properties.id,
+//   ])
+// })
+// map.on('mouseleave', 'boundaries-fill', () => {
+//   map.setFilter('boundaries-outline-highlight', [
+//     '==',
+//     ['get', 'id'],
+//     Infinity,
+//   ])
+// })
 
 // useEffect(() => {
 //   console.log('grid changed', grid)
@@ -390,3 +365,38 @@ export default Map
 //   }
 //   return feature
 // }
+
+// useEffect(() => {
+//   const { current: map } = mapRef
+//   const { current: marker } = markerRef
+
+//   if (!map.loaded()) return
+
+//   if (location !== null) {
+//     onSelectFeature(null)
+//     const { latitude, longitude } = location
+//     map.flyTo({ center: [longitude, latitude], zoom: 10 })
+
+//     map.once('moveend', () => {
+//       const point = map.project([longitude, latitude])
+//       const feature = getFeatureAtPoint(point)
+//       // source may still be loading, try again in 1 second
+//       if (!feature) {
+//         setTimeout(() => {
+//           getFeatureAtPoint(point)
+//         }, 1000)
+//       }
+//     })
+
+//     if (!marker) {
+//       markerRef.current = new mapboxgl.Marker()
+//         .setLngLat([longitude, latitude])
+//         .addTo(map)
+//     } else {
+//       marker.setLngLat([longitude, latitude])
+//     }
+//   } else if (marker) {
+//     marker.remove()
+//     markerRef.current = null
+//   }
+// }, [location])

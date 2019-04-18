@@ -60,25 +60,39 @@ export const toGeoJSONPoints = records => ({
 })
 
 /**
- * Group features from map by layer ID returning count and optional values.
- * properties is a mapping of layer ID to a getter function for that property: {layer: (featureProperties => property),...}
+ * Group features from map by layer ID returning array of features for each.
  */
-export const groupByLayer = (features, properties = {}) => {
+export const groupByLayer = features => {
   const results = {}
-  features.forEach(({ layer: { id }, properties: featureProperties }) => {
+  features.forEach(feature => {
+    const {
+      layer: { id },
+    } = feature
     if (!results[id]) {
-      results[id] = {
-        count: 0,
-        values: [],
-      }
+      results[id] = []
     }
-    results[id].count += 1
-
-    const getProp = properties[id]
-    if (getProp) {
-      results[id].values.push(getProp(featureProperties))
-    }
+    results[id].push(feature)
   })
 
   return results
+}
+
+// property, threshold, ... property (omit last threshold)
+
+/**
+ * Convert a list of objects into mapbox step expression
+ * @param {Array of objects} entries - list of objects to map to steps, each must have {threshold, property}
+ * @param {string} property  - property to assign to each step, e.g., radius
+ */
+export const createSteps = (entries, property) => {
+  const steps = []
+  entries.forEach(({ threshold, ...entry }, i) => {
+    steps.push(entry[property])
+
+    // omit the last threshold
+    if (i < entries.length - 1) {
+      steps.push(threshold)
+    }
+  })
+  return steps
 }
