@@ -16,6 +16,14 @@ const biotics = {
   tileURL:
     'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
   sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
+  idProperty: '_symbol',
+
+  // TODO: update once CMECS_ID or similar is in tileset
+  legend: Object.values(bioticInfo).map(({ vtID: id, color, label }) => ({
+    id,
+    color,
+    label,
+  })),
 }
 
 // Mapbox public token.  TODO: migrate to .env setting
@@ -156,6 +164,7 @@ export const config = {
           '#000',
         ],
         'circle-stroke-width': 1,
+        // size breakpoints are at 10 and 100 estuaries
         'circle-radius': ['step', ['get', 'point_count'], 12, 10, 20, 100, 25],
       },
     },
@@ -210,4 +219,21 @@ export const config = {
       },
     },
   ],
+}
+
+export const getClusterLegend = visibleFeatures => {
+  const sizes = new Set(
+    visibleFeatures.map(({ properties: { point_count: count } }) => {
+      if (count === undefined) {
+        return 0 // not clustered
+      }
+      if (count <= 10) {
+        return 1
+      }
+      if (count <= 100) {
+        return 2
+      }
+      return 3
+    })
+  )
 }

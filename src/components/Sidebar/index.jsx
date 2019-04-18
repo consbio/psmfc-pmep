@@ -28,7 +28,7 @@ const Header = styled(Flex).attrs({
   flexWrap: 'nowrap',
 })`
   line-height: 1;
-  padding: 1rem;
+  padding: 1rem 1rem 0.25rem;
 `
 
 const Icon = styled(FaIcon).attrs({})`

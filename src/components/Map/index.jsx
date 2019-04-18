@@ -1,15 +1,16 @@
 /* eslint-disable max-len, no-underscore-dangle */
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { List, fromJS } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import styled from 'util/style'
 import { hasWindow } from 'util/dom'
-import { getCenterAndZoom, toGeoJSONPoints } from 'util/map'
+import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
+
+import Legend from './Legend'
 import { config } from '../../../config/map'
 
 const Relative = styled.div`
@@ -49,6 +50,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   const pointsRef = useRef(null) // handle on points layer from data
   const noteNode = useRef(null)
   const markerRef = useRef(null)
+  const [mapZoom, setMapZoom] = useState(0)
+  const [legendEntries, setLegendEntries] = useState([]) // TODO: clusters visible by default
 
   useEffect(() => {
     let center = null
@@ -231,20 +234,30 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       tooltip.remove()
     })
 
-    // map.on('zoomend', () => {
-    //   console.log('zoom', map.getZoom())
+    map.on('zoomend', () => {
+      console.log('map zoom end')
+      setMapZoom(map.getZoom())
 
-    //   if (gridRef.current === 'na_grts' && map.getZoom() < 5) {
-    //     noteNode.current.innerHTML = 'Zoom in further to see GRTS grid...'
-    //   } else {
-    //     noteNode.current.innerHTML = ''
-    //   }
-    // })
+      // what layers have visible features?
+      const features = mapRef.current.queryRenderedFeatures({
+        layers: ['clusters', 'points', 'boundaries-fill'],
+      })
+
+      const grouped = groupByLayer(features, {
+        clusters: ({ point_count }) => point_count,
+      })
+      console.log(grouped)
+
+      // TODO:
+      // setLegendEntries()
+    })
 
     map.on('moveend', () => {
       const [lowerLeft, upperRight] = map.getBounds().toArray()
       onBoundsChange(lowerLeft.concat(upperRight))
     })
+
+    setMapZoom(zoom || config.zoom || 0)
 
     return () => {
       map.remove()
@@ -286,67 +299,11 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     }
   }, [location])
 
-  // useEffect(() => {
-  //   console.log('grid changed', grid)
-
-  //   const { current: map } = mapRef
-  //   if (!map.loaded()) return
-
-  //   // clear out any previous highlights
-  //   layers.forEach(({ id }) => {
-  //     updateHighlight(id, null)
-  //   })
-
-  //   layers.forEach(({ id }) => {
-  //     map.setLayoutProperty(id, 'visibility', grid === id ? 'visible' : 'none')
-  //   })
-
-  //   // update zoom in note
-  //   if (gridRef.current === 'na_grts' && map.getZoom() < 5) {
-  //     noteNode.current.innerHTML = 'Zoom in further to see GRTS grid...'
-  //   } else {
-  //     noteNode.current.innerHTML = ''
-  //   }
-  // }, [grid])
-
-  // const updateHighlight = (gridID, id) => {
-  //   const { current: map } = mapRef
-  //   const layer = `${gridID}-highlight`
-
-  //   if (id !== null) {
-  //     map.setPaintProperty(layer, 'fill-color', [
-  //       'match',
-  //       ['get', 'id'],
-  //       id,
-  //       '#b5676d',
-  //       TRANSPARENT,
-  //     ])
-  //   } else {
-  //     map.setPaintProperty(layer, 'fill-color', TRANSPARENT)
-  //   }
-  // }
-
-  // const getFeatureAtPoint = point => {
-  //   const { current: map } = mapRef
-  //   const { current: curGrid } = gridRef
-
-  //   if (!(map && curGrid)) return null
-
-  //   const [feature] = map.queryRenderedFeatures(point, {
-  //     layers: [`${curGrid}-highlight`],
-  //   })
-  //   if (feature) {
-  //     console.log('got feature at point', feature)
-  //     updateHighlight(curGrid, feature.properties.id)
-  //     onSelectFeature(feature.properties)
-  //   }
-  //   return feature
-  // }
-
   return (
     <Relative>
       {/* <MapNote ref={noteNode} /> */}
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
+      <Legend entries={legendEntries} />
     </Relative>
   )
 }
@@ -370,10 +327,66 @@ Map.propTypes = {
 
 Map.defaultProps = {
   bounds: null,
-  grid: null,
   location: null,
   onSelectFeature: () => {},
   onBoundsChange: () => {},
 }
 
 export default Map
+
+// useEffect(() => {
+//   console.log('grid changed', grid)
+
+//   const { current: map } = mapRef
+//   if (!map.loaded()) return
+
+//   // clear out any previous highlights
+//   layers.forEach(({ id }) => {
+//     updateHighlight(id, null)
+//   })
+
+//   layers.forEach(({ id }) => {
+//     map.setLayoutProperty(id, 'visibility', grid === id ? 'visible' : 'none')
+//   })
+
+//   // update zoom in note
+//   if (gridRef.current === 'na_grts' && map.getZoom() < 5) {
+//     noteNode.current.innerHTML = 'Zoom in further to see GRTS grid...'
+//   } else {
+//     noteNode.current.innerHTML = ''
+//   }
+// }, [grid])
+
+// const updateHighlight = (gridID, id) => {
+//   const { current: map } = mapRef
+//   const layer = `${gridID}-highlight`
+
+//   if (id !== null) {
+//     map.setPaintProperty(layer, 'fill-color', [
+//       'match',
+//       ['get', 'id'],
+//       id,
+//       '#b5676d',
+//       TRANSPARENT,
+//     ])
+//   } else {
+//     map.setPaintProperty(layer, 'fill-color', TRANSPARENT)
+//   }
+// }
+
+// const getFeatureAtPoint = point => {
+//   const { current: map } = mapRef
+//   const { current: curGrid } = gridRef
+
+//   if (!(map && curGrid)) return null
+
+//   const [feature] = map.queryRenderedFeatures(point, {
+//     layers: [`${curGrid}-highlight`],
+//   })
+//   if (feature) {
+//     console.log('got feature at point', feature)
+//     updateHighlight(curGrid, feature.properties.id)
+//     onSelectFeature(feature.properties)
+//   }
+//   return feature
+// }

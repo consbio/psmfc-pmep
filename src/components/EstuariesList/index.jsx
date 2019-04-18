@@ -96,7 +96,7 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
               ref={listRef}
               itemData={sortedData.toJS()}
               height={listHeight}
-              itemSize={72}
+              itemSize={64}
               itemCount={sortedData.size}
               itemKey={(i, items) => items[i].id}
             >

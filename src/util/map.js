@@ -58,3 +58,27 @@ export const toGeoJSONPoints = records => ({
   type: 'FeatureCollection',
   features: records.map(r => toGeoJSONPoint(r)),
 })
+
+/**
+ * Group features from map by layer ID returning count and optional values.
+ * properties is a mapping of layer ID to a getter function for that property: {layer: (featureProperties => property),...}
+ */
+export const groupByLayer = (features, properties = {}) => {
+  const results = {}
+  features.forEach(({ layer: { id }, properties: featureProperties }) => {
+    if (!results[id]) {
+      results[id] = {
+        count: 0,
+        values: [],
+      }
+    }
+    results[id].count += 1
+
+    const getProp = properties[id]
+    if (getProp) {
+      results[id].values.push(getProp(featureProperties))
+    }
+  })
+
+  return results
+}
