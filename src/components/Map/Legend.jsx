@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 
@@ -7,6 +7,7 @@ import { Flex, Box } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 
 const Wrapper = styled.div`
+  cursor: pointer;
   position: absolute;
   right: 10px;
   bottom: 24px;
@@ -85,21 +86,26 @@ Circle.defaultProps = {
 const Legend = ({ title, entries }) => {
   if (!entries.length) return null
 
+  const [closed, setClosed] = useState(false)
+  const toggle = () => setClosed(isClosed => !isClosed)
+
   return (
-    <Wrapper>
+    <Wrapper onClick={toggle}>
       <Title>{title}</Title>
-      <div>
-        {entries.map(({ type, label, ...entry }) => (
-          <Entry key={label}>
-            {type === 'circle' ? (
-              <Circle scale={0.5} {...entry} />
-            ) : (
-              <Patch {...entry} />
-            )}
-            <Label>{label}</Label>
-          </Entry>
-        ))}
-      </div>
+      {!closed && (
+        <div>
+          {entries.map(({ type, label, ...entry }) => (
+            <Entry key={label}>
+              {type === 'circle' ? (
+                <Circle scale={0.5} {...entry} />
+              ) : (
+                <Patch {...entry} />
+              )}
+              <Label>{label}</Label>
+            </Entry>
+          ))}
+        </div>
+      )}
     </Wrapper>
   )
 }
