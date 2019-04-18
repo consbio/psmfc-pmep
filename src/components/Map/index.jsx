@@ -213,8 +213,6 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   }, [])
 
   useEffect(() => {
-    console.log('map on data change')
-
     if (!isLoaded) return
 
     const { current: map } = mapRef

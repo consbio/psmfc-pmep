@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { FixedSizeList as List } from 'react-window'
 import useDimensions from 'react-use-dimensions'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import { Box, Flex, Columns, Column } from 'components/Grid'
 import styled, { themeGet } from 'util/style'

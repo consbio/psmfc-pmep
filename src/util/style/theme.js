@@ -6,6 +6,7 @@ const colors = {
   white: 'hsl(0, 0%, 100%)',
   black: 'hsl(0, 0%, 0%)',
   link: '#3273dc',
+  highlight: '#ee7d14',
   primary: {
     100: '#e8ecf0',
     200: '#ced8e0',

@@ -1,5 +1,6 @@
 // import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
+import { fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
 
@@ -61,5 +62,5 @@ export const useData = () => {
     window.index = index
   }
 
-  return [data, index]
+  return [fromJS(data), fromJS(index)]
 }

@@ -1,4 +1,5 @@
 import { boundsOverlap } from 'util/map'
+import { estuaryTypes } from './constants'
 
 // const getIntKeys = obj =>
 // Object.keys(obj)
@@ -13,10 +14,15 @@ import { boundsOverlap } from 'util/map'
  * `getValue` (function) - takes a record as input, and transforms the value as needed.
  * `internal` (bool) - if `true` will not be displayed in the list of filters, but will still be added as a filter.
  */
+
+// returns true if passed in values contains the value
+// values must be a Set
+const hasValue = values => value => values.has(value)
+
 export const filters = [
   {
     field: 'name',
-    internal: true,
+    internal: true, // TODO: lack of a label also indicates this
     getValue: ({ name }) => name.toLowerCase(),
     filterFunc: value => name => name.includes(value),
   },
@@ -25,5 +31,11 @@ export const filters = [
     internal: true,
     filterFunc: mapBounds => estuaryBounds =>
       boundsOverlap(mapBounds, estuaryBounds),
+  },
+  {
+    field: 'type',
+    label: 'Estuary Type',
+    values: estuaryTypes,
+    filterFunc: hasValue,
   },
 ]

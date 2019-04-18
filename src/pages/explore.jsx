@@ -16,11 +16,6 @@ const Wrapper = styled(Flex)`
   height: 100%;
 `
 
-const StyledHelpText = styled(HelpText)`
-  padding: 0 1rem;
-  margin-bottom: 1rem;
-`
-
 const Explore = () => {
   console.log('render explore')
 
@@ -59,12 +54,12 @@ const Explore = () => {
       <SEO title="Home" />
       <Wrapper>
         <Sidebar icon="binoculars" title="Explore Estuaries">
-          <StyledHelpText>
+          <HelpText mb="1rem" px="1rem">
             Click on an estuary in the list below or in the map for more
             detailed information. Estuary boundaries will show on the map when
             you have zoomed far enough in. This list only shows estuaries
             visible in the map.
-          </StyledHelpText>
+          </HelpText>
 
           <EstuariesList
             data={filteredData}

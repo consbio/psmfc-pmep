@@ -1,43 +1,18 @@
-import { useReducer, useRef } from 'react'
-import Crossfilter from 'crossfilter2'
+import React, { createContext, useReducer, useRef } from 'react'
+import PropTypes from 'prop-types'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import { Map, fromJS } from 'immutable'
 
+import Crossfilter from 'crossfilter2'
 import { isDebug } from 'util/dom'
+import { countByDimension, countFiltered } from './util'
 
 // Actions
 export const CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS'
 export const SET_FILTER = 'SET_FILTER' // payload is {field, filterValue}
 export const RESET_FILTER = 'RESET_FILTER'
 
-// Get counts based on current filters
-const countByDimension = dimensions => {
-  let dimCounts = Map()
-
-  // only generate counts for the non-internal filters
-  Object.values(dimensions)
-    .filter(({ config: { internal } }) => !internal)
-    .forEach(dimension => {
-      const grouped = dimension.group().all()
-
-      // Convert the array of key:count returned by crossfilter to a Map
-      const counts = grouped.reduce((result, item) => {
-        if (item) {
-          return result.set(item.key, item.value)
-        }
-        return result
-      }, Map())
-
-      dimCounts = dimCounts.set(dimension.config.field, counts)
-    })
-  return dimCounts
-}
-
-const countFiltered = cf =>
-  cf
-    .groupAll()
-    .reduceCount()
-    .value()
-
+// Incoming data is an immutable List of Maps
 export const useCrossfilter = (data, filters) => {
   const crossfilterRef = useRef(null)
   const dimensionsRef = useRef(null)
@@ -58,16 +33,17 @@ export const useCrossfilter = (data, filters) => {
     switch (type) {
       case SET_FILTER: {
         const dimension = dimensions[field]
-        const filterFunc = dimension.config.filterFunc(filterValue)
-        if (filterValue) {
-          dimension.filterFunction(filterFunc)
-        } else {
+
+        if (!filterValue || filterValue.size === 0) {
           // clear filter on field
           dimension.filterAll()
+        } else {
+          const filterFunc = dimension.config.filterFunc(filterValue)
+          dimension.filterFunction(filterFunc)
         }
 
         newState = state.merge({
-          data: fromJS(crossfilter.allFiltered()),
+          data: fromJS(crossfilter.allFiltered()), // TODO: can we avoid type conversion here?
           dimensionCounts: countByDimension(dimensions),
           filteredCount: countFiltered(crossfilter),
           filters: state.get('filters').set(field, filterValue),
@@ -75,9 +51,19 @@ export const useCrossfilter = (data, filters) => {
         break
       }
 
-      case RESET_FILTER: {
-        break
-      }
+      // Redundant with passing in empty Map/Set above
+      // case RESET_FILTER: {
+      //   const dimension = dimensions[field]
+      //   dimension.filterAll()
+
+      //   newState = state.merge({
+      //     data: fromJS(crossfilter.allFiltered()), // TODO: can we avoid type conversion here?
+      //     dimensionCounts: countByDimension(dimensions),
+      //     filteredCount: countFiltered(crossfilter),
+      //     filters: state.get('filters').set(field, filterValue),
+      //   })
+      //   break
+      // }
       case CLEAR_ALL_FILTERS: {
         break
       }
@@ -95,7 +81,7 @@ export const useCrossfilter = (data, filters) => {
 
   // Initialize crossfilter and dimensions when useReducer is first setup
   const initialize = () => {
-    const crossfilter = Crossfilter(data)
+    const crossfilter = Crossfilter(data.toJS())
 
     const dimensions = {}
     filters.forEach(filter => {
@@ -120,13 +106,31 @@ export const useCrossfilter = (data, filters) => {
 
     // initial state
     return Map({
-      data: fromJS(data),
+      data,
       filters: Map(),
-      dimensionCounts: Map(),
+      dimensionCounts: countByDimension(dimensions),
       filteredCount: countFiltered(crossfilter),
-      total: data.length,
+      total: data.size,
     })
   }
 
   return useReducer(reducer, undefined, initialize)
+}
+
+export const Context = createContext()
+export const Provider = ({ data, filters, children }) => {
+  const [state, dispatch] = useCrossfilter(data, filters)
+  return (
+    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+  )
+}
+
+Provider.propTypes = {
+  data: ImmutablePropTypes.list.isRequired,
+  filters: PropTypes.array.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.element,
+    PropTypes.array,
+  ]).isRequired,
 }
