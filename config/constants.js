@@ -1,11 +1,11 @@
 export const fullBounds = [[32.5, -124.7], [49, -117.1]] // Leaflet lat,lon format
 
-export const states = ['WA', 'ORWA', 'OR', 'CA']
+export const states = ['WA', 'OR', 'CA']
 
 export const stateNames = {
   WA: 'Washington',
   OR: 'Oregon',
-  ORWA: 'Oregon / Washington',
+  ORWA: 'Oregon / Washington', // these are split for filtering
   CA: 'California',
 }
 

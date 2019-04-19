@@ -18,7 +18,7 @@ const Header = styled(Flex).attrs({
   justifyContent: 'space-between',
 })``
 
-const Title = styled(Flex).attrs({ alignItems: 'center' })`
+const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
   cursor: pointer;
 `
 
@@ -52,8 +52,8 @@ const Bars = styled.div`
   padding: 0.5rem 0 0 1rem;
 `
 
-const Filter = ({ field, title, values, labels, help, open }) => {
-  const [isOpen, setIsOpen] = useState(open)
+const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
+  const [isOpen, setIsOpen] = useState(initIsOpen)
   const { state, dispatch } = useContext(Crossfilter)
 
   const filterValues = state.get('filters').get(field, Set())
@@ -129,13 +129,13 @@ Filter.propTypes = {
   values: PropTypes.array.isRequired,
   labels: PropTypes.array,
   help: PropTypes.string,
-  open: PropTypes.bool,
+  isOpen: PropTypes.bool,
 }
 
 Filter.defaultProps = {
   labels: null,
   help: null,
-  open: false,
+  isOpen: false,
 }
 
 export default Filter

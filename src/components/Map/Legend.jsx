@@ -84,7 +84,6 @@ Circle.defaultProps = {
 }
 
 const Legend = ({ title, entries }) => {
-  console.log('lenged render')
   if (!entries.length) return null
 
   const [closed, setClosed] = useState(false)

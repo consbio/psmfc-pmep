@@ -226,7 +226,6 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     const grouped = groupByLayer(visibleFeatures)
 
-    console.log('visible layers', Object.keys(grouped))
     // only show point or boundary for estuaries when in view
     if (grouped.points && grouped['estuaries-fill']) {
       delete grouped.points
