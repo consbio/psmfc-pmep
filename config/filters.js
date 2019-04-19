@@ -1,4 +1,6 @@
 import { boundsOverlap } from 'util/map'
+import { splitWords } from 'util/format'
+import { classify } from 'util/data'
 import {
   estuaryTypes,
   sizeClasses,
@@ -8,6 +10,11 @@ import {
   stateNames,
   nfhpCodes,
   nfhpLabels,
+  species,
+  bioticTypes,
+  bioticInfo,
+  sppCountClasses,
+  sppCountClassLabels,
 } from './constants'
 
 // const getIntKeys = obj =>
@@ -27,7 +34,7 @@ import {
 // TODO: migrate this into crossfilter reducer as the default
 // returns true if passed in values contains the value
 // values must be a Set
-const hasValue = values => value => values.has(value)
+const hasValue = filterValues => value => filterValues.has(value)
 
 export const filters = [
   {
@@ -54,7 +61,16 @@ export const filters = [
     title: 'Estuary Size Class',
     values: sizeClasses.map((_, idx) => idx), // we only need to know the index
     labels: sizeClassLabels,
+    getValue: ({ acres }) => classify(acres, sizeClasses),
     filterFunc: hasValue,
+  },
+  {
+    field: 'speciesPresent',
+    title: 'Focal Species Present',
+    values: species,
+    labels: species.map(splitWords),
+    filterFunc: hasValue,
+    isArray: true,
   },
   {
     field: 'region',
@@ -69,6 +85,33 @@ export const filters = [
     values: states,
     labels: states.map(state => stateNames[state]),
     filterFunc: hasValue,
+    isArray: true, // TODO: handle this
+  },
+  {
+    field: 'numSpps',
+    title: 'Number of Focal Species Present',
+    values: sppCountClasses,
+    labels: sppCountClassLabels,
+    getValue: ({ SoKJoin, speciesPresent }) => {
+      // if SoKJoin == 3, this is not inventoried
+      if (SoKJoin === 3) return -1
+
+      const count = speciesPresent.length
+      if (count >= 10) return 10
+      if (count >= 6) return 6
+      if (count > 0) return 1
+      return 0
+    },
+    filterFunc: hasValue,
+  },
+  {
+    field: 'biotic',
+    title: 'Estuarine Biotic Habitats Present',
+    values: bioticTypes,
+    labels: bioticTypes.map(b => bioticInfo[b].label),
+    getValue: ({ biotic }) => Object.keys(biotic),
+    filterFunc: hasValue,
+    isArray: true,
   },
   {
     field: 'Rating_2015',
@@ -76,6 +119,5 @@ export const filters = [
     values: nfhpCodes,
     labels: nfhpLabels,
     filterFunc: hasValue,
-    open: true,
   },
 ]

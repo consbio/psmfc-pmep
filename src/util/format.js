@@ -24,3 +24,16 @@ export const formatNumber = (number, decimals = null) => {
     maximumFractionDigits: targetDecimals,
   })
 }
+
+// CohoSalmon -> Coho Salmon
+export function splitWords(text) {
+  let newText = ''
+  for (let i = 0; i < text.length; i += 1) {
+    if (i > 0 && text[i] === text[i].toUpperCase()) {
+      newText += ` ${text[i]}`
+    } else {
+      newText += text[i]
+    }
+  }
+  return newText
+}

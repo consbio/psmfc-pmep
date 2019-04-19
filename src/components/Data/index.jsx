@@ -4,7 +4,7 @@ import { fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
 import { classify } from 'util/data'
-import { sizeClasses } from '../../../config/constants'
+import { sizeClasses, species } from '../../../config/constants'
 
 /**
  * Custom react hook to wrap getting data using GraphQL in gatsby
@@ -29,16 +29,46 @@ export const useData = () => {
             lon
             lat
             Rating_2015
+
+            DungenessCrab
+            BayShrimp
+            GreenSturgeon
+            LeopardShark
+            BatRay
+            CaliforniaHalibut
+            EnglishSole
+            StarryFlounder
+            ShinerPerch
+            StaghornSculpin
+            PacificHerring
+            BrownRockfish
+            Steelhead
+            CohoSalmon
+            ChinookSalmon
+            SoKJoin
+            NFHPJoin
+            Rating_2015
+            biotic_acres
           }
         }
       }
     }
   `).allEstuariesCsv.edges.map(({ node }) => {
     // parse data types
-    // TODO: convert to using JSON for data, then we won't need to parse data
-    const { id, lat, lon, minx, miny, maxx, maxy, acres, Rating_2015 } = node
-
-    // TODO: classify in Python preprocessing
+    const {
+      id,
+      lat,
+      lon,
+      minx,
+      miny,
+      maxx,
+      maxy,
+      acres,
+      Rating_2015,
+      SoKJoin,
+      NFHPJoin,
+      biotic_acres,
+    } = node
 
     return {
       ...node,
@@ -52,8 +82,17 @@ export const useData = () => {
         parseFloat(maxy),
       ],
       acres: parseFloat(acres),
-      sizeClass: classify(acres, sizeClasses),
       Rating_2015: parseInt(Rating_2015, 10),
+      SoKJoin: parseInt(SoKJoin, 10),
+      NFHPJoin: parseInt(NFHPJoin, 10),
+      speciesPresent: species.filter(spp => node[spp]), // any species not blank
+      // biotic_acres is a packed field:   <biotic_type>:<acres>|next, convert to an object of {type:acres, ...}
+      biotic: biotic_acres.split('|').reduce((result, part) => {
+        if (part === '') return result
+        part = part.split(':')
+        result[part[0]] = parseFloat(part[1])
+        return result
+      }, {}),
     }
   })
 

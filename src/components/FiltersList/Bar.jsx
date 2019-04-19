@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   line-height: 1;
   margin-bottom: 1rem;
 
+  transition: opacity 300ms;
   opacity: ${({ isExcluded }) => (isExcluded ? 0.25 : 1)};
 
   &:hover {
@@ -36,14 +37,15 @@ const IndicatorWrapper = styled(Flex).attrs({
 `
 
 const Indicator = styled.div`
-  // background-color: ${({ color }) => color};
   background-color: ${({ active }) =>
     active ? themeGet('colors.highlight') : themeGet('colors.link')};
   flex-grow: ${({ width }) => width};
+  transition: flex-grow 300ms;
 `
 
 const Filler = styled.div`
   flex-grow: ${({ width }) => width};
+  transition: flex-grow 300ms;
 `
 
 const Bar = ({ isFiltered, isExcluded, label, count, total, onClick }) => {

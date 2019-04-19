@@ -23,7 +23,7 @@ export const estuaryTypes = [
   'Lagoonal Estuary',
 ]
 
-export const spps = [
+export const species = [
   'BatRay',
   'BayShrimp',
   'BrownRockfish',
@@ -83,7 +83,7 @@ export const sizeClassLabels = [
   '> 2,500 acres',
 ]
 
-export const sppCountClasses = [10, 6, 1, 0, -1] // these are handled in filters.js
+export const sppCountClasses = [10, 6, 1, 0, -1] // classifying is handled in filters.js
 export const sppCountClassLabels = [
   '10-15 species present',
   '5-9 species present',

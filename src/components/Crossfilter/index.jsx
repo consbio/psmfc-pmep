@@ -10,7 +10,6 @@ import { countByDimension, countFiltered } from './util'
 // Actions
 export const CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS'
 export const SET_FILTER = 'SET_FILTER' // payload is {field, filterValue}
-export const RESET_FILTER = 'RESET_FILTER'
 
 // Incoming data is an immutable List of Maps
 export const useCrossfilter = (data, filters) => {
@@ -50,20 +49,6 @@ export const useCrossfilter = (data, filters) => {
         })
         break
       }
-
-      // Redundant with passing in empty Map/Set above
-      // case RESET_FILTER: {
-      //   const dimension = dimensions[field]
-      //   dimension.filterAll()
-
-      //   newState = state.merge({
-      //     data: fromJS(crossfilter.allFiltered()), // TODO: can we avoid type conversion here?
-      //     dimensionCounts: countByDimension(dimensions),
-      //     filteredCount: countFiltered(crossfilter),
-      //     filters: state.get('filters').set(field, filterValue),
-      //   })
-      //   break
-      // }
       case CLEAR_ALL_FILTERS: {
         break
       }
@@ -85,13 +70,10 @@ export const useCrossfilter = (data, filters) => {
 
     const dimensions = {}
     filters.forEach(filter => {
-      const { field, dimensionIsArray = false, getValue } = filter
+      const { field, isArray, getValue } = filter
       // default is identify function for field
       const dimensionFunction = getValue || (d => d[field])
-      const dimension = crossfilter.dimension(
-        dimensionFunction,
-        !!dimensionIsArray
-      )
+      const dimension = crossfilter.dimension(dimensionFunction, !!isArray)
       dimension.config = filter
       dimensions[field] = dimension
     })
