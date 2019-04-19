@@ -7,7 +7,6 @@ import { Context as Crossfilter, SET_FILTER } from 'components/Crossfilter'
 import { Flex } from 'components/Grid'
 
 import styled, { theme, themeGet } from 'util/style'
-import { formatNumber } from 'util/format'
 import Bar from './Bar'
 
 const Wrapper = styled.div`
@@ -57,13 +56,9 @@ const Filter = ({ field, title, values, labels, help, open }) => {
   const [isOpen, setIsOpen] = useState(open)
   const { state, dispatch } = useContext(Crossfilter)
 
-  const filterValues = state.get('filters').get(field, Set()) // TODO: general default type
+  const filterValues = state.get('filters').get(field, Set())
   const counts = state.get('dimensionCounts').get(field, Map())
   const total = state.get('total') // TODO: get the right number
-
-  console.log('filter values', field, filterValues.toJS())
-
-  const isFiltered = filterValues.size > 0 // TODO
 
   const toggle = () => {
     setIsOpen(prev => !prev)
@@ -102,7 +97,7 @@ const Filter = ({ field, title, values, labels, help, open }) => {
         {
           <ResetIcon
             onClick={handleReset}
-            visible={isFiltered ? 'visible' : 'hidden'}
+            visible={filterValues.size > 0 ? 'visible' : 'hidden'}
           />
         }
       </Header>

@@ -40,11 +40,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
 
   const mapNode = useRef(null)
   const mapRef = useRef(null)
-  const pointsRef = useRef(null) // handle on points layer from data
-  const noteNode = useRef(null)
-  const markerRef = useRef(null)
-  const [mapZoom, setMapZoom] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [legendEntries, setLegendEntries] = useState([])
 
   useEffect(() => {
     const { accessToken, styleID, padding, bounds: initBounds } = config
@@ -98,7 +94,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       })
 
       // wait a second to force rerender with legend
-      setTimeout(() => setIsLoaded(true), 1000)
+      // setTimeout(() => setIsLoaded(true), 1000)
     })
 
     map.on('click', e => {
@@ -196,16 +192,15 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       tooltip.remove()
     })
 
-    map.on('zoomend', () => {
-      setMapZoom(map.getZoom())
-    })
-
     map.on('moveend', () => {
       const [lowerLeft, upperRight] = map.getBounds().toArray()
       onBoundsChange(lowerLeft.concat(upperRight))
     })
 
-    setMapZoom(zoom || config.zoom || 0)
+    map.on('idle', () => {
+      // update legend after drawing layers
+      setLegendEntries(getLegendEntries())
+    })
 
     return () => {
       map.remove()
@@ -213,10 +208,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
   }, [])
 
   useEffect(() => {
-    if (!isLoaded) return
-
     const { current: map } = mapRef
-    // if (!(map && map.isStyleLoaded())) return
+    if (!(map && map.isStyleLoaded())) return
 
     const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
     map.getSource('points').setData(geoJSON)
@@ -224,9 +217,8 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
 
   // memoize this?
   const getLegendEntries = () => {
-    if (!isLoaded) return []
-
     const { current: map } = mapRef
+    if (!(map && map.isStyleLoaded())) return []
 
     // Group layers with visible features
     const visibleFeatures = map.queryRenderedFeatures({
@@ -234,6 +226,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     const grouped = groupByLayer(visibleFeatures)
 
+    console.log('visible layers', Object.keys(grouped))
     // only show point or boundary for estuaries when in view
     if (grouped.points && grouped['estuaries-fill']) {
       delete grouped.points
@@ -255,7 +248,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     <Relative>
       {/* <MapNote ref={noteNode} /> */}
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
-      <Legend entries={getLegendEntries()} />
+      <Legend entries={legendEntries} />
     </Relative>
   )
 }

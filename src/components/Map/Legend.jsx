@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 
@@ -84,6 +84,7 @@ Circle.defaultProps = {
 }
 
 const Legend = ({ title, entries }) => {
+  console.log('lenged render')
   if (!entries.length) return null
 
   const [closed, setClosed] = useState(false)
