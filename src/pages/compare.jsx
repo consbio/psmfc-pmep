@@ -1,8 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React from 'react'
 
 import { useData } from 'components/Data'
-import { Provider as CrossfilterProvider } from 'components/Crossfilter'
-import FilteredMap from 'components/Crossfilter/FilteredMap'
+import {
+  Provider as CrossfilterProvider,
+  FilteredMap,
+} from 'components/Crossfilter'
 import Layout from 'components/Layout'
 import SEO from 'components/SEO'
 // import Map from 'components/Map'

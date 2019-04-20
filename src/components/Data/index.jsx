@@ -18,7 +18,7 @@ export const useData = () => {
           node {
             id
             name
-            estuaryType
+            type: estuaryType
             region
             state
             lat
@@ -36,7 +36,7 @@ export const useData = () => {
     }
   `).allEstuariesJson.edges.map(({ node }) => {
     // parse data types as needed
-    const { id, region, estuaryType, species, biotic } = node
+    const { id, region, type, species, biotic } = node
 
     return {
       ...node,
@@ -45,7 +45,7 @@ export const useData = () => {
       id: parseInt(id, 10),
 
       // convert codes back to labels
-      estuaryType: estuaryTypes[estuaryType],
+      type: estuaryTypes[type],
       region: regions[region],
 
       // unpack species and biotic fields

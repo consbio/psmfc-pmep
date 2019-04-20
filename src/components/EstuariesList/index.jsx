@@ -1,9 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
-import ImmutablePropTypes from 'react-immutable-proptypes'
 import { FixedSizeList as List } from 'react-window'
 import useDimensions from 'react-use-dimensions'
 
+import {
+  Context as CrossfilterContext,
+  SET_FILTER,
+} from 'components/Crossfilter'
 import { Box, Flex, Columns, Column } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 import SearchBar from './SearchBar'
@@ -40,8 +43,10 @@ export const NoResults = styled(Box)`
   text-align: center;
 `
 
-const EstuariesList = ({ data, onQueryChange, onSelect }) => {
+const EstuariesList = ({ onSelect }) => {
   console.log('render estuaries list')
+
+  const { state, dispatch: filterDispatch } = useContext(CrossfilterContext)
 
   const listRef = useRef(null)
   const [listWrapperRef, { height: listHeight }] = useDimensions()
@@ -50,9 +55,21 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
 
   const handleQueryChange = value => {
     setQuery(value)
-    // TODO: debounce
-    onQueryChange(value.toLowerCase())
+
+    filterDispatch({
+      type: SET_FILTER,
+      payload: {
+        field: 'name',
+        filterValue: value.toLowerCase(),
+      },
+    })
   }
+
+  // const handleQueryChange = value => {
+  //   setQuery(value)
+  //   // TODO: debounce
+  //   onQueryChange(value.toLowerCase())
+  // }
 
   const handleSortChange = idx => {
     if (idx === sortIdx) return
@@ -65,6 +82,7 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
     }
   }
 
+  const data = state.get('data')
   const sortedData = data.sort(sortOptions[sortIdx].sortFunc)
 
   return (
@@ -120,16 +138,6 @@ const EstuariesList = ({ data, onQueryChange, onSelect }) => {
 }
 
 EstuariesList.propTypes = {
-  data: ImmutablePropTypes.listOf(
-    ImmutablePropTypes.mapContains({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      state: PropTypes.string.isRequired,
-      acres: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  onQueryChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
 }
 

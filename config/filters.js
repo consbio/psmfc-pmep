@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable'
+import { Map } from 'immutable'
 
 import { boundsOverlap } from 'util/map'
 import { splitWords } from 'util/format'
@@ -82,7 +82,7 @@ export const filters = [
       boundsOverlap(mapBounds, estuaryBounds),
   },
   {
-    field: 'estuaryType',
+    field: 'type',
     title: 'Estuary Type',
     values: estuaryTypes,
     labels: estuaryTypes,

@@ -98,10 +98,19 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
 
     map.on('click', e => {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: ['estuaries-fill', 'biotics-fill'],
+      const [feature] = map.queryRenderedFeatures(e.point, {
+        layers: ['points', 'estuaries-fill'],
       })
-      console.log('clicked features', features)
+      console.log('clicked features, first is', feature)
+
+      if (!feature) return
+      const { layer: {id: layerId}, properties } = feature
+
+      if (layerId === 'points') {
+        onSelectFeature(properties.id)
+      } else {
+        // TODO: need ID from boundaries
+      }
     })
 
     // clicking on clusters zooms in
