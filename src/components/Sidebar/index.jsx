@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
 
 import { Box, Flex } from 'components/Grid'
-import FaIcon from 'components/elements/FaIcon'
+import HelpText from 'components/elements/HelpText'
 import styled, { themeGet } from 'util/style'
+import Header from './Header'
+
+export { Header as SidebarHeader }
 
 const Wrapper = styled(Box).attrs({
   width: ['100%', '350px', '470px'],
@@ -23,42 +25,15 @@ const InnerWrapper = styled(Flex).attrs({
   height: 100%;
 `
 
-const Header = styled(Flex).attrs({
-  alignItems: 'center',
-  flexWrap: 'nowrap',
-})`
-  line-height: 1;
-  padding: 1rem 1rem 0.25rem;
-`
+export const SidebarHelp = styled(HelpText).attrs({ mb: '1rem', px: '1rem' })``
 
-const Icon = styled(FaIcon).attrs({})`
-  margin-right: 0.25em;
-  color: ${themeGet('colors.grey.800')};
-`
-
-const Title = styled(Text).attrs({
-  fontSize: ['1.5rem', '1.75rem'],
-})`
-  margin: 0;
-`
-
-const Sidebar = ({ icon, title, children, allowScroll }) => (
+const Sidebar = ({ children, allowScroll }) => (
   <Wrapper>
-    <InnerWrapper allowScroll={allowScroll}>
-      <Header>
-        <Text fontSize={['1.5rem', '1.75rem']}>
-          <Icon name={icon} />
-        </Text>
-        <Title>{title}</Title>
-      </Header>
-      {children}
-    </InnerWrapper>
+    <InnerWrapper allowScroll={allowScroll}>{children}</InnerWrapper>
   </Wrapper>
 )
 
 Sidebar.propTypes = {
-  icon: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   allowScroll: PropTypes.bool,
 }

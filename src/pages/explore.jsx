@@ -7,10 +7,10 @@ import {
 } from 'components/Crossfilter'
 import Layout from 'components/Layout'
 import SEO from 'components/SEO'
-import Sidebar from 'components/Sidebar'
 import { Flex } from 'components/Grid'
-import HelpText from 'components/elements/HelpText'
+import Sidebar, { SidebarHeader, SidebarHelp } from 'components/Sidebar'
 import EstuariesList from 'components/EstuariesList'
+import EstuaryDetails from 'components/EstuaryDetails'
 import styled from 'util/style'
 import { filters } from '../../config/filters'
 
@@ -22,29 +22,36 @@ const Explore = () => {
   console.log('render explore')
 
   const [data, index] = useData()
-  
+  const [selectedId, setSelectedId] = useState(null)
+
   const handleSelect = id => {
     console.log('onSelect', id)
+    setSelectedId(id)
   }
 
   return (
     <CrossfilterProvider data={data} filters={filters}>
       <Layout>
-        <SEO title="Home" />
+        <SEO title="Explore" />
         <Wrapper>
-          <Sidebar
-            icon="binoculars"
-            title="Explore Estuaries"
-            allowScroll={false}
-          >
-            <HelpText mb="1rem" px="1rem">
-              Click on an estuary in the list below or in the map for more
-              detailed information. Estuary boundaries will show on the map when
-              you have zoomed far enough in. This list only shows estuaries
-              visible in the map.
-            </HelpText>
-
-            <EstuariesList onSelect={handleSelect} />
+          <Sidebar allowScroll={false}>
+            {selectedId !== null ? (
+              <EstuaryDetails
+                {...index.get(selectedId.toString()).toJS()}
+                onBack={() => handleSelect(null)}
+              />
+            ) : (
+              <>
+                <SidebarHeader title="Explore Estuaries" icon="binoculars" />
+                <SidebarHelp>
+                  Click on an estuary in the list below or in the map for more
+                  detailed information. Estuary boundaries will show on the map
+                  when you have zoomed far enough in. This list only shows
+                  estuaries visible in the map.
+                </SidebarHelp>
+                <EstuariesList onSelect={handleSelect} />
+              </>
+            )}
           </Sidebar>
           <FilteredMap onSelectFeature={handleSelect} />
         </Wrapper>

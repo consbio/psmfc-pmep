@@ -23,8 +23,10 @@ export const useCrossfilter = (data, filters) => {
     const { current: crossfilter } = crossfilterRef
     const { current: dimensions } = dimensionsRef
 
-    console.log(`Handling ${type}`, payload)
-    console.log('Prev state', state.toJS())
+    if (isDebug) {
+      console.log(`Handling ${type}`, payload)
+      console.log('Prev state', state.toJS())
+    }
 
     let newState = state
 
@@ -59,7 +61,9 @@ export const useCrossfilter = (data, filters) => {
       }
     }
 
-    console.log('Next state', newState.toJS())
+    if (isDebug) {
+      console.log('Next state', newState.toJS())
+    }
 
     return newState
   }

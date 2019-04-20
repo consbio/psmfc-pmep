@@ -65,12 +65,6 @@ const EstuariesList = ({ onSelect }) => {
     })
   }
 
-  // const handleQueryChange = value => {
-  //   setQuery(value)
-  //   // TODO: debounce
-  //   onQueryChange(value.toLowerCase())
-  // }
-
   const handleSortChange = idx => {
     if (idx === sortIdx) return
 
@@ -83,6 +77,7 @@ const EstuariesList = ({ onSelect }) => {
   }
 
   const data = state.get('data')
+  console.log('data in render list', data)
   const sortedData = data.sort(sortOptions[sortIdx].sortFunc)
 
   return (
@@ -106,7 +101,7 @@ const EstuariesList = ({ onSelect }) => {
         onChange={handleQueryChange}
       />
 
-      {data.size ? (
+      {data.size > 0 ? (
         <ListWrapper ref={listWrapperRef}>
           {listHeight ? (
             <List

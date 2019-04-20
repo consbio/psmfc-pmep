@@ -50,16 +50,7 @@ export const useData = () => {
 
       // unpack species and biotic fields
       species: species ? packedToObject(species) : {},
-      biotic: biotic ? packedToObject(biotic) : {},
-
-      // speciesPresent: species.filter(spp => node[spp]), // any species not blank
-      // // biotic_acres is a packed field:   <biotic_type>:<acres>|next, convert to an object of {type:acres, ...}
-      // biotic: biotic_acres.split('|').reduce((result, part) => {
-      //   if (part === '') return result
-      //   part = part.split(':')
-      //   result[part[0]] = parseFloat(part[1])
-      //   return result
-      // }, {}),
+      biotic: biotic ? packedToObject(biotic, value => parseFloat(value)) : {},
     }
   })
 
@@ -75,5 +66,6 @@ export const useData = () => {
     window.index = index
   }
 
+  // return data as immutable objects
   return [fromJS(data), fromJS(index)]
 }

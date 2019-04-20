@@ -12,12 +12,13 @@ export const classify = (value, ranges) => {
 
 /**
  * Converts an array of ['key:value', ...] to {key: value, }
- * @param {Array of strings} entries
+ * @param {Array of strings} entries - array of ['key:value', ...]
+ * @param {function} modifier - modifier function called for each value (optional)
  */
-export const packedToObject = entries =>
+export const packedToObject = (entries, modifier) =>
   entries.reduce((result, part) => {
     const [key, value] = part.split(':')
     /* eslint-disable no-param-reassign */
-    result[key] = value
+    result[key] = modifier ? modifier(value) : value
     return result
   }, {})
