@@ -41,12 +41,6 @@ export const useCrossfilter = (data, filters) => {
           dimension.filterFunction(filterFunc)
         }
 
-        console.log('allfiltered', crossfilter.allFiltered())
-        console.log(
-          'type check',
-          crossfilter.allFiltered()[0].get('speciesPresent')
-        )
-
         newState = state.merge({
           // convert Array from crossfilter back to an immutable List
           data: List(crossfilter.allFiltered()),
@@ -95,8 +89,6 @@ export const useCrossfilter = (data, filters) => {
       const dimension = crossfilter.dimension(dimensionFunction, !!isArray)
       dimension.config = filter
       dimensions[field] = dimension
-
-      console.log('added dimension', dimension.group().top(Infinity))
     })
 
     crossfilterRef.current = crossfilter

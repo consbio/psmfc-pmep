@@ -3,6 +3,8 @@
 node_modules
 yarn-error.log
 
+__pycache__
+
 # Build directory
 public
 .DS_Store

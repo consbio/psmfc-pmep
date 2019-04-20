@@ -82,7 +82,7 @@ export const filters = [
       boundsOverlap(mapBounds, estuaryBounds),
   },
   {
-    field: 'type',
+    field: 'estuaryType',
     title: 'Estuary Type',
     values: estuaryTypes,
     labels: estuaryTypes,
@@ -97,10 +97,16 @@ export const filters = [
     filterFunc: hasValue,
   },
   {
-    field: 'speciesPresent',
+    field: 'species',
     title: 'Focal Species Present',
     values: species,
     labels: species.map(splitWords),
+    // getValue: record => record.get('species').map(spp => spp.split(':')[0]),
+    getValue: record =>
+      record
+        .get('species', Map())
+        .keySeq()
+        .toArray(),
     filterFunc: hasValue,
     isArray: true,
   },
@@ -130,7 +136,7 @@ export const filters = [
       // if SoKJoin == 3, this is not inventoried
       if (record.get('SoKJoin') === 3) return -1
 
-      const count = record.get('speciesPresent', List()).size
+      const count = record.get('species', Map()).size
       if (count >= 10) return 10
       if (count >= 6) return 6
       if (count > 0) return 1
@@ -153,7 +159,7 @@ export const filters = [
     isArray: true,
   },
   {
-    field: 'Rating_2015',
+    field: 'nfhp2015',
     title: 'Risk of Fish Habitat Degradation (2015)',
     values: nfhpCodes,
     labels: nfhpLabels,

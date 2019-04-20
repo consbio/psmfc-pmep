@@ -41,7 +41,7 @@ const Footer = () => (
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <OutboundLink
         from="/"
-        to="https://nplcc.databasin.org/galleries/db581e2725634ba2a8a8841395d28905"
+        to="http://www.pacificfishhabitat.org/data/"
         target="_blank"
       >
         Access data

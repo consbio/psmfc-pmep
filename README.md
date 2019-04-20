@@ -44,6 +44,20 @@ Colors can be specified as RGB strings or hex codes.
 
 ### Adding a new map layer:
 
+TODO
+
+### Adding a new filter:
+
+TODO
+
+## Data processing
+
+Data are available [here](http://www.pacificfishhabitat.org/data/). Data were downloaded on 4/19/2019.
+Information on the State of the Knowledge and NFHAP status of each estuary was provided separately by PSMFC staff on 11/3/2017.
+
+Data were processed using Python 3.6 using `tools/extract_data.py`.
+This script reads from each dataset, transforms the data as needed, and creates `data/estuaries.json` with the required fields.
+
 ## Credits
 
 Developed by the Conservation Biology Institute in partnership with the Pacific Marine and Estuarine Fish Habitat Partnership (PMEP) and North Pacific Landscape Conservation Cooperative (NPLCC).
