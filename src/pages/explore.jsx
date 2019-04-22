@@ -22,7 +22,7 @@ const Explore = () => {
   console.log('render explore')
 
   const [data, index] = useData()
-  const [selectedId, setSelectedId] = useState(1001)
+  const [selectedId, setSelectedId] = useState(1148)
 
   const handleSelect = id => {
     console.log('onSelect', id)

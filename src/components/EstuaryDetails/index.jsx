@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 import { FaRegTimesCircle } from 'react-icons/fa'
 
-import { Flex, Column } from 'components/Grid'
+import { Flex } from 'components/Grid'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
@@ -39,23 +39,11 @@ const State = styled(Text).attrs({
   fontSize: ['0.8rem', '0.8rem', '1rem'],
 })``
 
-// const Info = styled.div`
-//   color: ${themeGet('colors.grey.700')};
-//   margin-bottom: 0.5rem;
-//   padding-bottom: 0.5rem;
-// `
-
-// const RightColumn = styled(Column)`
-//   text-align: right;
-// `
 
 const TabHeader = styled.div`
   font-size: 1.25rem;
 `
 const Content = styled.div`
-  /* overflow-y: auto;
-  flex: 1 1 auto;
-  padding: 0.25rem 1rem 2rem; */
   padding-left: 1rem;
   color: ${themeGet('colors.grey.900')};
 `

@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { FaCaretDown, FaCaretRight } from 'react-icons/fa'
 
 import { Flex } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
+import HelpText from 'components/elements/HelpText'
+import styled, { themeGet, theme } from 'util/style'
 import { formatNumber } from 'util/format'
 import { bioticInfo } from '../../../config/constants'
 
@@ -10,7 +12,13 @@ const Wrapper = styled.div`
   margin-bottom: 1rem;
 `
 
-const Title = styled.div``
+const Header = styled(Flex).attrs({
+  justifyContent: 'space-between',
+})``
+
+const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
+  cursor: pointer;
+`
 
 const Bar = styled.div`
   background-color: ${({ color }) => color};
@@ -22,46 +30,50 @@ const Bar = styled.div`
   box-sizing: border-box;
 `
 
-const Label = styled.div`
-  font-size: 0.75rem;
+const Acres = styled.div`
+  font-size: 0.8rem;
   margin-left: 0.5rem;
   color: ${themeGet('colors.grey.700')};
-`
-
-const InnerLabel = styled(Label)`
-  margin-left: 0;
-  color: #fff;
-  text-shadow: 1px 1px 3px #666;
   text-align: right;
 `
 
-const Description = styled.p`
-  line-height: 1.2;
-  font-size: 0.8rem;
-  color: ${themeGet('colors.grey.600')};
-  margin: 0.5rem 0 0 1rem;
+const Content = styled.div`
+  margin-left: 1.5rem;
 `
 
+const expandoColor = theme.colors.grey[800]
+const expandoSize = '1.5rem'
+
+const CaretDown = styled(FaCaretDown).attrs({
+  color: expandoColor,
+  size: expandoSize,
+})``
+
+const CaretRight = styled(FaCaretRight).attrs({
+  color: expandoColor,
+  size: expandoSize,
+})``
+
 const BioticListItem = ({ type, acres, maxAcres }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen)
+
   const { label, color, description } = bioticInfo[type]
   const position = acres / maxAcres
+
   return (
     <Wrapper>
-      <Title>{label}</Title>
-      <Flex alignItems="center">
-        {position > 0.75 ? (
-          <Bar color={color} width={position}>
-            <InnerLabel>{formatNumber(acres)} acres</InnerLabel>
-          </Bar>
-        ) : (
-          <>
-            {position > 0 && <Bar color={color} width={position} />}
-            <Label>{formatNumber(acres)} acres</Label>
-          </>
-        )}
-      </Flex>
-
-      <Description>{description}</Description>
+      <Header>
+        <Title onClick={toggle}>
+          {isOpen ? <CaretDown /> : <CaretRight />}
+          <div>{label}</div>
+        </Title>
+        <Acres>{formatNumber(acres)} acres</Acres>
+      </Header>
+      <Content>
+        {position > 0 && <Bar color={color} width={position} />}
+        {isOpen && <HelpText>{description}</HelpText>}
+      </Content>
     </Wrapper>
   )
 }

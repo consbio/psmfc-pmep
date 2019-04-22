@@ -8,7 +8,6 @@ import { splitWords } from 'util/format'
 import { sppEOLIDs } from '../../../config/constants'
 
 const List = styled.ul`
-  /* margin-bottom: 0; */
   line-height: 1.2;
   li {
     margin: 0;
@@ -19,14 +18,10 @@ const List = styled.ul`
   }
 `
 
-const NoSpecies = styled.div`
-  color: ${themeGet('colors.grey.700')};
-  font-size: 0.8rem;
-`
 
 const Stage = styled.span`
   margin-left: 0.5em;
-  font-size: smaller;
+  font-size: 0.9rem;
   font-style: italic;
   color: ${themeGet('colors.grey.700')};
 `
@@ -96,7 +91,7 @@ const SpeciesList = ({ species: data, status }) => {
           ))}
         </List>
       ) : (
-        <NoSpecies>No focal species present</NoSpecies>
+        <HelpText>No focal species present</HelpText>
       )}
 
       {statusNote}

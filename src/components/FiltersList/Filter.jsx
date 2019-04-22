@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Map, Set } from 'immutable'
 import { FaRegTimesCircle, FaCaretDown, FaCaretRight } from 'react-icons/fa'
 
+import HelpText from 'components/elements/HelpText'
 import { Context as Crossfilter, SET_FILTER } from 'components/Crossfilter'
 import { Flex } from 'components/Grid'
 
@@ -116,7 +117,7 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
             />
           ))}
 
-          {/* TODO: help text */}
+          {help && <HelpText>{help}</HelpText>}
         </Bars>
       )}
     </Wrapper>
