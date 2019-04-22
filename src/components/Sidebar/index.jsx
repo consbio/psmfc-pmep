@@ -25,7 +25,9 @@ const InnerWrapper = styled(Flex).attrs({
   height: 100%;
 `
 
-export const SidebarHelp = styled(HelpText).attrs({ mb: '1rem', px: '1rem' })``
+export const SidebarHelp = styled(HelpText).attrs({ mb: '1rem', px: '1rem' })`
+  font-size: 0.8rem;
+`
 
 const Sidebar = ({ children, allowScroll }) => (
   <Wrapper>

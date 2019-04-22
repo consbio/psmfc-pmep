@@ -36,9 +36,10 @@ const InnerLabel = styled(Label)`
 `
 
 const Description = styled.p`
-  font-size: 0.7rem;
+  line-height: 1.2;
+  font-size: 0.8rem;
   color: ${themeGet('colors.grey.600')};
-  margin: 0;
+  margin: 0.5rem 0 0 1rem;
 `
 
 const BioticListItem = ({ type, acres, maxAcres }) => {

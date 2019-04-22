@@ -14,7 +14,7 @@ const Wrapper = styled(Flex).attrs({
   alignItems: 'center',
   justifyContent: 'space-between',
 })`
-  background-color: ${themeGet('colors.primary.600')};
+  background-color: ${themeGet('colors.primary.900')};
   padding: 0;
   flex: 0 0 auto;
 `

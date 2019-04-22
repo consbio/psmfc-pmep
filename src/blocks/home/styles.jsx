@@ -31,7 +31,7 @@ export const DarkSection = styled(Section)`
   }
 
   a {
-    color: ${themeGet('colors.highlight')};
+    color: ${themeGet('colors.highlight.500')};
   }
 `
 

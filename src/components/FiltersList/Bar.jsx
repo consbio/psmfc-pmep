@@ -22,7 +22,7 @@ const Labels = styled(Columns).attrs({
   justifyContent: 'space-between',
 })`
   color: ${({ active }) =>
-    active ? themeGet('colors.highlight') : themeGet('colors.grey.700')};
+    active ? themeGet('colors.highlight.500') : themeGet('colors.grey.700')};
   font-size: 0.8rem;
 `
 
@@ -38,7 +38,7 @@ const IndicatorWrapper = styled(Flex).attrs({
 
 const Indicator = styled.div`
   background-color: ${({ active }) =>
-    active ? themeGet('colors.highlight') : themeGet('colors.link')};
+    active ? themeGet('colors.highlight.500') : themeGet('colors.primary.500')};
   flex-grow: ${({ width }) => width};
   transition: flex-grow 300ms;
 `

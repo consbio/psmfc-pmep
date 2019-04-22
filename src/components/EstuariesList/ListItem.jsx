@@ -28,7 +28,7 @@ const Wrapper = styled(Text).attrs({
 `
 
 const Name = styled.div`
-  color: ${themeGet('colors.link')};
+  color: ${themeGet('colors.primary.500')};
   font-size: 1rem;
   font-weight: normal;
 `

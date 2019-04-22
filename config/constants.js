@@ -1,3 +1,5 @@
+import { theme } from 'util/style'
+
 export const fullBounds = [[32.5, -124.7], [49, -117.1]] // Leaflet lat,lon format
 
 export const states = ['WA', 'OR', 'CA']
@@ -71,8 +73,17 @@ export const nfhpLabels = [
   'Moderate',
   'Low',
   'Very Low',
-  'Not assessed in the 2015 National Fish Habitat Assessment', // includes nodata, not scored by NFHAP, etc
+  // these get screened out based on NFHPJoin==999
+  'Not assessed', // includes nodata, not scored by NFHAP, etc
 ]
+export const nfhpColors = {
+  5: theme.colors.grey[200],
+  4: theme.colors.primary[200],
+  3: theme.colors.primary[0],
+  2: theme.colors.secondary[300],
+  1: theme.colors.secondary[600],
+  0: theme.colors.secondary[900],
+}
 
 // Size classes adapted from page 127 in SoK, converted to acres
 export const sizeClasses = [[0, 25], [25, 250], [250, 2500], [2500, Infinity]]

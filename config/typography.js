@@ -23,7 +23,7 @@ theme.overrideThemeStyles = () => ({
     cursor: 'pointer',
   },
   'a, a:visited': {
-    color: style.colors.link,
+    color: style.colors.primary[500],
     textDecoration: 'none',
   },
 })

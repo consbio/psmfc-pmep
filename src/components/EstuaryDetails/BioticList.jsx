@@ -34,7 +34,7 @@ const BioticList = ({ biotic }) => {
         <Total>{formatNumber(totalAcres)} acres total</Total>
       </Flex>
       {entries.map(entry => (
-        <BioticListItem maxAcres={maxAcres} {...entry} />
+        <BioticListItem key={entry.type} maxAcres={maxAcres} {...entry} />
       ))}
     </>
   )

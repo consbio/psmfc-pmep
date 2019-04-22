@@ -28,7 +28,7 @@ const ResetIcon = styled(FaRegTimesCircle).attrs({
   margin-left: 1rem;
   visibility: ${({ visible }) => visible};
   cursor: pointer;
-  color: ${themeGet('colors.highlight')};
+  color: ${themeGet('colors.highlight.500')};
 `
 
 const expandoColor = theme.colors.grey[800]
