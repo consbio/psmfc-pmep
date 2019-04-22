@@ -14,7 +14,9 @@ const Wrapper = styled.div`
 
 const Header = styled(Flex).attrs({
   justifyContent: 'space-between',
-})``
+})`
+  cursor: pointer;
+`
 
 const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
   cursor: pointer;
@@ -27,7 +29,9 @@ const Bar = styled.div`
   line-height: 1;
   border-radius: 0 0.5rem 0.5rem 0;
   padding: 0.25rem 1rem 0;
+  margin-bottom: 0.5rem;
   box-sizing: border-box;
+  cursor: pointer;
 `
 
 const Acres = styled.div`
@@ -63,15 +67,17 @@ const BioticListItem = ({ type, acres, maxAcres }) => {
 
   return (
     <Wrapper>
-      <Header>
-        <Title onClick={toggle}>
+      <Header onClick={toggle}>
+        <Title>
           {isOpen ? <CaretDown /> : <CaretRight />}
           <div>{label}</div>
         </Title>
         <Acres>{formatNumber(acres)} acres</Acres>
       </Header>
       <Content>
-        {position > 0 && <Bar color={color} width={position} />}
+        {position > 0 && (
+          <Bar color={color} width={position} onClick={toggle} />
+        )}
         {isOpen && <HelpText>{description}</HelpText>}
       </Content>
     </Wrapper>

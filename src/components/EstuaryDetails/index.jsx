@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 import { FaRegTimesCircle } from 'react-icons/fa'
 
-import { Flex } from 'components/Grid'
+import { Flex, Columns, Column } from 'components/Grid'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
@@ -12,11 +12,7 @@ import BioticList from './BioticList'
 import NFHP from './NFHP'
 import { stateNames } from '../../../config/constants'
 
-const Header = styled(Flex).attrs({
-  alignItems: 'top',
-  flex: 0,
-  justifyContent: 'space-between',
-})`
+const Header = styled.div`
   padding: 0.5rem 1rem;
   background-color: ${themeGet('colors.primary.0')};
   border-bottom: 1px solid ${themeGet('colors.grey.200')};
@@ -27,6 +23,10 @@ const Title = styled(Text).attrs({
   fontSize: ['1rem', '1rem', '1.5rem'],
 })``
 
+const Subtitle = styled(Text).attrs({
+  fontSize: ['0.8rem', '0.8rem', '1rem'],
+})``
+
 const BackIcon = styled(FaRegTimesCircle).attrs({ size: '1.5rem' })`
   cursor: pointer;
   color: ${themeGet('colors.grey.600')};
@@ -35,15 +35,15 @@ const BackIcon = styled(FaRegTimesCircle).attrs({ size: '1.5rem' })`
   }
 `
 
-const State = styled(Text).attrs({
-  fontSize: ['0.8rem', '0.8rem', '1rem'],
-})``
-
+const Acres = styled(Text).attrs({ textAlign: 'right' })`
+  color: ${themeGet('colors.grey.700')};
+  font-size: 0.8rem;
+`
 
 const TabHeader = styled.div`
   font-size: 1.25rem;
 `
-const Content = styled.div`
+const Value = styled.div`
   padding-left: 1rem;
   color: ${themeGet('colors.grey.900')};
 `
@@ -74,45 +74,76 @@ const EstuaryDetails = ({
   nfhp2015,
   NFHPJoin,
   onBack,
-}) => (
-  <>
-    <Header>
-      <div>
-        <Title>{name}</Title>
-        <State>{stateNames[state]}</State>
-      </div>
-      <BackIcon onClick={onBack} />
-    </Header>
+}) => {
+  const countSpecies = Object.entries(species).length
+  const countBiotic = Object.entries(biotic).length
+  const areaBiotic = Object.values(biotic).reduce((sum, area) => sum + area, 0)
 
-    <Tabs>
-      <Tab id="overview" label="Overview">
-        <TabHeader>General information:</TabHeader>
-        <Content>
-          Region: {region}
-          <br />
-          Type: {type}
-          <br />
-          Area: {formatNumber(acres, 0)} acres
-        </Content>
-      </Tab>
-      <Tab id="species" label="Species">
-        <TabHeader>Focal species present:</TabHeader>
-        <SpeciesList species={species} status={SoKJoin} />
-      </Tab>
-      <Tab id="habitats" label="Habitats">
-        <TabHeader>Biotic habitats:</TabHeader>
-        <BioticList biotic={biotic} />
-      </Tab>
-      <Tab id="threats" label="Threats">
-        <Section>
-          <TabHeader>Risk of fish habitat degradation:</TabHeader>
-          <NFHP level={nfhp2015} status={NFHPJoin} />
-        </Section>
-        {/* TODO: tidal wetland loss goes here */}
-      </Tab>
-    </Tabs>
-  </>
-)
+  return (
+    <>
+      <Header>
+        <Columns>
+          <Column flex={1}>
+            <Title>{name}</Title>
+          </Column>
+          <Column flex={0}>
+            <BackIcon onClick={onBack} />
+          </Column>
+        </Columns>
+        <Subtitle width="100%">
+          <Columns>
+            <Column>{stateNames[state]}</Column>
+            <Column>
+              <Acres>{formatNumber(acres, 0)} acres</Acres>
+            </Column>
+          </Columns>
+        </Subtitle>
+      </Header>
+
+      <Tabs>
+        <Tab id="overview" label="Overview">
+          <Section>
+            <TabHeader>Region:</TabHeader>
+            <Value>{region}</Value>
+          </Section>
+          <Section>
+            <TabHeader>Estuary type:</TabHeader>
+            <Value>{type}</Value>
+          </Section>
+          <Section>
+            <TabHeader>Focal species:</TabHeader>
+            <Value>
+              {countSpecies || 'No'} focal species are found in this estuary.
+            </Value>
+          </Section>
+          <Section>
+            <TabHeader>Biotic habitats:</TabHeader>
+            <Value>
+              {countBiotic || 'No'} biotic habitats{' '}
+              {countBiotic && `(${formatNumber(areaBiotic)} acres)`} have been
+              mapped in this estuary.
+            </Value>
+          </Section>
+        </Tab>
+        <Tab id="species" label="Species">
+          <TabHeader>Focal species present:</TabHeader>
+          <SpeciesList species={species} status={SoKJoin} />
+        </Tab>
+        <Tab id="habitats" label="Habitats">
+          <TabHeader>Biotic habitats:</TabHeader>
+          <BioticList biotic={biotic} />
+        </Tab>
+        <Tab id="threats" label="Threats">
+          <Section>
+            <TabHeader>Risk of fish habitat degradation:</TabHeader>
+            <NFHP level={nfhp2015} status={NFHPJoin} />
+          </Section>
+          {/* TODO: tidal wetland loss goes here */}
+        </Tab>
+      </Tabs>
+    </>
+  )
+}
 
 EstuaryDetails.propTypes = {
   name: PropTypes.string.isRequired,

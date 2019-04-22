@@ -22,7 +22,7 @@ const Explore = () => {
   console.log('render explore')
 
   const [data, index] = useData()
-  const [selectedId, setSelectedId] = useState(1148)
+  const [selectedId, setSelectedId] = useState(null)
 
   const handleSelect = id => {
     console.log('onSelect', id)
@@ -53,7 +53,10 @@ const Explore = () => {
               </>
             )}
           </Sidebar>
-          <FilteredMap onSelectFeature={handleSelect} />
+          <FilteredMap
+            selectedFeature={selectedId}
+            onSelectFeature={handleSelect}
+          />
         </Wrapper>
       </Layout>
     </CrossfilterProvider>

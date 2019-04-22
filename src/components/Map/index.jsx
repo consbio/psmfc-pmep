@@ -30,7 +30,14 @@ const MapNote = styled.div`
   box-shadow: 0 2px 6px #666;
 `
 
-const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
+const Map = ({
+  data,
+  selectedFeature,
+  bounds,
+  location,
+  onSelectFeature,
+  onBoundsChange,
+}) => {
   console.log('map render')
 
   // if there is no window, we cannot render this component
@@ -40,6 +47,7 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
 
   const mapNode = useRef(null)
   const mapRef = useRef(null)
+  const selectedFeatureRef = useRef(selectedFeature)
   const [legendEntries, setLegendEntries] = useState([])
 
   useEffect(() => {
@@ -104,7 +112,10 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
       console.log('clicked features, first is', feature)
 
       if (!feature) return
-      const { layer: {id: layerId}, properties } = feature
+      const {
+        layer: { id: layerId },
+        properties,
+      } = feature
 
       if (layerId === 'points') {
         onSelectFeature(properties.id)
@@ -176,7 +187,11 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     map.on('mouseleave', 'clusters', () => {
       map.getCanvas().style.cursor = ''
-      map.setFilter('points-highlight', ['==', 'id', Infinity])
+      map.setFilter('points-highlight', [
+        '==',
+        'id',
+        selectedFeatureRef.current || Infinity,
+      ])
       tooltip.remove()
     })
 
@@ -188,7 +203,11 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
         layers: ['points'],
       })
 
-      map.setFilter('points-highlight', ['==', 'id', feature.properties.id])
+      map.setFilter('points-highlight', [
+        'any',
+        ['==', 'id', feature.properties.id],
+        ['==', 'id', selectedFeatureRef.current || Infinity],
+      ])
 
       tooltip
         .setLngLat(feature.geometry.coordinates)
@@ -197,7 +216,11 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     })
     map.on('mouseleave', 'points', () => {
       map.getCanvas().style.cursor = ''
-      map.setFilter('points-highlight', ['==', 'id', Infinity])
+      map.setFilter('points-highlight', [
+        '==',
+        'id',
+        selectedFeatureRef.current || Infinity,
+      ])
       tooltip.remove()
     })
 
@@ -223,6 +246,17 @@ const Map = ({ data, bounds, location, onSelectFeature, onBoundsChange }) => {
     const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
     map.getSource('points').setData(geoJSON)
   }, [data])
+
+  useEffect(() => {
+    selectedFeatureRef.current = selectedFeature
+
+    const { current: map } = mapRef
+    if (!(map && map.isStyleLoaded())) return
+
+    console.log('set highlight ', selectedFeature)
+
+    map.setFilter('points-highlight', ['==', 'id', selectedFeature || Infinity])
+  }, [selectedFeature])
 
   // memoize this?
   const getLegendEntries = () => {
@@ -274,6 +308,7 @@ Map.propTypes = {
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
   }),
+  selectedFeature: PropTypes.number,
   onSelectFeature: PropTypes.func,
   onBoundsChange: PropTypes.func,
 }
@@ -281,6 +316,7 @@ Map.propTypes = {
 Map.defaultProps = {
   bounds: null,
   location: null,
+  selectedFeature: null,
   onSelectFeature: () => {},
   onBoundsChange: () => {},
 }

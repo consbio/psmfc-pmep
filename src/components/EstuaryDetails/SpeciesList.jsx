@@ -7,6 +7,10 @@ import styled, { themeGet } from 'util/style'
 import { splitWords } from 'util/format'
 import { sppEOLIDs } from '../../../config/constants'
 
+const Header = styled(HelpText)`
+  margin-bottom: 2rem;
+`
+
 const List = styled.ul`
   line-height: 1.2;
   li {
@@ -18,12 +22,17 @@ const List = styled.ul`
   }
 `
 
-
 const Stage = styled.span`
   margin-left: 0.5em;
   font-size: 0.9rem;
   font-style: italic;
   color: ${themeGet('colors.grey.700')};
+`
+
+const Section = styled.section`
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid ${themeGet('colors.grey.200')};
 `
 
 const SoKLink = () => (
@@ -41,9 +50,9 @@ const SpeciesList = ({ species: data, status }) => {
   // not inventoried
   if (status === 3) {
     return (
-      <InventoryStatus>
+      <HelpText>
         This estuary was not inventoried for species in the <SoKLink />
-      </InventoryStatus>
+      </HelpText>
     )
   }
 
@@ -54,6 +63,8 @@ const SpeciesList = ({ species: data, status }) => {
 
   // sort by name
   entries.sort((a, b) => (a.species > b.species ? 1 : -1))
+
+  const juvenileCount = entries.filter(({ stage }) => stage === 'JP').length
 
   let statusNote = null
 
@@ -75,26 +86,33 @@ const SpeciesList = ({ species: data, status }) => {
   return (
     <>
       {entries.length > 0 ? (
-        <List>
-          {entries.map(({ species, stage }) => (
-            <li key={species}>
-              <OutboundLink
-                from="/"
-                to={`http://eol.org/pages/${sppEOLIDs[species]}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {splitWords(species)}
-                {stage === 'JP' && <Stage>(juvenile)</Stage>}
-              </OutboundLink>
-            </li>
-          ))}
-        </List>
+        <>
+          <Header>
+            There are <b>{entries.length}</b> focal species that have been
+            inventoried in this estuary. <b>{juvenileCount}</b> use the estuary
+            mostly in their juvenile stage.
+          </Header>
+          <List>
+            {entries.map(({ species, stage }) => (
+              <li key={species}>
+                <OutboundLink
+                  from="/"
+                  to={`http://eol.org/pages/${sppEOLIDs[species]}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {splitWords(species)}
+                  {stage === 'JP' && <Stage>(juvenile)</Stage>}
+                </OutboundLink>
+              </li>
+            ))}
+          </List>
+        </>
       ) : (
         <HelpText>No focal species present</HelpText>
       )}
 
-      {statusNote}
+      <Section>{statusNote}</Section>
     </>
   )
 }
