@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 import { FaRegTimesCircle } from 'react-icons/fa'
 
-import { Flex, Columns, Column } from 'components/Grid'
+import { Button } from 'components/Button'
+import { Columns, Column } from 'components/Grid'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
@@ -40,6 +41,11 @@ const Acres = styled(Text).attrs({ textAlign: 'right' })`
   font-size: 0.8rem;
 `
 
+const ZoomButton = styled(Button)`
+  font-size: 0.8rem;
+  padding: 0.1rem 0.5rem;
+`
+
 const TabHeader = styled.div`
   font-size: 1.25rem;
 `
@@ -74,10 +80,15 @@ const EstuaryDetails = ({
   nfhp2015,
   NFHPJoin,
   onBack,
+  onZoomTo,
 }) => {
   const countSpecies = Object.entries(species).length
   const countBiotic = Object.entries(biotic).length
   const areaBiotic = Object.values(biotic).reduce((sum, area) => sum + area, 0)
+
+  const handleZoom = () => {
+    onZoomTo()
+  }
 
   return (
     <>
@@ -102,6 +113,11 @@ const EstuaryDetails = ({
 
       <Tabs>
         <Tab id="overview" label="Overview">
+          <Text textAlign="center">
+            <ZoomButton primary onClick={handleZoom}>
+              Zoom To Estuary
+            </ZoomButton>
+          </Text>
           <Section>
             <TabHeader>Region:</TabHeader>
             <Value>{region}</Value>
@@ -157,10 +173,12 @@ EstuaryDetails.propTypes = {
   nfhp2015: PropTypes.number.isRequired,
   NFHPJoin: PropTypes.number.isRequired,
   onBack: PropTypes.func,
+  onZoomTo: PropTypes.func,
 }
 
 EstuaryDetails.defaultProps = {
   onBack: () => {},
+  onZoomTo: () => {},
 }
 
 export default EstuaryDetails

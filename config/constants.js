@@ -1,6 +1,6 @@
 import { theme } from 'util/style'
 
-export const fullBounds = [[32.5, -124.7], [49, -117.1]] // Leaflet lat,lon format
+export const PNWBounds = [-124.7, 32.5, -117.1, 49]
 
 export const states = ['WA', 'OR', 'CA']
 

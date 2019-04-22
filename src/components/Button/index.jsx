@@ -35,8 +35,14 @@ export const DisabledButton = styled(DefaultButton).attrs({
   }
 `
 
-
-export const Button = ({ children, primary, secondary, disabled, onClick }) => {
+export const Button = ({
+  children,
+  primary,
+  secondary,
+  disabled,
+  onClick,
+  ...props
+}) => {
   let StyledButton = null
   if (primary) {
     StyledButton = PrimaryButton
@@ -48,7 +54,11 @@ export const Button = ({ children, primary, secondary, disabled, onClick }) => {
     StyledButton = DefaultButton
   }
 
-  return <StyledButton onClick={onClick}>{children}</StyledButton>
+  return (
+    <StyledButton onClick={onClick} {...props}>
+      {children}
+    </StyledButton>
+  )
 }
 
 Button.propTypes = {

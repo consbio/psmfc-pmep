@@ -1,5 +1,5 @@
 import { createSteps } from 'util/map'
-import { bioticInfo } from './constants'
+import { bioticInfo, PNWBounds } from './constants'
 
 export const transparentColor = 'rgba(0,0,0,0)'
 export const boundaryColor = '#a18ac9'
@@ -68,7 +68,7 @@ export const config = {
   accessToken: mapboxToken,
   // center: [-120.9, 40.75],
   // zoom: 4,
-  bounds: [-124.7, 32.5, -117.1, 49],
+  bounds: PNWBounds,
   minZoom: 1.75,
   styleID: 'light-v9',
   padding: 0.1, // padding around bounds as a proportion

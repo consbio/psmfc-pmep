@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+import { List } from 'immutable'
 
 import { useData } from 'components/Data'
 import {
@@ -12,6 +13,7 @@ import EstuaryDetails from 'components/EstuaryDetails'
 import { Flex } from 'components/Grid'
 import FiltersList from 'components/FiltersList'
 import styled from 'util/style'
+import { PNWBounds } from '../../config/constants'
 import { filters } from '../../config/filters'
 
 const Wrapper = styled(Flex)`
@@ -20,12 +22,31 @@ const Wrapper = styled(Flex)`
 
 const Compare = () => {
   const [data, index] = useData()
-
   const [selectedId, setSelectedId] = useState(null)
+  const boundsRef = useRef(PNWBounds) // store bounds as they are updated without rerendering
+  const [{ prevBounds, nextBounds }, setBounds] = useState({
+    prevBounds: List(PNWBounds),
+  })
 
   const handleSelect = id => {
     console.log('onSelect', id)
     setSelectedId(id)
+  }
+
+  const handleZoomTo = () => {
+    setBounds({
+      prevBounds: List(boundsRef.current || []),
+      nextBounds: index.get(selectedId.toString()).get('bounds'),
+    })
+  }
+
+  const handleBack = () => {
+    setSelectedId(null)
+    setBounds({ nextBounds: List(prevBounds || []), prevBounds: List() })
+  }
+
+  const handleBoundsChange = bounds => {
+    boundsRef.current = bounds
   }
 
   return (
@@ -37,7 +58,8 @@ const Compare = () => {
             {selectedId !== null ? (
               <EstuaryDetails
                 {...index.get(selectedId.toString()).toJS()}
-                onBack={() => handleSelect(null)}
+                onBack={handleBack}
+                onZoomTo={handleZoomTo}
               />
             ) : (
               <>
@@ -64,8 +86,10 @@ const Compare = () => {
           </Sidebar>
 
           <FilteredMap
+            bounds={nextBounds}
             selectedFeature={selectedId}
             onSelectFeature={handleSelect}
+            onBoundsChange={handleBoundsChange}
           />
         </Wrapper>
       </Layout>

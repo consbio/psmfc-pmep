@@ -55,7 +55,7 @@ const Map = ({
 
     let { center, zoom } = config
 
-    const targetBounds = bounds ? bounds.toJS() : initBounds
+    const targetBounds = bounds.isEmpty() ? initBounds : bounds.toJS()
 
     // If bounds are available, use these to establish center and zoom when map first loads
     if (targetBounds && targetBounds.length === 4) {
@@ -239,6 +239,7 @@ const Map = ({
     }
   }, [])
 
+  // Update clusters when the filtered data change
   useEffect(() => {
     const { current: map } = mapRef
     if (!(map && map.isStyleLoaded())) return
@@ -247,16 +248,26 @@ const Map = ({
     map.getSource('points').setData(geoJSON)
   }, [data])
 
+  // Update selected point / polygon
   useEffect(() => {
     selectedFeatureRef.current = selectedFeature
 
     const { current: map } = mapRef
     if (!(map && map.isStyleLoaded())) return
 
-    console.log('set highlight ', selectedFeature)
-
     map.setFilter('points-highlight', ['==', 'id', selectedFeature || Infinity])
   }, [selectedFeature])
+
+  // Update bounds to match incoming bounds
+  useEffect(() => {
+    if (!bounds.isEmpty()) {
+      const { current: map } = mapRef
+
+      if (!map) return
+
+      map.fitBounds(bounds.toJS(), { padding: 20, maxZoom: 14, duration: 2000 })
+    }
+  }, [bounds])
 
   // memoize this?
   const getLegendEntries = () => {
@@ -314,7 +325,7 @@ Map.propTypes = {
 }
 
 Map.defaultProps = {
-  bounds: null,
+  bounds: List(),
   location: null,
   selectedFeature: null,
   onSelectFeature: () => {},
