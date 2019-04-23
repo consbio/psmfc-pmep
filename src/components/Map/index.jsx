@@ -11,7 +11,14 @@ import { hasWindow } from 'util/dom'
 import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 
 import Legend from './Legend'
-import { config, sources, layers, legends } from '../../../config/map'
+import {
+  config,
+  sources,
+  layers,
+  legends,
+  boundaryLayer,
+  bioticLayer,
+} from '../../../config/map'
 
 const Relative = styled.div`
   position: relative;
@@ -107,7 +114,7 @@ const Map = ({
 
     map.on('click', e => {
       const [feature] = map.queryRenderedFeatures(e.point, {
-        layers: ['points', 'estuaries-fill'],
+        layers: ['points', 'boundaries-fill'],
       })
       console.log('clicked features, first is', feature)
 
@@ -120,7 +127,7 @@ const Map = ({
       if (layerId === 'points') {
         onSelectFeature(properties.id)
       } else {
-        // TODO: need ID from boundaries
+        onSelectFeature(properties[boundaryLayer.idProperty])
       }
     })
 
@@ -246,6 +253,8 @@ const Map = ({
 
     const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
     map.getSource('points').setData(geoJSON)
+
+    // TODO: set filter on the estuary boundaries?
   }, [data])
 
   // Update selected point / polygon
@@ -256,6 +265,11 @@ const Map = ({
     if (!(map && map.isStyleLoaded())) return
 
     map.setFilter('points-highlight', ['==', 'id', selectedFeature || Infinity])
+    map.setFilter('boundaries-outline-highlight', [
+      '==',
+      ['get', boundaryLayer.idProperty],
+      selectedFeature || Infinity,
+    ])
   }, [selectedFeature])
 
   // Update bounds to match incoming bounds
@@ -276,12 +290,12 @@ const Map = ({
 
     // Group layers with visible features
     const visibleFeatures = map.queryRenderedFeatures({
-      layers: ['clusters', 'points', 'estuaries-fill', 'biotics-fill'],
+      layers: ['clusters', 'points', 'boundaries-fill', 'biotics-fill'],
     })
     const grouped = groupByLayer(visibleFeatures)
 
     // only show point or boundary for estuaries when in view
-    if (grouped.points && grouped['estuaries-fill']) {
+    if (grouped.points && grouped['boundaries-fill']) {
       delete grouped.points
     }
 

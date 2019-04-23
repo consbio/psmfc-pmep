@@ -11,18 +11,25 @@ const mapboxToken =
   'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
 
 /* --------- Vector tile source information --------- */
-const boundaries = {
-  tileURL:
-    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-  sourceLayer: 'PMEP Estuary Extent:1',
+export const boundaryLayer = {
+  // tileURL:
+  //   'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  // sourceLayer: 'PMEP Estuary Extent:1',
+  tileURL: 'http://52.43.202.160/services/pmep/estuaries/tiles/{z}/{x}/{y}.pbf',
+  sourceLayer: 'estuaries',
+  idProperty: 'PMEP_EstuaryID',
 }
 
 // CMECS biotics vector tile source information
-const biotics = {
+export const bioticLayer = {
+  // tileURL:
+  //   'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  // sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
+  // idProperty: '_symbol',
   tileURL:
-    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-  sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
-  idProperty: '_symbol',
+    'http://52.43.202.160/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
+  sourceLayer: 'cmecs_biotic',
+  idProperty: 'CMECS_BC_Code',
 }
 
 /* --------- Cluster information --------- */
@@ -54,9 +61,13 @@ const clusterRadii = createSteps(clusters, 'radius')
 // extract biotic code and color info into Mapbox style expression
 // so that we can style the layer based on code
 // structure is: [code, color, code2, color2, ...]
+// TODO: Convert this to use proper ID for each CMECS type
 let bioticStyle = []
-Object.values(bioticInfo).forEach(({ vtID, color }) => {
-  bioticStyle = bioticStyle.concat([vtID, color])
+// Object.values(bioticInfo).forEach(({ vtID, color }) => {
+//   bioticStyle = bioticStyle.concat([vtID, color])
+// })
+Object.entries(bioticInfo).forEach(([key, { color }]) => {
+  bioticStyle = bioticStyle.concat([key, color])
 })
 // final entry must be the default color
 bioticStyle.push(transparentColor)
@@ -75,16 +86,16 @@ export const config = {
 }
 
 export const sources = {
-  estuaries: {
+  boundaries: {
     type: 'vector',
-    tiles: [boundaries.tileURL],
+    tiles: [boundaryLayer.tileURL],
     minzoom: 4,
     maxzoom: 19,
     tileSize: 512,
   },
   biotics: {
     type: 'vector',
-    tiles: [biotics.tileURL],
+    tiles: [bioticLayer.tileURL],
     minzoom: 5,
     maxzoom: 14,
     tileSize: 512,
@@ -100,9 +111,9 @@ export const sources = {
 
 export const layers = [
   {
-    id: 'estuaries-fill',
-    source: 'estuaries',
-    'source-layer': boundaries.sourceLayer,
+    id: 'boundaries-fill',
+    source: 'boundaries',
+    'source-layer': boundaryLayer.sourceLayer,
     minzoom: 4,
     maxzoom: 22,
     type: 'fill',
@@ -114,9 +125,9 @@ export const layers = [
     },
   },
   {
-    id: 'estuaries-outline',
-    source: 'estuaries',
-    'source-layer': boundaries.sourceLayer,
+    id: 'boundaries-outline',
+    source: 'boundaries',
+    'source-layer': boundaryLayer.sourceLayer,
     minzoom: 4,
     maxzoom: 22,
     type: 'line',
@@ -131,36 +142,35 @@ export const layers = [
       'line-color': boundaryColor,
     },
   },
-  // TODO: when boundaries have an ID
-  // {
-  //   id: 'boundaries-outline-highlight',
-  //   source: 'boundaries',
-  //   'source-layer': boundaries.sourceLayer,
-  //   minzoom: 4,
-  //   maxzoom: 22,
-  //   type: 'line',
-  //   filter: ['==', ['get', 'id'], Infinity],
-  //   paint: {
-  //     'line-width': {
-  //       base: 1,
-  //       stops: [[5, 1], [12, 3]],
-  //     },
-  //     'line-opacity': {
-  //       stops: [[5, 0.1], [7, 0.5], [10, 1]],
-  //     },
-  //     'line-color': boundaryColor,
-  //   },
-  // },
+  {
+    id: 'boundaries-outline-highlight',
+    source: 'boundaries',
+    'source-layer': boundaryLayer.sourceLayer,
+    minzoom: 4,
+    maxzoom: 22,
+    type: 'line',
+    filter: ['==', ['get', boundaryLayer.idProperty], Infinity],
+    paint: {
+      'line-width': {
+        base: 1,
+        stops: [[5, 1], [12, 3]],
+      },
+      'line-opacity': {
+        stops: [[5, 0.5], [8, 1]],
+      },
+      'line-color': highlightColor,
+    },
+  },
   {
     id: 'biotics-fill',
     source: 'biotics',
-    'source-layer': biotics.sourceLayer,
+    'source-layer': bioticLayer.sourceLayer,
     minzoom: 10,
     maxzoom: 22,
     type: 'fill',
     paint: {
       'fill-opacity': 0.5,
-      'fill-color': ['match', ['get', '_symbol'], ...bioticStyle],
+      'fill-color': ['match', ['get', bioticLayer.idProperty], ...bioticStyle],
     },
   },
   {
@@ -188,10 +198,14 @@ export const layers = [
     id: 'points', // unclustered points
     type: 'circle',
     source: 'points',
+    maxzoom: 15,
     filter: ['!', ['has', 'point_count']],
     paint: {
       'circle-color': boundaryColor,
-      'circle-radius': defaultRadius,
+      'circle-radius': {
+        base: 12,
+        stops: [[5, defaultRadius], [14, 10]],
+      },
       'circle-stroke-width': 1,
       'circle-stroke-color': '#fff',
     },
@@ -200,6 +214,7 @@ export const layers = [
     id: 'points-highlight',
     type: 'circle',
     source: 'points',
+    maxzoom: 15,
     filter: ['==', 'id', Infinity],
     paint: {
       'circle-color': highlightColor,
@@ -280,7 +295,7 @@ export const legends = {
       },
     ],
   },
-  'estuaries-fill': {
+  'boundaries-fill': {
     getLegend: () => [
       {
         type: 'fill',
@@ -294,19 +309,21 @@ export const legends = {
   'biotics-fill': {
     getLegend: features => {
       // TODO: no longer needed when biotics code is in vector tiles
-      const codeLUT = {}
-      Object.values(bioticInfo).forEach(({ vtID, label, color }) => {
-        codeLUT[vtID] = { label, color }
-      })
+      // const codeLUT = {}
+      // Object.values(bioticInfo).forEach(({ vtID, label, color }) => {
+      //   codeLUT[vtID] = { label, color }
+      // })
 
       // extract unique biotic codes and sort in ascending order
-      // TODO: change _symbol to biotics code when vector tiles are updated
       const codes = Array.from(
-        new Set(features.map(({ properties: { _symbol } }) => _symbol))
+        new Set(
+          features.map(({ properties }) => properties[bioticLayer.idProperty])
+        )
       ).sort()
 
       return codes.map(code => {
-        const { label, color } = codeLUT[code]
+        // const { label, color } = codeLUT[code]
+        const { label, color } = bioticInfo[code]
         return {
           type: 'fill',
           label,
