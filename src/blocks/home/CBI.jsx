@@ -8,7 +8,7 @@ import Logo from 'images/cbi_logo.png'
 import { Section as BaseSection } from './styles'
 
 const Section = styled(BaseSection)`
-  border-top: 0.5rem solid ${themeGet('colors.primary.400')};
+  border-top: 0.5rem solid ${themeGet('colors.primary.800')};
 
   p {
     font-size: 0.9rem;
