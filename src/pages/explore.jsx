@@ -32,10 +32,11 @@ const Explore = () => {
 
   const [data, index] = useData()
   const [selectedId, setSelectedId] = useState(null)
-  const boundsRef = useRef(PNWBounds) // store bounds as they are updated without rerendering
+  const boundsRef = useRef(PNWBounds) // store bounds so they are updated without rerendering
   const [{ prevBounds, nextBounds }, setBounds] = useState({
     prevBounds: List(PNWBounds),
   })
+  const [showZoom, setShowZoom] = useState(true)
 
   const handleSelect = id => {
     console.log('onSelect', id)
@@ -45,21 +46,23 @@ const Explore = () => {
   const handleSelectFromList = id => {
     handleSelect(id)
     setBounds({
-      prevBounds: List(boundsRef.current || []),
+      prevBounds: List(boundsRef.current),
       nextBounds: index.get(id.toString()).get('bounds'),
     })
+    setShowZoom(false)
   }
 
   const handleZoomTo = () => {
     setBounds({
-      prevBounds: List(boundsRef.current || []),
+      prevBounds: List(boundsRef.current),
       nextBounds: index.get(selectedId.toString()).get('bounds'),
     })
   }
 
   const handleBack = () => {
     setSelectedId(null)
-    setBounds({ nextBounds: List(prevBounds || []), prevBounds: List() })
+    setBounds({ nextBounds: List(prevBounds), prevBounds: List() })
+    setShowZoom(true)
   }
 
   const handleBoundsChange = bounds => {
@@ -75,6 +78,7 @@ const Explore = () => {
             {selectedId !== null ? (
               <EstuaryDetails
                 {...index.get(selectedId.toString()).toJS()}
+                showZoom={showZoom}
                 onBack={handleBack}
                 onZoomTo={handleZoomTo}
               />

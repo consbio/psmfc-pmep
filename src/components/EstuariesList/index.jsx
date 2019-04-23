@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
+import { Map } from 'immutable'
 import { FixedSizeList as List } from 'react-window'
 import useDimensions from 'react-use-dimensions'
 
@@ -50,17 +51,14 @@ const EstuariesList = ({ onSelect }) => {
 
   const listRef = useRef(null)
   const [listWrapperRef, { height: listHeight }] = useDimensions()
-  const [query, setQuery] = useState('')
   const [sortIdx, setSortIdx] = useState(2) // default: north to south
 
   const handleQueryChange = value => {
-    setQuery(value)
-
     filterDispatch({
       type: SET_FILTER,
       payload: {
         field: 'name',
-        filterValue: value.toLowerCase(),
+        filterValue: value,
       },
     })
   }
@@ -95,7 +93,7 @@ const EstuariesList = ({ onSelect }) => {
       </Columns>
 
       <SearchBar
-        value={query}
+        value={state.get('filters', Map()).get('name', '')}
         placeholder="Enter an estuary name"
         onChange={handleQueryChange}
       />

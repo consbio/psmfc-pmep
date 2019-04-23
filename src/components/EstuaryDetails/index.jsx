@@ -79,6 +79,7 @@ const EstuaryDetails = ({
   SoKJoin,
   nfhp2015,
   NFHPJoin,
+  showZoom,
   onBack,
   onZoomTo,
 }) => {
@@ -113,11 +114,14 @@ const EstuaryDetails = ({
 
       <Tabs>
         <Tab id="overview" label="Overview">
-          <Text textAlign="center">
-            <ZoomButton primary onClick={handleZoom}>
-              Zoom To Estuary
-            </ZoomButton>
-          </Text>
+          {showZoom && (
+            <Text textAlign="center">
+              <ZoomButton primary onClick={handleZoom}>
+                Zoom To Estuary
+              </ZoomButton>
+            </Text>
+          )}
+
           <Section>
             <TabHeader>Region:</TabHeader>
             <Value>{region}</Value>
@@ -172,11 +176,13 @@ EstuaryDetails.propTypes = {
   SoKJoin: PropTypes.number.isRequired,
   nfhp2015: PropTypes.number.isRequired,
   NFHPJoin: PropTypes.number.isRequired,
+  showZoom: PropTypes.bool,
   onBack: PropTypes.func,
   onZoomTo: PropTypes.func,
 }
 
 EstuaryDetails.defaultProps = {
+  showZoom: true,
   onBack: () => {},
   onZoomTo: () => {},
 }

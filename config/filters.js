@@ -73,7 +73,7 @@ export const filters = [
     field: 'name',
     internal: true,
     getValue: record => record.get('name').toLowerCase(),
-    filterFunc: value => name => name.includes(value),
+    filterFunc: value => name => name.includes(value.toLowerCase()),
   },
   {
     field: 'bounds',
