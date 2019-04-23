@@ -15,7 +15,8 @@ export const boundaryLayer = {
   // tileURL:
   //   'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
   // sourceLayer: 'PMEP Estuary Extent:1',
-  tileURL: 'http://52.43.202.160/services/pmep/estuaries/tiles/{z}/{x}/{y}.pbf',
+  tileURL:
+    'https://tiles.databasin.org/services/pmep/estuaries/tiles/{z}/{x}/{y}.pbf',
   sourceLayer: 'estuaries',
   idProperty: 'PMEP_EstuaryID',
 }
@@ -27,7 +28,7 @@ export const bioticLayer = {
   // sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
   // idProperty: '_symbol',
   tileURL:
-    'http://52.43.202.160/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
+    'https://tiles.databasin.org/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
   sourceLayer: 'cmecs_biotic',
   idProperty: 'CMECS_BC_Code',
 }
