@@ -4,16 +4,23 @@ import { Text } from 'rebass'
 
 import { Context as Crossfilter, RESET_FILTERS } from 'components/Crossfilter'
 import { Button } from 'components/Button'
-import { Flex, Columns, Column } from 'components/Grid'
+import { Flex, Box, Columns, Column } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 import Filter from './Filter'
 import { filters as rawFilters } from '../../../config/filters'
 
-const Wrapper = styled.div`
-  padding: 0 1rem;
-`
+const Wrapper = styled(Flex).attrs({
+  flexDirection: 'column',
+  flex: 1,
+})``
 
-const Header = styled(Columns).attrs({ marginBottom: '0.5rem' })``
+const Header = styled(Columns).attrs({
+  flex: 0,
+  px: '1rem',
+  pb: '0.5rem',
+})`
+  border-bottom: 1px solid ${themeGet('colors.grey.200')};
+`
 
 export const Count = styled.span`
   color: ${themeGet('colors.grey.600')};
@@ -36,6 +43,10 @@ const ResetIcon = styled(FaRegTimesCircle).attrs({
 })`
   margin-right: 0.25rem;
   cursor: pointer;
+`
+
+const Filters = styled(Box).attrs({ flex: 1, pr: '1rem' })`
+  overflow-y: auto;
 `
 
 // filter out internal filters
@@ -81,9 +92,11 @@ const index = () => {
         </Column>
       </Header>
 
-      {filters.map(filter => (
-        <Filter key={filter.field} {...filter} />
-      ))}
+      <Filters>
+        {filters.map(filter => (
+          <Filter key={filter.field} {...filter} />
+        ))}
+      </Filters>
     </Wrapper>
   )
 }

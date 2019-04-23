@@ -11,8 +11,11 @@ import styled, { theme, themeGet } from 'util/style'
 import Bar from './Bar'
 
 const Wrapper = styled.div`
-  border-top: 1px solid ${themeGet('colors.grey.200')};
   padding-top: 0.25rem;
+
+  &:not(:first-child) {
+    border-top: 1px solid ${themeGet('colors.grey.200')};
+  }
 `
 
 const Header = styled(Flex).attrs({
