@@ -1,13 +1,13 @@
 import { useReducer, useRef } from 'react'
 
-import { Map, List } from 'immutable'
+import { Map, List, Set } from 'immutable'
 
 import Crossfilter from 'crossfilter2'
 import { isDebug } from 'util/dom'
 import { countByDimension, countFiltered } from './util'
 
 // Actions
-export const CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS'
+export const RESET_FILTERS = 'RESET_FILTERS'
 export const SET_FILTER = 'SET_FILTER' // payload is {field, filterValue}
 
 // Incoming data is an immutableJS List of Maps
@@ -16,10 +16,7 @@ export const useCrossfilter = (data, filters) => {
   const dimensionsRef = useRef(null)
 
   // payload: {type: "SOME_TYPE", payload: <the_data>}
-  const reducer = (
-    state,
-    { type, payload: { field, filterValue, ...payload } }
-  ) => {
+  const reducer = (state, { type, payload }) => {
     const { current: crossfilter } = crossfilterRef
     const { current: dimensions } = dimensionsRef
 
@@ -32,6 +29,7 @@ export const useCrossfilter = (data, filters) => {
 
     switch (type) {
       case SET_FILTER: {
+        const { field, filterValue } = payload
         const dimension = dimensions[field]
 
         if (!filterValue || filterValue.size === 0) {
@@ -51,7 +49,26 @@ export const useCrossfilter = (data, filters) => {
         })
         break
       }
-      case CLEAR_ALL_FILTERS: {
+
+      case RESET_FILTERS: {
+        const { fields } = payload
+
+        let newFilters = state.get('filters')
+
+        fields.forEach(field => {
+          dimensions[field].filterAll()
+
+          const filter = newFilters.get(field)
+          newFilters = newFilters.set(field, filter ? filter.clear() : Set())
+        })
+
+        newState = state.merge({
+          // convert Array from crossfilter back to an immutable List
+          data: List(crossfilter.allFiltered()),
+          dimensionCounts: countByDimension(dimensions),
+          filteredCount: countFiltered(crossfilter),
+          filters: newFilters,
+        })
         break
       }
 

@@ -17,7 +17,6 @@ const NFHPLink = () => (
 )
 
 const NFHP = ({ level, status }) => {
-  console.log(status)
   let StatusNote = ''
 
   switch (status) {

@@ -77,7 +77,6 @@ const EstuariesList = ({ onSelect }) => {
   }
 
   const data = state.get('data')
-  console.log('data in render list', data)
   const sortedData = data.sort(sortOptions[sortIdx].sortFunc)
 
   return (

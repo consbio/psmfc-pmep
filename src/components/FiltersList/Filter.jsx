@@ -59,7 +59,7 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
 
   const filterValues = state.get('filters').get(field, Set())
   const counts = state.get('dimensionCounts').get(field, Map())
-  const total = state.get('total') // TODO: get the right number
+  const total = state.get('total')
 
   const toggle = () => {
     setIsOpen(prev => !prev)
@@ -109,7 +109,7 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
             <Bar
               key={value}
               isFiltered={filterValues.has(value)}
-              isExcluded={filterValues.size > 0 && !filterValues.has(value)}
+              isExcluded={!filterValues.isEmpty() && !filterValues.has(value)}
               label={labels && labels[idx] ? labels[idx] : value}
               count={counts.get(value, 0)}
               total={total}
