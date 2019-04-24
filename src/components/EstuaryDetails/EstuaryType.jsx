@@ -5,6 +5,8 @@ import HelpText from 'components/elements/HelpText'
 import styled, { themeGet } from 'util/style'
 import riverine from 'images/riverine.svg'
 import delta from 'images/delta.svg'
+import lagoonal from 'images/lagoonal.svg'
+import bay from 'images/bay.svg'
 import { estuaryTypes } from '../../../config/constants'
 
 const Graphic = styled.img`
@@ -13,10 +15,10 @@ const Graphic = styled.img`
 `
 // in same order as estuaryType in constants
 const graphics = {
-  0: null,
+  0: bay,
   1: delta,
   2: riverine,
-  3: null,
+  3: lagoonal,
 }
 
 const EstuaryType = ({ type }) => {

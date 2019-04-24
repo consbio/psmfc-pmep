@@ -45,6 +45,7 @@ const Acres = styled(Text).attrs({ textAlign: 'right' })`
 
 const ZoomButton = styled(Button)`
   font-size: 0.8rem;
+  margin-bottom: 1rem;
   padding: 0.1rem 0.5rem;
 `
 
