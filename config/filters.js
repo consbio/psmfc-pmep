@@ -84,8 +84,8 @@ export const filters = [
   {
     field: 'type',
     title: 'Estuary Type',
-    values: estuaryTypes,
-    labels: estuaryTypes,
+    values: Object.keys(estuaryTypes).map(type => parseInt(type, 10)),
+    labels: Object.values(estuaryTypes).map(({ label }) => label),
     filterFunc: hasValue,
   },
   {

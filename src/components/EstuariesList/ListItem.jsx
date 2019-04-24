@@ -5,7 +5,7 @@ import { Text } from 'rebass'
 import { Columns, Column } from 'components/Grid'
 import styled, { themeGet, theme } from 'util/style'
 import { formatNumber } from 'util/format'
-import { stateNames } from '../../../config/constants'
+import { stateNames, estuaryTypes } from '../../../config/constants'
 
 const Wrapper = styled(Text).attrs({
   fontSize: ['0.9rem', '0.8rem', '0.9rem'],
@@ -42,7 +42,7 @@ const ListItem = ({ name, type, state, acres, ...props }) => (
       </Column>
       <Column>
         <Text textAlign="right">
-          {type}
+          {estuaryTypes[type].label}
           <br />({formatNumber(acres, 0)} acres)
         </Text>
       </Column>
@@ -53,7 +53,7 @@ const ListItem = ({ name, type, state, acres, ...props }) => (
 ListItem.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.number.isRequired,
   state: PropTypes.string.isRequired,
   acres: PropTypes.number.isRequired,
 }

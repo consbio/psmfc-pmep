@@ -1,10 +1,12 @@
 import React from 'react'
+import { Image } from 'rebass'
 
 import { Box, Flex } from 'components/Grid'
 import { Link } from 'components/Link'
 import styled, { themeGet } from 'util/style'
 import CompareImg from 'images/compare.jpg'
 import ExploreImg from 'images/explore.jpg'
+import SiteLogo from 'images/logo.svg'
 import { Section, Title } from './styles'
 
 const Columns = styled(Flex).attrs({
@@ -22,9 +24,22 @@ const Screenshot = styled.img`
   margin: 1rem;
 `
 
+const Logo = styled(Image).attrs({
+  src: SiteLogo,
+  width: ['2rem', '4rem'],
+  my: 0,
+  mr: '0.5rem',
+  as: 'img',
+})``
+
 const About = () => (
   <Section>
-    <Title>The West Coast Estuaries Explorer</Title>
+    <Title>
+      <Flex alignItems="center">
+        <Logo />
+        <div>The West Coast Estuaries Explorer</div>
+      </Flex>
+    </Title>
     <Columns>
       <Column>
         <p>

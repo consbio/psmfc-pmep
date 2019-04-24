@@ -1,6 +1,6 @@
 const breakpoints = ['40em', '52em', '64em']
 
-// generated using: https://palx.jxnblk.com/073763
+// generated using:
 // https://palx.jxnblk.com/ee7d14
 const colors = {
   pageBackground: 'hsl(228, 33%, 97%)',

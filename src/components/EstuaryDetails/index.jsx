@@ -8,10 +8,12 @@ import { Columns, Column } from 'components/Grid'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
+
 import SpeciesList from './SpeciesList'
 import BioticList from './BioticList'
 import NFHP from './NFHP'
-import { stateNames } from '../../../config/constants'
+import EstuaryType from './EstuaryType'
+import { stateNames, estuaryTypes } from '../../../config/constants'
 
 const Header = styled.div`
   padding: 0.5rem 1rem;
@@ -122,14 +124,14 @@ const EstuaryDetails = ({
             </Text>
           )}
 
+          <TabHeader>Type: {estuaryTypes[type].label}</TabHeader>
+          <EstuaryType type={type} />
+
           <Section>
             <TabHeader>Region:</TabHeader>
             <Value>{region}</Value>
           </Section>
-          <Section>
-            <TabHeader>Estuary type:</TabHeader>
-            <Value>{type}</Value>
-          </Section>
+
           <Section>
             <TabHeader>Focal species:</TabHeader>
             <Value>
@@ -168,7 +170,7 @@ const EstuaryDetails = ({
 EstuaryDetails.propTypes = {
   name: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.number.isRequired,
   acres: PropTypes.number.isRequired,
   region: PropTypes.string.isRequired,
   species: PropTypes.object.isRequired,

@@ -45,7 +45,6 @@ export const useData = () => {
       id: parseInt(id, 10),
 
       // convert codes back to labels
-      type: estuaryTypes[type],
       region: regions[region],
 
       // unpack species and biotic fields

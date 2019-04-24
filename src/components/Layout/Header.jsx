@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
+import { Text, Image } from 'rebass'
 import { FaSlidersH, FaBinoculars } from 'react-icons/fa'
 
 import { Link } from 'components/Link'
@@ -8,7 +8,7 @@ import { Link } from 'components/Link'
 import { Flex } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 
-import LogoImage from 'images/logo.png'
+import SiteLogo from 'images/logo.svg'
 
 const Wrapper = styled(Flex).attrs({
   alignItems: 'center',
@@ -30,16 +30,14 @@ const Title = styled.h1`
   }
 `
 
-const SiteLogo = styled.img.attrs({
-  src: LogoImage,
-})`
-  border: 2px solid #fff;
-  border-radius: 20px;
-  background: #fff;
-  height: 30px;
-  box-shadow: 0 0 6px #ffffffad;
-  margin: 0 0.5em 0 0.5em;
-`
+const Logo = styled(Image).attrs({
+  src: SiteLogo,
+  as: 'img',
+  width: ['2rem'],
+  my: '-0.5rem',
+  mr: '0.25rem',
+  ml: '0.5rem',
+})``
 
 const NavLink = styled(Link)`
   color: #fff !important;
@@ -71,7 +69,7 @@ const Header = ({ siteTitle }) => (
     <Title>
       <Link to="/">
         <Flex alignItems="center" flexWrap="wrap">
-          <SiteLogo />
+          <Logo />
           <Text fontSize={['1.25rem']}>{siteTitle}</Text>
         </Flex>
       </Link>
