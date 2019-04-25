@@ -29,6 +29,8 @@ const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
 const ResetIcon = styled(FaRegTimesCircle).attrs({
   size: '1rem',
 })`
+  width: 1rem;
+  height: 1rem;
   margin-left: 1rem;
   visibility: ${({ visible }) => visible};
   cursor: pointer;
@@ -42,6 +44,8 @@ const CaretDown = styled(FaCaretDown).attrs({
   color: expandoColor,
   size: expandoSize,
 })`
+  width: 1rem;
+  height: 1rem;
   margin-right: 0.25rem;
 `
 
@@ -49,6 +53,8 @@ const CaretRight = styled(FaCaretRight).attrs({
   color: expandoColor,
   size: expandoSize,
 })`
+  width: 1rem;
+  height: 1rem;
   margin-right: 0.25rem;
 `
 

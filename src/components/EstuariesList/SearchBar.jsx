@@ -25,11 +25,16 @@ export const InnerWrapper = styled(Flex).attrs({
 
 export const SearchIcon = styled(FaSearch).attrs({
   size: '1rem',
-})``
+})`
+  width: 1rem;
+  height: 1rem;
+`
 
 export const ClearIcon = styled(FaRegTimesCircle).attrs({
   size: '1rem',
 })`
+  width: 1rem;
+  height: 1rem;
   cursor: pointer;
 
   visibility: ${({ visibility }) => visibility};
