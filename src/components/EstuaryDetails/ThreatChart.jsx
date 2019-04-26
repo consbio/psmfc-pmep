@@ -30,7 +30,7 @@ const ItemContainer = styled(Flex)`
   margin: 0 0.5em;
 `
 
-const borderColor = theme.colors.primary[800]
+const borderColor = theme.colors.primary[900]
 
 const borderRadius = (isLower, isUpper) => {
   if (!(isLower || isUpper)) return '0'

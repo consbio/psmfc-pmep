@@ -19,7 +19,7 @@ export const Option = styled.span`
   margin-left: 0.5em;
 
   color: ${({ active }) =>
-    active ? themeGet('colors.secondary.800') : 'inherit'};
+    active ? themeGet('colors.highlight.500') : 'inherit'};
 
   &:not(:first-child) {
     padding-left: 0.5em;

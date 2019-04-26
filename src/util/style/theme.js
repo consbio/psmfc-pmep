@@ -8,16 +8,11 @@ const colors = {
   black: 'hsl(0, 0%, 0%)',
   link: '#1488ee',
   primary: {
-    0: '#e5f2fd',
-    100: '#c8e3fb',
-    200: '#a8d3f8',
-    300: '#83c0f6',
-    400: '#54a8f2',
-    500: '#1488ee',
-    600: '#127ad6',
-    700: '#0f6bbc',
+    100: '#e6eff4',
+    300: '#85b1cc',
+    500: '#0C649B',
     800: '#0d589b',
-    900: '#093f6e',
+    900: '#001E3C',
   },
   secondary: {
     100: '#fdebeb',
@@ -42,7 +37,7 @@ const colors = {
     900: '#6f3909',
   },
   grey: {
-    100: '#f9f9f9',
+    100: '#f9f9f9', // TODO: base other colors off 900
     200: '#ecedee',
     300: '#dfe0e1',
     400: '#d1d3d4',
@@ -50,7 +45,7 @@ const colors = {
     600: '#b0b3b5',
     700: '#85898d',
     800: '#676c71',
-    900: '#394046',
+    900: '#636466',
   },
 }
 
@@ -81,13 +76,13 @@ const radii = [0, 2, 4, 8, 16]
 
 const buttons = {
   default: {
-    backgroundColor: colors.grey[800],
+    backgroundColor: colors.grey[900],
   },
   primary: {
-    backgroundColor: colors.primary[700],
+    backgroundColor: colors.primary[500],
   },
   secondary: {
-    backgroundColor: colors.primary[500],
+    backgroundColor: colors.primary[300],
   },
   disabled: {
     backgroundColor: colors.grey[300],

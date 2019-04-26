@@ -94,8 +94,8 @@ export const nfhpLabels = [
 ]
 export const nfhpColors = {
   5: theme.colors.grey[200],
-  4: theme.colors.primary[200],
-  3: theme.colors.primary[0],
+  4: theme.colors.primary[500],
+  3: theme.colors.primary[100],
   2: theme.colors.secondary[300],
   1: theme.colors.secondary[600],
   0: theme.colors.secondary[900],

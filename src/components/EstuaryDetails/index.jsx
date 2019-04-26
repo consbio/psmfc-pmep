@@ -17,7 +17,7 @@ import { stateNames, estuaryTypes } from '../../../config/constants'
 
 const Header = styled.div`
   padding: 0.5rem 1rem;
-  background-color: ${themeGet('colors.primary.0')};
+  background-color: ${themeGet('colors.primary.100')};
   border-bottom: 1px solid ${themeGet('colors.grey.200')};
   line-height: 1.2;
 `

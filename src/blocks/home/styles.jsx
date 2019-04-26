@@ -1,4 +1,6 @@
-import { Box, Container } from 'components/Grid'
+import { Text } from 'rebass'
+
+import { Container } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 
 export const Section = styled(Container).attrs({
@@ -35,9 +37,10 @@ export const DarkSection = styled(Section)`
   }
 `
 
-export const Title = styled(Box).attrs({
-  fontSize: ['1.5rem', '2.5rem'],
-  mb: '0.5em',
+export const Title = styled(Text).attrs({
+  fontSize: ['1.5rem', '3rem'],
+  mb: '0.5rem',
+  as: 'h2',
 })`
   font-weight: bold;
   line-height: 1.2;

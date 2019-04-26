@@ -8,24 +8,24 @@ import { Link } from 'components/Link'
 import { Flex } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 
-import SiteLogo from 'images/logo.svg'
+import SiteLogo from 'images/pmep_logo_color.svg'
 
 const Wrapper = styled(Flex).attrs({
   alignItems: 'center',
   justifyContent: 'space-between',
 })`
-  background-color: ${themeGet('colors.primary.900')};
-  padding: 0;
+  padding: 0.75rem 0.5rem;
   flex: 0 0 auto;
+  border-bottom: 1px solid ${themeGet('colors.grey.900')};
 `
 
 const Title = styled.h1`
   margin: 0;
   font-weight: normal;
   flex-grow: 1;
+  line-height: 1;
 
   & * {
-    color: #fff;
     text-decoration: none;
   }
 `
@@ -33,35 +33,37 @@ const Title = styled.h1`
 const Logo = styled(Image).attrs({
   src: SiteLogo,
   as: 'img',
-  width: ['2rem'],
+  width: ['3rem'],
   my: '-0.5rem',
   mr: '0.25rem',
-  ml: '0.5rem',
 })``
 
 const NavLink = styled(Link)`
-  color: #fff !important;
   text-decoration: none;
   font-weight: 100;
-  padding: 0.5em 1em;
 
   &:hover {
-    background-color: ${themeGet('colors.primary.500')};
+    text-decoration: underline;
   }
 `
 
+const NavItem = styled(Flex).attrs({
+  alignItems: 'center',
+  px: ['0.5em', '0.5rem', '1rem'],
+})``
+
 const CompareIcon = styled(FaSlidersH)`
-  color: ${themeGet('colors.grey.100')};
   width: 1em;
   height: 1em;
-  margin-right: 0.5em;
+  margin-right: 0.25em;
+  opacity: 0.6;
 `
 
 const ExploreIcon = styled(FaBinoculars)`
-  color: ${themeGet('colors.grey.100')};
   width: 1em;
   height: 1em;
-  margin-right: 0.5em;
+  margin-right: 0.25em;
+  opacity: 0.6;
 `
 
 const Header = ({ siteTitle }) => (
@@ -70,24 +72,26 @@ const Header = ({ siteTitle }) => (
       <Link to="/">
         <Flex alignItems="center" flexWrap="wrap">
           <Logo />
-          <Text fontSize={['1.25rem']}>{siteTitle}</Text>
+          <Text fontSize={['1.5rem', '1.5rem', '1.75rem']}>{siteTitle}</Text>
         </Flex>
       </Link>
     </Title>
-    <Flex>
-      <NavLink to="/compare">
-        <Flex alignItems="center">
-          <CompareIcon />
-          <div>Compare</div>
-        </Flex>
-      </NavLink>
-      <NavLink to="/explore">
-        <Flex alignItems="center">
-          <ExploreIcon />
-          Explore
-        </Flex>
-      </NavLink>
-    </Flex>
+    <Text as="h2" fontSize={['1.25rem']} m={0}>
+      <Flex>
+        <NavLink to="/compare">
+          <NavItem>
+            <CompareIcon />
+            <div>Compare</div>
+          </NavItem>
+        </NavLink>
+        <NavLink to="/explore">
+          <NavItem>
+            <ExploreIcon />
+            Explore
+          </NavItem>
+        </NavLink>
+      </Flex>
+    </Text>
   </Wrapper>
 )
 

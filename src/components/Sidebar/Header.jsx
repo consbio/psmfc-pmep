@@ -16,13 +16,17 @@ const Wrapper = styled(Flex).attrs({
 
 const Icon = styled(FaIcon).attrs({})`
   margin-right: 0.25em;
-  color: ${themeGet('colors.grey.800')};
+  color: ${themeGet('colors.grey.900')};
+  opacity: 0.6;
 `
 
 const Title = styled(Text).attrs({
   fontSize: ['1.5rem', '1.75rem'],
+  as: 'h2',
 })`
   margin: 0;
+  font-weight: normal;
+  color: ${themeGet('colors.grey.900')};
 `
 
 const Header = ({ icon, title }) => (

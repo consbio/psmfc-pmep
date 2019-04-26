@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Text } from 'rebass'
 
 import { Box, Flex } from 'components/Grid'
 import { Link } from 'components/Link'
@@ -17,15 +18,18 @@ const Wrapper = styled(Box).attrs({
 
 const Header = styled(Flex).attrs({
   alignItems: 'center',
+  justifyContent: 'center',
   flexWrap: 'nowrap',
 })`
   margin-bottom: 1rem;
 `
 
-const Title = styled.h3`
+const Title = styled(Text).attrs({
+  as: 'h3',
+  fontSize: ['1.5rem', '1.5rem', '1.75rem'],
+})`
   flex: 0 0 auto;
   color: ${themeGet('colors.grey.900')} !important;
-  font-size: 1.5em;
   font-weight: normal;
   margin-bottom: 0;
 `
@@ -35,13 +39,15 @@ const StyledIcon = styled(FaIcon).attrs({
 })`
   width: 2rem;
   height: 2rem;
-  margin-right: 1em;
-  color: ${themeGet('colors.grey.800')};
+  margin-right: 0.5em;
+  opacity: 0.6;
+  color: ${themeGet('colors.grey.900')};
+  flex-shrink: 0;
 `
 
 const Content = styled.div`
   line-height: 1.2;
-  color: ${themeGet('colors.grey.800')};
+  color: ${themeGet('colors.grey.900')};
 `
 
 const LinkWrapper = styled.div`

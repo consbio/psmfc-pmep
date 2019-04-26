@@ -33,7 +33,7 @@ const TopSection = styled(DarkSection)`
 `
 
 const StyledCTA = styled(CallToActionBox).attrs({
-  width: ['100%', '50%', '50%'],
+  width: ['100%', '45%', '45%'],
 })`
   a {
     color: #3273dc;
@@ -97,12 +97,17 @@ const Top = () => {
           <br />
         </p>
 
-        <Flex alignItems="center" justifyContent="space-between">
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="wrap"
+        >
           <StyledCTA
             icon="slidersH"
             title="Compare estuaries"
             link="/compare"
             linkLabel="Start comparing"
+            mb={['1rem', 0]}
           >
             Compare and select estuaries based on type, size, and more.
           </StyledCTA>

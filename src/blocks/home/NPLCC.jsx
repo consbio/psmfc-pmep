@@ -8,7 +8,7 @@ import Logo from 'images/nplcc_logo.png'
 import { Section as BaseSection, Title } from './styles'
 
 const Section = styled(BaseSection)`
-  border-top: 0.5rem solid ${themeGet('colors.primary.800')};
+  border-top: 0.5rem solid ${themeGet('colors.primary.500')};
 `
 
 const Columns = styled(Flex).attrs({
