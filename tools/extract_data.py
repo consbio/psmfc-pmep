@@ -134,6 +134,10 @@ biotic = biotic.loc[biotic.type != "9.9.9.9.9"].copy()
 acres_by_type = (
     biotic.groupby(["PMEP_EstuaryID", "type"], as_index=False)["acres"].sum().round(2)
 )
+
+# filter out areas <= 0
+acres_by_type = acres_by_type.loc[acres_by_type.acres > 0].copy()
+
 acres_by_type["biotic_acres"] = acres_by_type.apply(
     lambda x: "{0}:{1:g}".format(x.type, x.acres), axis=1
 )
