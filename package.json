@@ -6,6 +6,7 @@
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
     "@rebass/grid": "^6.0.0",
+    "@sentry/browser": "^5.1.1",
     "babel-plugin-styled-components": "^1.10.0",
     "crossfilter2": "^1.4.7",
     "gatsby": "^2.3.23",
