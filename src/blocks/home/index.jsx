@@ -5,7 +5,7 @@ import Habitat from './Habitat'
 import Threats from './Threats'
 import PMEP from './PMEP'
 import NPLCC from './NPLCC'
-import CBI from './CBI'
+import Credits from './Credits'
 
 export {
   TopSection,
@@ -15,5 +15,5 @@ export {
   Threats,
   PMEP,
   NPLCC,
-  CBI,
+  Credits,
 }

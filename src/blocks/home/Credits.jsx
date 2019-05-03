@@ -62,6 +62,14 @@ const CBI = () => (
           >
             North Pacific Landscape Conservation Cooperative
           </OutboundLink>
+          and National Oceanic and Atmpospheric Administration -{' '}
+          <OutboundLink
+            from="/"
+            to="https://www.fisheries.noaa.gov/about/office-habitat-conservation"
+            target="_blank"
+          >
+            Office of Habitat Conservation
+          </OutboundLink>
           . CBI provides science and software development to support the
           conservation of biodiversity.
         </p>

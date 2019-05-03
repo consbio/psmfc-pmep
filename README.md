@@ -1,10 +1,14 @@
 # West Coast Estuaries Explorer
 
-A simple tool to explore various characteristics of estuaries along the U.S. West Coast.
+This application allows you to easily explore estuaries along the U.S. West Coast.
 
-This was originally built in 2017 using [Create React App](https://facebook.github.io/create-react-app/) and [Leaflet](https://leafletjs.com/) with data and tiles hosted by the Conservation Biology Institute.
+This application was developed by the [Conservation Biology Institute](https://consbio.org/) in partnership with the [Pacific Marine & Estuarine Fish Habitat Partnership](http://www.pacificfishhabitat.org/) (PMEP), [Pacific States Marine Fisheries Commission](https://www.psmfc.org/) (PSMFC), and U.S. Fish and Wildlife Service - [North Pacific Landscape Conservation Cooperative](http://northpacificlcc.org/) (NPLCC).
 
-This project was converted to [GatsbyJS](https://www.gatsbyjs.org/) and [MapboxGL JS](https://docs.mapbox.com/mapbox-gl-js/) in 2019 and hosted by the Pacific States Marine Fisheries Commission (PSMFC).
+Data on estuary boundaries, biotic habitats, and focal species presence were developed by PMEP and are available for download [here](http://www.pacificfishhabitat.org/data/).
+
+## Architecture
+
+This application is a Javascript-based static web application, created using GatsbyJS and React.
 
 ## Map layers
 
@@ -58,8 +62,12 @@ Information on the State of the Knowledge and NFHAP status of each estuary was p
 Data were processed using Python 3.6 using `tools/extract_data.py`.
 This script reads from each dataset, transforms the data as needed, and creates `data/estuaries.json` with the required fields.
 
+## Changes
+
+This was originally built in 2017 using [Create React App](https://facebook.github.io/create-react-app/) and [Leaflet](https://leafletjs.com/) and hosted as part of the North Pacific Landscape Conservation Cooperative's (NPLCC) [Conservation Planning Atlas in Data Basin](https://nplcc.databasin.org/).
+
+This project has since been converted to [GatsbyJS](https://www.gatsbyjs.org/) and [MapboxGL JS](https://docs.mapbox.com/mapbox-gl-js/) in 2019 and hosted by the Pacific States Marine Fisheries Commission (PSMFC). This migration is described in more detail in this [article](https://medium.com/@brendan_ward/migrating-from-create-react-app-and-leaflet-to-gatsbyjs-and-mapbox-gl-98b49c2e75c4).
+
 ## Credits
 
-Developed by the Conservation Biology Institute in partnership with the Pacific Marine and Estuarine Fish Habitat Partnership (PMEP) and North Pacific Landscape Conservation Cooperative (NPLCC).
-
-This project was made possible by support from the US Fish and Wildlife Service - NPLCC and the Pacific States Marine Fisheries Commission.
+This project was made possible by financial support from the NPLCC and National Oceanic and Atmospheric Administration - [Office of Habitat Conservation](https://www.fisheries.noaa.gov/about/office-habitat-conservation).

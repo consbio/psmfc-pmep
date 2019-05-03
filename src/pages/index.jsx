@@ -11,7 +11,7 @@ import {
   Threats,
   PMEP,
   NPLCC,
-  CBI,
+  Credits,
 } from 'blocks/home'
 
 const IndexPage = () => (
@@ -32,7 +32,7 @@ const IndexPage = () => (
 
     <NPLCC />
 
-    <CBI />
+    <Credits />
   </Layout>
 )
 
