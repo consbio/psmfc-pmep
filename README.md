@@ -48,7 +48,41 @@ Colors can be specified as RGB strings or hex codes.
 
 ### Adding a new map layer:
 
-TODO
+Create a vector tile service with the data layer, or include as a layer within an existing vector tile service (vector tile services can have multiple layers). At minimum, this layer must contain the property (attribute) that is used for display and for filtering if this layer is also to be filtered.
+
+For example, the estuaries boundaries layer must contain the property `PMEP_ID` because it is used to filter estuaries. The biotic habitat layer must contain the property `CMECS_BC_Code` because this is used for display.
+
+#### Update `config/map.js`:
+
+Add a new object toward the top of the file with the following information:
+
+```
+export const myLayer = {
+  tileURL: '<url of tile service>',
+  sourceLayer: '<layer in tile service>',
+  idProperty: '<id property used to uniquely identify each feature>'
+}
+```
+
+`idProperty` is only relevant if used for filtering.
+
+Sources and layers are defined according to the [Mapbox GL style specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/).
+
+Add an entry for this to `sources` object:
+
+```
+...,
+points: {...},
+myLayer: {
+  type: 'vector',
+  tiles: [myLayer.tileURL],
+  minzoom: <min zoom level of vector tile SOURCE>,
+  maxzoom: <max zoom level of vector tile SOURCE>,
+  tileSize: <tile size used when creating tiles: 256 or 512>
+}
+```
+
+This defines the source tile service and associated properties so that one or more layers can be created against it within the map. More information on vector tile sources [here](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-vector).
 
 ### Adding a new filter:
 
