@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-underscore-dangle */
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { List } from 'immutable'
+import { List, fromJS } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -11,6 +11,7 @@ import { hasWindow } from 'util/dom'
 import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 
 import Legend from './Legend'
+import StyleSelector from './StyleSelector'
 import {
   config,
   sources,
@@ -24,23 +25,10 @@ const Relative = styled.div`
   flex: 1 0 auto;
 `
 
-const MapNote = styled.div`
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 4rem;
-  right: 4rem;
-  background: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 2px 6px #666;
-`
-
 const Map = ({
   data,
   selectedFeature,
   bounds,
-  location,
   onSelectFeature,
   onBoundsChange,
 }) => {
@@ -51,13 +39,16 @@ const Map = ({
     return null
   }
 
+  const { accessToken, styles } = config
+
   const mapNode = useRef(null)
   const mapRef = useRef(null)
+  const baseStyleRef = useRef(null)
   const selectedFeatureRef = useRef(selectedFeature)
   const [legendEntries, setLegendEntries] = useState([])
 
   useEffect(() => {
-    const { accessToken, styleID, padding, bounds: initBounds } = config
+    const { padding, bounds: initBounds } = config
 
     let { center, zoom } = config
 
@@ -83,7 +74,7 @@ const Map = ({
 
     const map = new mapboxgl.Map({
       container: mapNode.current,
-      style: `mapbox://styles/mapbox/${styleID}`,
+      style: `mapbox://styles/mapbox/${styles[0]}`,
       center: center || [0, 0],
       zoom: zoom || 0,
       minZoom: config.minZoom || 0,
@@ -97,6 +88,10 @@ const Map = ({
     sources.points.data = data ? toGeoJSONPoints(data.toJS()) : []
 
     map.on('load', () => {
+      // snapshot existing map config
+      baseStyleRef.current = fromJS(map.getStyle())
+      window.baseStyle = baseStyleRef.current
+
       // add sources
       Object.entries(sources).forEach(([id, source]) => {
         map.addSource(id, source)
@@ -307,11 +302,53 @@ const Map = ({
     return entries
   }
 
+  const handleBasemapChange = styleID => {
+    const { current: map } = mapRef
+    const { current: baseStyle } = baseStyleRef
+
+    const snapshot = fromJS(map.getStyle())
+    const baseSources = baseStyle.get('sources')
+    const baseLayers = baseStyle.get('layers')
+
+    // diff the sources and layers to find those added by the user
+    const userSources = snapshot
+      .get('sources')
+      .filter((_, key) => !baseSources.has(key))
+    const userLayers = snapshot
+      .get('layers')
+      .filter(layer => !baseLayers.includes(layer))
+
+    map.setStyle(`mapbox://styles/mapbox/${styleID}`)
+
+    map.once('style.load', () => {
+      // after new style has loaded
+      // save it so that we can diff with it on next change
+      // and re-add the sources / layers back on it
+
+      // save base for new style
+      baseStyleRef.current = fromJS(map.getStyle())
+
+      userSources.forEach((source, id) => {
+        map.addSource(id, source.toJS())
+      })
+
+      userLayers.forEach(layer => {
+        map.addLayer(layer.toJS())
+      })
+    })
+  }
+
   return (
     <Relative>
-      {/* <MapNote ref={noteNode} /> */}
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
       <Legend entries={legendEntries} />
+      {mapRef.current && mapRef.current.isStyleLoaded && (
+        <StyleSelector
+          styles={styles}
+          token={accessToken}
+          onChange={handleBasemapChange}
+        />
+      )}
     </Relative>
   )
 }
@@ -325,10 +362,6 @@ Map.propTypes = {
     })
   ).isRequired,
   bounds: ImmutablePropTypes.listOf(PropTypes.number),
-  location: PropTypes.shape({
-    latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired,
-  }),
   selectedFeature: PropTypes.number,
   onSelectFeature: PropTypes.func,
   onBoundsChange: PropTypes.func,
@@ -336,7 +369,6 @@ Map.propTypes = {
 
 Map.defaultProps = {
   bounds: List(),
-  location: null,
   selectedFeature: null,
   onSelectFeature: () => {},
   onBoundsChange: () => {},
