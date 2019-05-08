@@ -1,8 +1,7 @@
 import React, { useState, memo } from 'react'
 import PropTypes from 'prop-types'
 
-import { Flex } from 'components/Grid'
-import styled, { css } from 'util/style'
+import styled, { css, themeGet } from 'util/style'
 
 // TODO: if there are only 2 styles, make this a toggle
 // tile URL: https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/0/0/0?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ
@@ -16,7 +15,9 @@ const Wrapper = styled.div`
 `
 
 const Basemap = styled.img`
-  border: 2px solid #fff;
+  box-sizing: border-box;
+  border: 2px solid
+    ${({ isActive }) => (isActive ? themeGet('colors.highlight.500') : '#fff')};
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
   margin: 0;
 
@@ -35,57 +36,69 @@ const getSrc = ({ styleID, z, x, y, token }) =>
   `https://api.mapbox.com/styles/v1/mapbox/${styleID}/tiles/256/${z}/${x}/${y}?access_token=${token}`
 
 const StyleSelector = ({ token, styles, tile, size, onChange }) => {
-  const [basemapIdx, setBasemapIdx] = useState(0)
+  const [basemap, setBasemap] = useState(styles[0])
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleBasemapClick = idx => {
-    if (idx === basemapIdx) return
-    // TODO:
-    setBasemapIdx(idx)
-    onChange(styles[idx])
+  const handleBasemapClick = newBasemap => {
+    setIsOpen(false)
+
+    if (newBasemap === basemap) return
+
+    setBasemap(newBasemap)
+    onChange(newBasemap)
   }
 
   const toggleOpen = () => {
-    setIsOpen(prevIsOpen => !prevIsOpen)
+    setIsOpen(true)
+  }
+
+  const toggleClosed = () => {
+    setIsOpen(false)
   }
 
   // if there are only 2 options, render as a toggle
   if (styles.length === 2) {
-    const nextIdx = basemapIdx === 0 ? 1 : 0
+    const nextBasemap = basemap === styles[0] ? styles[1] : styles[0]
+
     return (
       <Wrapper>
         <Basemap
           size={size}
-          src={getSrc({ styleID: styles[nextIdx], token, ...tile })}
-          onClick={() => handleBasemapClick(nextIdx)}
+          src={getSrc({ styleID: nextBasemap, token, ...tile })}
+          onClick={() => handleBasemapClick(nextBasemap)}
         />
       </Wrapper>
     )
   }
 
+  const nextBasemap = styles.filter(style => style !== basemap)[0]
+
   return (
-    <Wrapper onMouseEnter={() => toggleOpen} onMouseLeave={() => toggleOpen}>
+    <Wrapper onMouseEnter={toggleOpen} onMouseLeave={toggleClosed}>
       {isOpen ? (
-        <Flex alignItems="center">
+        <>
           <Basemap
             size={size}
-            src={getSrc({ styleID: styles[basemapIdx], token, ...tile })}
-            onClick={() => toggleOpen}
+            src={getSrc({ styleID: nextBasemap, token, ...tile })}
+            onClick={() => handleBasemapClick(nextBasemap)}
           />
           {styles
-            .filter((style, i) => i !== basemapIdx)
-            .map((style, i) => (
+            .filter(style => style !== nextBasemap)
+            .map(styleID => (
               <Basemap
-                src={getSrc({ styleID: style, token, ...tile })}
-                onClick={() => handleBasemapClick(i)}
+                key={styleID}
+                isActive={styleID === basemap}
+                size={size}
+                src={getSrc({ styleID, token, ...tile })}
+                onClick={() => handleBasemapClick(styleID)}
               />
             ))}
-        </Flex>
+        </>
       ) : (
         <Basemap
           size={size}
-          src={getSrc({ styleID: styles[basemapIdx], token, ...tile })}
-          onClick={() => toggleOpen}
+          src={getSrc({ styleID: nextBasemap, token, ...tile })}
+          onClick={toggleOpen}
         />
       )}
     </Wrapper>

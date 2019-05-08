@@ -82,7 +82,7 @@ export const config = {
   // zoom: 4,
   bounds: PNWBounds,
   minZoom: 1.75,
-  styles: ['light-v9', 'satellite-v9'],
+  styles: ['light-v9', 'satellite-streets-v11', 'streets-v11'],
   padding: 0.1, // padding around bounds as a proportion
 }
 
