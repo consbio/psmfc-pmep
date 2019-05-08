@@ -71,22 +71,117 @@ Sources and layers are defined according to the [Mapbox GL style specification](
 Add an entry for this to `sources` object:
 
 ```
-...,
-points: {...},
-myLayer: {
-  type: 'vector',
-  tiles: [myLayer.tileURL],
-  minzoom: <min zoom level of vector tile SOURCE>,
-  maxzoom: <max zoom level of vector tile SOURCE>,
-  tileSize: <tile size used when creating tiles: 256 or 512>
+sources = {
+  ...,
+  myLayer: {
+    type: 'vector',
+    tiles: [myLayer.tileURL],
+    minzoom: <min zoom level of vector tile SOURCE>,
+    maxzoom: <max zoom level of vector tile SOURCE>,
+    tileSize: <tile size used when creating tiles: 256 or 512>
+  },
 }
 ```
 
 This defines the source tile service and associated properties so that one or more layers can be created against it within the map. More information on vector tile sources [here](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-vector).
 
+Add an entry for this source to the `layers` array. Layers in Mapbox GL can be quite complex and creating them is outside the scope for this README. See the [layers](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers) documentation for more information.
+
+Note: in order to show a polygon layer with border and fill styles, you need to define 2 layers: one for the fill (`type: 'fill'`), and one for the border (`type: 'line'`)
+
+For example, the following shows a basic border style that is 1px wide black (hex: `#000`):
+
+```
+layers = [
+  ...,
+  {
+    id: 'myLayer',
+    source: 'myLayer',  // must match the entry in the sources object abovce
+    'source-layer': myLayer.sourceLayer,
+    minzoom: <min zoom level for DISPLAY>,
+    maxzoom: <max zoom level for DISPLAY>,  // can be higher than maxzoom of source
+    type: 'line',
+    paint: {
+      'line-width': 1,
+      'line-opacity': 1,
+      'line-color': '#000',
+    },
+  },
+]
+```
+
+To include in the legend, add an entry to `legends`:
+
+```
+legends = {
+  ...,
+  getLegend: features => {
+    return [
+      {
+        type: 'fill', // or 'circle'
+        label: 'Label for value 1',
+        color: '#F00',  // fill color
+        borderColor: '#AAA', // optional
+        borderWidth: 1 // optional
+      },
+      ...
+    ]
+  }
+}
+```
+
+The `getLegend` function is called against this layer based on the features that are visible in the map for a particular zoom level and extent. For example, the legend for biotic habitat shows a color for each of the visible biotic habitat types. It must return an array of entries based on the feature values passed in. See existing legends for examples.
+
+Adding click, hover, or filtering interaction for this layer is more complex and outside the scope of this README. Custom code will need to be added to `src/components/Map/index.jsx` for this specific layer.
+
+### Adding layer information to estuary details
+
+The data to be shown for this layer in the estuaries view needs to be included in the `data/estuaries.json` file. Depending on the nature of the data, it may need to be structured in a particular way. This will require obtaining and standardizing the input data (e.g., ensuring that it is in WGS 84 projection and can be easily joined to existing estuary data on `PMEP_ID`). This will also require modifying `tools/extract_data.py` to preprocess the data into the appropriate format.
+
+Once the entry has been added for each estuary into `data/estuaries.json`, the data import component in `src/components/Data/index.jsx` needs to be updated to add add that field name to the list of imported fields in the GraphQL query at the top of that component. More information on GraphQL [here](https://graphql.org/).
+
+Important note: do not name your field any one of the reserved GraphQL keywords (e.g., `id`, `type`, etc) as this may create errors that are difficult to troubleshoot.
+
+If necessary to decode or convert the type of the data for that field during import, add an entry below the query to convert the value for that field.
+
+Custom development is required in `src/components/EstuaryDetails/*` to display this new data. Depending on the level of complexity, this may require one or more new component in that directory. Developing custom components is outside the scope of this README.
+
 ### Adding a new filter:
 
-TODO
+The field used for filtering must first be added to `data/estuaries.json` and imported as described above.
+
+Update `config/filters.js` to add a new entry to the `filters` array:
+
+```
+filters = [
+  ...,
+  {
+    field: '<name of field in record>',
+    internal: false, // optional
+    getValue: record => {...return field value from record...}, // optional
+    filterFunc: filterValues => recordValue => {...return true if record value meets conditions of filterValues...},
+    values: <array of values to use for filtering field>,
+    labels: <array of labels to show for values, if different than values> // optional
+  }
+]
+```
+
+This filter object provides all the information needed to register this new filter within the `crossfilter` index.
+
+If `internal` is present and `true` this filter is accessible for internal filtering but not displayed in the list of filters to the user. Example: `bounds` used to filter records based on the bounds of the map. Internal filters require custom code in the appropriate view.
+
+`getValue` is a function that takes a record as input, and returns the value for this field. You can convert the type or otherwise transform the field value to use for filtering. Note: each record is an `ImmutableJS` `Map` object, so you need to use the `Map` API to acccess the appropriate value. By default, this returns the raw value for the `field`, so `getValue` is only necessary if you need to transform the value of that field before adding it to the index.
+
+`filterFunc` is a function that takes an object, generally an `ImmutableJS` `Set` with the values selected by the user for filtering. This function needs to return a function that takes a value for a singular record as input and returns `true` or `false` based on whether that record meets the criteria of the filter values. The most common case is to return `true` if the value for that field in the record is present in `filterValues`.
+
+`values` is an array of all possible values for this particular field. For example, this would be the list of codes for biotic habitat types.
+
+`labels` is an array of labels to show for the above values next to the filter bars. It must be in the same order as `values`.
+
+The non-internal filters in `filters` are displayed to the user in the order they appear within this attribute.
+
+**Note:**
+In general, the array of values and labels are stored in `config/constants.js` so that they can also be used in other parts of the application. These need to be added to the `import` list at the top of `config/filters.js`.
 
 ## Data processing
 

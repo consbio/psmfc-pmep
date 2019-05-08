@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-underscore-dangle */
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { List, fromJS } from 'immutable'
+import { List } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -17,7 +17,6 @@ import {
   layers,
   legends,
   boundaryLayer,
-  bioticLayer,
 } from '../../../config/map'
 
 const Relative = styled.div`
@@ -107,9 +106,6 @@ const Map = ({
       layers.forEach(layer => {
         map.addLayer(layer)
       })
-
-      // wait a second to force rerender with legend
-      // setTimeout(() => setIsLoaded(true), 1000)
     })
 
     map.on('click', e => {
