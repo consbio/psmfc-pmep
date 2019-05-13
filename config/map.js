@@ -23,13 +23,12 @@ export const boundaryLayer = {
 
 // CMECS biotics vector tile source information
 export const bioticLayer = {
-  // tileURL:
-  //   'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-  // sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
-  // idProperty: '_symbol',
   tileURL:
-    'https://tiles.databasin.org/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
-  sourceLayer: 'cmecs_biotic',
+    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_flat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
+  // tileURL:
+  //   'https://tiles.databasin.org/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
+  // sourceLayer: 'cmecs_biotic',
   idProperty: 'CMECS_BC_Code',
 }
 
@@ -98,7 +97,7 @@ export const sources = {
     type: 'vector',
     tiles: [bioticLayer.tileURL],
     minzoom: 5,
-    maxzoom: 14,
+    maxzoom: 15,
     tileSize: 512,
   },
   points: {
