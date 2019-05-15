@@ -281,11 +281,18 @@ const Map = ({
 
     // Group layers with visible features
     const visibleFeatures = map.queryRenderedFeatures({
-      layers: ['clusters', 'points', 'boundaries-fill', 'biotics-fill'],
+      layers: [
+        'clusters',
+        'points',
+        'boundaries-fill',
+        'biotics-fill',
+        'boundaries-outline-highlight',
+      ],
     })
     const grouped = groupByLayer(visibleFeatures)
 
-    // only show point or boundary for estuaries when in view
+    // only show point or boundary for estuaries when in view, not both
+    // if fill is visible, show that
     if (grouped.points && grouped['boundaries-fill']) {
       delete grouped.points
     }

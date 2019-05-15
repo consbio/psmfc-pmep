@@ -6,7 +6,7 @@ export const boundaryColor = '#a18ac9'
 export const highlightColor = '#ee7d14'
 export const defaultRadius = 12
 
-// Mapbox public token.  TODO: migrate to .env setting
+// Mapbox public token.
 const mapboxToken =
   'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
 
@@ -26,9 +26,6 @@ export const bioticLayer = {
   tileURL:
     'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_flat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
   sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
-  // tileURL:
-  //   'https://tiles.databasin.org/services/pmep/cmecs_biotic/tiles/{z}/{x}/{y}.pbf',
-  // sourceLayer: 'cmecs_biotic',
   idProperty: 'CMECS_BC_Code',
 }
 
@@ -306,14 +303,19 @@ export const legends = {
       },
     ],
   },
+  'boundaries-outline-highlight': {
+    getLegend: () => [
+      {
+        type: 'fill',
+        label: 'Selected estuary',
+        // color: `${highlightColor}55`, // make partly transparent
+        borderColor: highlightColor,
+        borderWidth: 2,
+      },
+    ],
+  },
   'biotics-fill': {
     getLegend: features => {
-      // TODO: no longer needed when biotics code is in vector tiles
-      // const codeLUT = {}
-      // Object.values(bioticInfo).forEach(({ vtID, label, color }) => {
-      //   codeLUT[vtID] = { label, color }
-      // })
-
       // extract unique biotic codes and sort in ascending order
       const codes = Array.from(
         new Set(
@@ -322,7 +324,6 @@ export const legends = {
       ).sort()
 
       return codes.map(code => {
-        // const { label, color } = codeLUT[code]
         const { label, color } = bioticInfo[code]
         return {
           type: 'fill',

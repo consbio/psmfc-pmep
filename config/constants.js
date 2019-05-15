@@ -148,7 +148,6 @@ export const bioticInfo = {
     description:
       'Subtidal or intertidal bottoms and other areas dominated by rooted vascular plants, attached macroalgae, or mosses, which are usually submersed in the water column or floating on the surface. They may be exposed during low tides.',
     color: 'rgb(102, 205, 171)',
-    vtID: 0, // _symbol in ArcGIS online vector tiles
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/394.html',
   },
   '2.5.1': {
@@ -156,7 +155,6 @@ export const bioticInfo = {
     description:
       'Aquatic beds dominated by macroalgae attached to the substrate, such as kelp, intertidal fucoids, and calcareous algae. Macroalgal communities can exist at all depths within the photic zone, on diverse substrates, and across a range of energy and water chemistry regimes.',
     color: 'rgb(0, 168, 132)',
-    vtID: 1,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/433.html',
   },
   '2.5.2': {
@@ -164,7 +162,6 @@ export const bioticInfo = {
     description:
       'Aquatic vascular vegetation beds dominated by submerged, rooted, vascular species (such as seagrasses, Figure 8.15) or submerged or rooted floating freshwater tidal vascular vegetation.',
     color: 'rgb(68, 101, 137)',
-    vtID: 2,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/434.html',
   },
   '2.6': {
@@ -172,7 +169,6 @@ export const bioticInfo = {
     description:
       'Areas in this class are characterized by erect, rooted, herbaceous hydrophytes—excluding emergent mosses and lichens. This vegetation is present for most of the growing season in most years. These wetlands are usually dominated by perennial plants. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
     color: 'rgb(115, 178, 255)',
-    vtID: 3,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/395.html',
   },
   '2.6.1': {
@@ -180,7 +176,6 @@ export const bioticInfo = {
     description:
       'Communities dominated by emergent, halophytic, herbaceous vegetation (with occasional woody forbs or shrubs) along low-wave-energy, intertidal areas of estuaries and rivers.',
     color: 'rgb(0, 77, 168)',
-    vtID: 4,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/435.html',
   },
   '2.6.1.1': {
@@ -188,7 +183,6 @@ export const bioticInfo = {
     description:
       'Marshes dominated by species with a wide range of salinity tolerance. Depending on the salinity levels (0.5-30), more or less salt-intolerant species may be present. ',
     color: 'rgb(0, 15, 90)',
-    vtID: 5,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/568.html',
   },
   '2.7': {
@@ -196,7 +190,6 @@ export const bioticInfo = {
     description:
       'Areas in this class are dominated by woody vegetation that is generally less than 6 meters tall. Characteristic species include true shrubs, young trees, and trees or shrubs that are small or stunted due to environmental conditions. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
     color: 'rgb(215, 215, 158)',
-    vtID: 6,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/396.html',
   },
   '2.7.1': {
@@ -204,7 +197,6 @@ export const bioticInfo = {
     description:
       'Estuarine or tidal riverine areas dominated by shrub vegetation that has less than 10% tree cover.',
     color: 'rgb(230, 230, 0)',
-    vtID: 7,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/437.html',
   },
   '2.7.1.1': {
@@ -212,7 +204,6 @@ export const bioticInfo = {
     description:
       'Tidal areas dominated by shrub or immature tree species that are less than 6 meters tall and have a range of salt tolerance.',
     color: 'rgb(115, 115, 0)',
-    vtID: 8,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/574.html',
   },
   '2.8': {
@@ -220,7 +211,6 @@ export const bioticInfo = {
     description:
       'Areas in this class are characterized by woody vegetation that is generally 6 meters or taller. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
     color: 'rgb(171, 205, 102)',
-    vtID: 9,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/397.html',
   },
   '2.8.1': {
@@ -228,7 +218,6 @@ export const bioticInfo = {
     description:
       'Estuarine or tidal riverine areas with greater than 10% tree cover',
     color: 'rgb(76, 115, 0)',
-    vtID: 10,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/438.html',
   },
   '2.8.1.1': {
@@ -236,7 +225,6 @@ export const bioticInfo = {
     description:
       'Tidal areas dominated by tree species that are greater than 6 meters tall and have a range of salt tolerance. Salinities may range from 0.5-30.',
     color: 'rgb(35,50,0)',
-    vtID: 11,
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/578.html',
   },
 }

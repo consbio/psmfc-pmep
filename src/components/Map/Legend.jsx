@@ -9,6 +9,7 @@ import styled, { themeGet } from 'util/style'
 const Wrapper = styled.div`
   cursor: pointer;
   position: absolute;
+  max-width: 200px;
   right: 10px;
   bottom: 24px;
   z-index: 10000;
@@ -45,7 +46,7 @@ const Patch = styled(Box).attrs({
 `
 
 const Label = styled(Box).attrs({})`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: ${themeGet('colors.grey.800')};
   margin-left: 0.5rem;
 `
@@ -86,13 +87,14 @@ Circle.defaultProps = {
 const Legend = ({ title, entries }) => {
   if (!entries.length) return null
 
-  const [closed, setClosed] = useState(false)
-  const toggle = () => setClosed(isClosed => !isClosed)
+  const [isClosed, setIsClosed] = useState(false)
+  const toggle = () => setIsClosed(prevIsClosed => !prevIsClosed)
 
   return (
     <Wrapper onClick={toggle}>
-      <Title>{title}</Title>
-      {!closed && (
+      {isClosed ? (
+        <Title>{title}</Title>
+      ) : (
         <div>
           {entries.map(({ type, label, ...entry }) => (
             <Entry key={label}>

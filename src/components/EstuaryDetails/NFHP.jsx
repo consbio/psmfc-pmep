@@ -2,8 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { OutboundLink } from 'components/Link'
-import HelpText from 'components/elements/HelpText'
+import BaseHelpText from 'components/elements/HelpText'
+import styled from 'util/style'
 import ThreatChart from './ThreatChart'
+
+const HelpText = styled(BaseHelpText)`
+  font-size: 0.8rem;
+`
 
 const NFHPLink = () => (
   <OutboundLink
@@ -16,6 +21,9 @@ const NFHPLink = () => (
   </OutboundLink>
 )
 
+const NFHAPAbout =
+  'This assessment used a cumulative disturbance index to estimate risk of fish habitat degradation in estuarine habitats. The index used twenty-eight variables across four types of disturbance, which included (1) land use and land cover change, (2) alteration of river flows, (3) pollution sources, and (4) estuary eutrophication.'
+
 const NFHP = ({ level, status }) => {
   let StatusNote = ''
 
@@ -23,7 +31,7 @@ const NFHP = ({ level, status }) => {
     case 1: {
       StatusNote = (
         <HelpText>
-          This estuary was assessed as part of the <NFHPLink />.
+          This estuary was assessed as part of the <NFHPLink />. {NFHAPAbout}
         </HelpText>
       )
       break
@@ -32,8 +40,11 @@ const NFHP = ({ level, status }) => {
       StatusNote = (
         <HelpText>
           This estuary was assessed as part of a larger estuary system or
-          sub-basin within the <NFHPLink />. Note: this assessment may not
-          accurately represent this specific estuary.
+          sub-basin within the <NFHPLink />. {NFHAPAbout}
+          <br />
+          <br />
+          Note: this assessment may not accurately represent this specific
+          estuary.
         </HelpText>
       )
       break
