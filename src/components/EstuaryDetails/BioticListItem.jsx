@@ -51,12 +51,18 @@ const expandoSize = '1.5rem'
 const CaretDown = styled(FaCaretDown).attrs({
   color: expandoColor,
   size: expandoSize,
-})``
+})`
+  width: ${expandoSize};
+  height: ${expandoSize};
+`
 
 const CaretRight = styled(FaCaretRight).attrs({
   color: expandoColor,
   size: expandoSize,
-})``
+})`
+  width: ${expandoSize};
+  height: ${expandoSize};
+`
 
 const BioticListItem = ({ type, acres, maxAcres }) => {
   const [isOpen, setIsOpen] = useState(false)

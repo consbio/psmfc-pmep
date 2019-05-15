@@ -12,7 +12,7 @@ const Wrapper = styled(Flex).attrs({
   flexDirection: 'column',
 })``
 
-const Tabs = ({ children }) => {
+const Tabs = ({ children, ...props }) => {
   const tabs = children.map(({ props: { id, label } }) => ({ id, label }))
   const firstTab = tabs[0].id
 
@@ -23,7 +23,7 @@ const Tabs = ({ children }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <TabBar tabs={tabs} activeTab={tab} onChange={handleTabChange} />
       <TabContainer activeTab={tab}>{children}</TabContainer>
     </Wrapper>

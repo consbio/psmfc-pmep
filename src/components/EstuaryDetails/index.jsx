@@ -5,6 +5,7 @@ import { FaRegTimesCircle } from 'react-icons/fa'
 
 import { Button } from 'components/Button'
 import { Columns, Column } from 'components/Grid'
+import ExpandableParagraph from 'components/elements/ExpandableParagraph'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
@@ -31,6 +32,8 @@ const Subtitle = styled(Text).attrs({
 })``
 
 const BackIcon = styled(FaRegTimesCircle).attrs({ size: '1.5rem' })`
+  height: 1.5rem;
+  width: 1.5rem;
   cursor: pointer;
   color: ${themeGet('colors.grey.600')};
   &:hover {
@@ -65,8 +68,12 @@ const Section = styled.section`
   }
 `
 
+const TabContainer = styled(Tabs)`
+  height: 100%;
+`
+
 const Tab = styled(BaseTab)`
-  padding: 1rem 1rem 2rem;
+  padding: 1rem;
   overflow-y: auto;
   flex: 1 1 auto;
 `
@@ -115,7 +122,7 @@ const EstuaryDetails = ({
         </Subtitle>
       </Header>
 
-      <Tabs>
+      <TabContainer>
         <Tab id="overview" label="Overview">
           {showZoom && (
             <Text textAlign="center">
@@ -125,8 +132,17 @@ const EstuaryDetails = ({
             </Text>
           )}
 
-          <TabHeader>Type: {estuaryTypes[type].label}</TabHeader>
-          <EstuaryType type={type} />
+          <Section>
+            <TabHeader>Estuary Type:</TabHeader>
+            <Value>
+              {estuaryTypes[type].label}
+              <br />
+              <br />
+              <ExpandableParagraph snippet={estuaryTypes[type].snippet}>
+                <EstuaryType type={type} />
+              </ExpandableParagraph>
+            </Value>
+          </Section>
 
           <Section>
             <TabHeader>Region:</TabHeader>
@@ -147,6 +163,7 @@ const EstuaryDetails = ({
               mapped in this estuary.
             </Value>
           </Section>
+          <br />
         </Tab>
         <Tab id="species" label="Species">
           <TabHeader>Focal species present:</TabHeader>
@@ -163,7 +180,7 @@ const EstuaryDetails = ({
           </Section>
           {/* TODO: tidal wetland loss goes here */}
         </Tab>
-      </Tabs>
+      </TabContainer>
     </>
   )
 }

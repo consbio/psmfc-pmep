@@ -60,7 +60,7 @@ const CBI = () => (
             target="_blank"
             rel="noopener noreferrer"
           >
-            North Pacific Landscape Conservation Cooperative
+            North Pacific Landscape Conservation Cooperative{' '}
           </OutboundLink>
           and National Oceanic and Atmpospheric Administration -{' '}
           <OutboundLink

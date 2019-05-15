@@ -165,7 +165,7 @@ export const layers = [
     id: 'biotics-fill',
     source: 'biotics',
     'source-layer': bioticLayer.sourceLayer,
-    minzoom: 10,
+    minzoom: 7.5,
     maxzoom: 22,
     type: 'fill',
     paint: {

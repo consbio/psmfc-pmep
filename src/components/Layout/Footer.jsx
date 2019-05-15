@@ -9,6 +9,7 @@ const Wrapper = styled(Flex).attrs({
   alignItems: 'center',
   justifyContent: 'space-between',
 })`
+  flex: 0;
   background-color: ${themeGet('colors.primary.900')};
   padding: 0.25em 1em;
   font-size: 0.7rem;

@@ -43,9 +43,9 @@ const Threats = () => {
         </p>
 
         <p>
-          In 2010 and 2015, the National Fish Habitat Partnership assessed the
-          status of fish habitats across the United States. This assessment
-          analyzed disturbance factors that impact the quality of fish habitat,
+          In 2015 the National Fish Habitat Partnership assessed the status of
+          fish habitats across the United States. This assessment analyzed
+          disturbance factors that impact the quality of fish habitat,
           including:
         </p>
 
@@ -76,16 +76,7 @@ const Threats = () => {
         </p>
 
         <p>
-          For more information about these assessments, please see the&nbsp;
-          <OutboundLink
-            from="/"
-            to="http://www.fishhabitat.org/files/uploads/fishhabitatreport.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            2010 Report
-          </OutboundLink>
-          &nbsp;and&nbsp;
+          For more information about these assessments, please see the{' '}
           <OutboundLink
             from="/"
             to="http://assessment.fishhabitat.org/"

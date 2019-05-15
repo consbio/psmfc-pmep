@@ -21,21 +21,28 @@ export const regions = [
 export const estuaryTypes = {
   0: {
     label: 'Embayment/Bay',
+    snippet:
+      'This type of estuary is primarily composed of a water body with some level of enclosure by land at different spatial scales...',
     description:
       'This type of estuary is primarily composed of a water body with some level of enclosure by land at different spatial scales. These can be wide, curving indentations in the coast, arms of the sea, or bodies of water almost surrounded by land. These features can be small—with considerable freshwater and terrestrial influence—or large and generally oceanic in character.',
   },
   1: {
     label: 'Major River Delta',
+    snippet:
+      'This type of estuary is primarily composed of the nearly flat, alluvial tract of land at the mouth of a river...',
     description:
       'This type of estuary is primarily composed of the nearly flat, alluvial tract of land at the mouth of a river, which commonly forms a triangular or fan-shaped plain. It is crossed by many distributaries, and the delta is the result of sediment accumulation from the river. Deltas are distinguished from alluvial fans by their flatter slope. All deltas are dynamic areas of mixed-water flow and salinity.',
   },
   2: {
     label: 'Riverine Estuary',
+    snippet: 'This type of estuary tends to be linear and seasonally turbid...',
     description:
       'This type of estuary tends to be linear and seasonally turbid (especially in upper reaches), and may have higher current speeds. These estuaries are sedimentary and depositional, so they may be associated with a delta, bar, barrier island, and other depositional features. These estuaries also tend to be highly flushed (with a wide and variable salinity range) and seasonally stratified. ',
   },
   3: {
     label: 'Lagoonal Estuary',
+    snippet:
+      'This type of estuary tends to be shallow, highly enclosed, and have reduced exchange with the ocean...',
     description:
       'This type of estuary tends to be shallow, highly enclosed, and have reduced exchange with the ocean. They often experience high evaporation, and they tend to be quiescent in terms of wind, current, and wave energy. The flushing times tend to be long relative to riverine estuaries and embayments because of the restricted exchange with the marine-end member and the reduced river input. Exchange with surrounding landscapes tends to be enhanced and more highly coupled than in other types of estuaries.',
   },
