@@ -4,7 +4,12 @@ import { fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
 import { packedToObject } from 'util/data'
-import { regions, estuaryTypes } from '../../../config/constants'
+import {
+  regions,
+  estuaryTypes,
+  imageCredits,
+  imageRoot,
+} from '../../../config/constants'
 
 /**
  * Custom react hook to wrap getting data using GraphQL in gatsby
@@ -30,13 +35,22 @@ export const useData = () => {
             NFHPJoin
             biotic
             species
+            imageURL
+            imageCredits
           }
         }
       }
     }
   `).allEstuariesJson.edges.map(({ node }) => {
     // parse data types as needed
-    const { id, region, type, species, biotic } = node
+    const {
+      id,
+      region,
+      species,
+      biotic,
+      imageURL,
+      imageCredits: credits,
+    } = node
 
     return {
       ...node,
@@ -46,6 +60,10 @@ export const useData = () => {
 
       // convert codes back to labels
       region: regions[region],
+      imageCredits: imageCredits ? imageCredits[credits] : null,
+
+      // expand URL
+      imageURL: imageURL ? `${imageRoot}${imageURL}` : null,
 
       // unpack species and biotic fields
       species: species ? packedToObject(species) : {},

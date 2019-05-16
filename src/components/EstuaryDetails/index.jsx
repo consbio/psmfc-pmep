@@ -6,11 +6,11 @@ import { FaRegTimesCircle } from 'react-icons/fa'
 import { Button } from 'components/Button'
 import { Columns, Column } from 'components/Grid'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
-import HelpText from 'components/elements/HelpText'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
 
+import { OutboundLink } from 'react-ga'
 import SpeciesList from './SpeciesList'
 import BioticList from './BioticList'
 import NFHP from './NFHP'
@@ -40,6 +40,16 @@ const BackIcon = styled(FaRegTimesCircle).attrs({ size: '1.5rem' })`
   &:hover {
     color: ${themeGet('colors.grey.900')};
   }
+`
+
+const Image = styled.img`
+  margin: 0;
+`
+
+const ImageCredits = styled.div`
+  font-size: 0.7rem;
+  text-align: right;
+  color: ${themeGet('colors.grey.500')};
 `
 
 const Acres = styled(Text).attrs({ textAlign: 'right' })`
@@ -79,8 +89,15 @@ const Tab = styled(BaseTab)`
   flex: 1 1 auto;
 `
 
+const getImage = id =>
+  /* eslint-disable-next-line */
+  require(`images/aerial/${id}.jpg`)
+
 const EstuaryDetails = ({
+  id,
   name,
+  imageURL,
+  imageCredits,
   state,
   acres,
   type,
@@ -131,6 +148,30 @@ const EstuaryDetails = ({
                 Zoom To Estuary
               </ZoomButton>
             </Text>
+          )}
+
+          {imageURL !== null && (
+            <Section>
+              <OutboundLink from="/" to={imageURL} target="_blank">
+                <Image src={getImage(id)} />
+                {imageCredits && (
+                  <ImageCredits>
+                    Photo:{' '}
+                    {imageCredits.url ? (
+                      <OutboundLink
+                        from="/"
+                        to={imageCredits.url}
+                        target="_blank"
+                      >
+                        {imageCredits.credits}
+                      </OutboundLink>
+                    ) : (
+                      imageCredits.credits
+                    )}
+                  </ImageCredits>
+                )}
+              </OutboundLink>
+            </Section>
           )}
 
           <Section>
@@ -187,7 +228,10 @@ const EstuaryDetails = ({
 }
 
 EstuaryDetails.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  imageURL: PropTypes.string,
+  imageCredits: PropTypes.string,
   state: PropTypes.string.isRequired,
   type: PropTypes.number.isRequired,
   acres: PropTypes.number.isRequired,
@@ -203,6 +247,8 @@ EstuaryDetails.propTypes = {
 }
 
 EstuaryDetails.defaultProps = {
+  imageURL: null,
+  imageCredits: null,
   showZoom: true,
   onBack: () => {},
   onZoomTo: () => {},

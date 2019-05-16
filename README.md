@@ -191,6 +191,14 @@ Information on the State of the Knowledge and NFHAP status of each estuary was p
 Data were processed using Python 3.6 using `tools/extract_data.py`.
 This script reads from each dataset, transforms the data as needed, and creates `data/estuaries.json` with the required fields.
 
+## Estuary Photos
+
+Oblique aerial imagery was captured by the [Washington State Department of Ecology](https://fortress.wa.gov/ecy/shorephotoviewer/), [Oregon ShoreZone](https://www.oregonshorezone.info/images.html) project, and supplemented with imagery from Google Earth.
+
+Representative photos were obtained by Brett Holycross (PSMFC) and hosted on PSMFC servers.
+
+These photos were processed into smaller versions for use in this application using `tools/extract_data.py`.
+
 ## Changes
 
 This was originally built in 2017 using [Create React App](https://facebook.github.io/create-react-app/) and [Leaflet](https://leafletjs.com/) and hosted as part of the North Pacific Landscape Conservation Cooperative's (NPLCC) [Conservation Planning Atlas in Data Basin](https://nplcc.databasin.org/).

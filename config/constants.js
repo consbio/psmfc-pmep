@@ -228,3 +228,20 @@ export const bioticInfo = {
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/578.html',
   },
 }
+
+export const imageCredits = {
+  WA: {
+    credits: '© Washington State Department of Ecology',
+    url: 'https://fortress.wa.gov/ecy/shorephotoviewer/',
+  },
+  OR: {
+    credits: 'Oregon ShoreZone, CC-BY-SA',
+    url: 'https://www.oregonshorezone.info/images.html',
+  },
+  GE: {
+    credits: 'Google Earth',
+  },
+}
+
+export const imageRoot =
+  'https://maps.psmfc.org/imagelibrary/PMEP/Images/Estuary_Images/'

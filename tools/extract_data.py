@@ -1,14 +1,25 @@
 # Export attributes for PMEP estuaries.
-
+from io import BytesIO
 import os
+
+from PIL import Image
+import requests
 import pandas as pd
 import geopandas as gp
 
-from constants import get_state, spp_fields, nfhp_codes, region_codes, type_codes
-
+from constants import (
+    get_state,
+    spp_fields,
+    nfhp_codes,
+    region_codes,
+    type_codes,
+    thumbnail_size,
+    get_photo_credit_code,
+)
 
 # locations are relative to project repository root
 data_dir = "../data/pmep"
+image_dir = "./src/images/aerial"
 out_dir = "./data"
 
 # Data are downloaded from: http://www.pacificfishhabitat.org/data/
@@ -22,6 +33,7 @@ sok_gdb = "PMEP_SoKData_ForSharing.gdb"
 sok_fc = "PMEP_SoK_SpeciesPresence"
 nfhp_fc = "PMEP_EstuaryExtent_NFHPScores"
 
+photo_filename = "PMEP_Estuary_Image_Links.csv"
 
 ### Read in Boundary and center point info
 print("Reading Estuary boundaries")
@@ -143,25 +155,28 @@ acres_by_type["biotic_acres"] = acres_by_type.apply(
 )
 biotic_areas = acres_by_type.groupby(["PMEP_EstuaryID"])["biotic_acres"].apply(list)
 
-# Previous version joined these to a single pipe delimited field:
-# biotic_areas = acres_by_type.groupby(["PMEP_EstuaryID"])["biotic_acres"].agg(
-#     lambda x: "|".join(x.unique())
-# )
-
 # this is series, add a name so we can join it with this name
 biotic_areas.name = "biotic"
 
-# NOT USED
-# # Group by PMEP_EstuaryID and aggregate into a list of dicts: [{"type": <type>, "acres": <acres>}, ...]
-# biotic_areas = acres_by_type.groupby("PMEP_EstuaryID")[["type", "acres"]].apply(
-#     lambda x: x.to_dict(orient="records")
-# )
-# # this is series, add a name so we can join it with this name
-# biotic_areas.name = "biotic"
+
+### Photos
+image_df = (
+    pd.read_csv(os.path.join(data_dir, photo_filename))
+    .set_index("PMEP_EstuaryID")
+    .rename(columns={"Image_Link": "imageURL"})
+)
+
+
+# Only process those with images
+image_df = image_df.loc[~image_df.imageURL.isnull()].copy()
+# drop constant part of URL
+image_df.imageURL = image_df.imageURL.str.replace('https://maps.psmfc.org/imagelibrary/PMEP/Images/Estuary_Images/','')
+image_df["imageCredits"] = image_df.Credits.apply(get_photo_credit_code)
+image_df = image_df[["imageURL", "imageCredits"]]
 
 
 ### Join everything together
-df = df.join(pts).join(spps).join(nfhp).join(biotic_areas)
+df = df.join(pts).join(spps).join(nfhp).join(biotic_areas).join(image_df)
 
 # Remove duplicate rows
 df = df[~df.index.duplicated(keep="first")]
@@ -177,3 +192,19 @@ df = df[~df.index.duplicated(keep="first")]
 df.id = df.id.astype("str")
 df.to_json(os.path.join(out_dir, "estuaries.json"), orient="records")
 
+
+### Download and resize photos
+for id, row in image_df.iterrows():
+    outfilename = os.path.join(image_dir, "{}.jpg".format(id))
+
+    # Skip existing files
+    if os.path.exists(outfilename):
+        continue
+
+    print("Downloading {}...".format(id))
+    r = requests.get(row.Image_Link)
+    img = Image.open(BytesIO(r.content))
+
+    # Create thumbnail, automatically handles aspect ratio based on smallest dimension
+    img.thumbnail((thumbnail_size, thumbnail_size * 2))
+    img.save(os.path.join(outfilename))

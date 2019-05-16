@@ -1,5 +1,7 @@
 """Constants and helper functions used for processing estuary data"""
 
+thumbnail_size = 470
+
 # Region: sorted north to south
 region_codes = {
     "Salish Sea": 0,
@@ -61,3 +63,14 @@ def get_state(id):
     if id <= 2086:
         return "OR"
     return "CA"
+
+
+def get_photo_credit_code(credits):
+    if "Washington" in credits:
+        return "WA"
+    if "Oregon" in credits:
+        return "OR"
+    if "Google" in credits:
+        return "GE"
+
+    return ""

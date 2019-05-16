@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 
 import styled, { css, themeGet } from 'util/style'
 
-// TODO: if there are only 2 styles, make this a toggle
-// tile URL: https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/0/0/0?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ
-
 const Wrapper = styled.div`
   cursor: pointer;
   position: absolute;
