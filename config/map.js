@@ -12,12 +12,9 @@ const mapboxToken =
 
 /* --------- Vector tile source information --------- */
 export const boundaryLayer = {
-  // tileURL:
-  //   'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
-  // sourceLayer: 'PMEP Estuary Extent:1',
   tileURL:
-    'https://tiles.databasin.org/services/pmep/estuaries/tiles/{z}/{x}/{y}.pbf',
-  sourceLayer: 'estuaries',
+    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Estuary_Extent_Vector_Tiles_flat_20190517/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  sourceLayer: 'West Coast USA Current and Historical Estuary Extent',
   idProperty: 'PMEP_EstuaryID',
 }
 
@@ -87,7 +84,7 @@ export const sources = {
     type: 'vector',
     tiles: [boundaryLayer.tileURL],
     minzoom: 4,
-    maxzoom: 19,
+    maxzoom: 15,
     tileSize: 512,
   },
   biotics: {
@@ -311,7 +308,6 @@ export const legends = {
       {
         type: 'fill',
         label: 'Selected estuary',
-        // color: `${highlightColor}55`, // make partly transparent
         borderColor: highlightColor,
         borderWidth: 2,
       },
