@@ -166,7 +166,10 @@ export const layers = [
     maxzoom: 22,
     type: 'fill',
     paint: {
-      'fill-opacity': 0.5,
+      'fill-opacity': {
+        base: 1,
+        stops: [[7.5, 0.1], [9, 0.5]],
+      },
       'fill-color': ['match', ['get', bioticLayer.idProperty], ...bioticStyle],
     },
   },
