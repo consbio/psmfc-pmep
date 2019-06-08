@@ -238,6 +238,10 @@ export const imageCredits = {
     credits: 'Oregon ShoreZone, CC-BY-SA',
     url: 'https://www.oregonshorezone.info/images.html',
   },
+  CA: {
+    credits: '© 2002-2019 Kenneth & Gabrielle Adelman, California Coastal Records Project',
+    url: 'https://www.californiacoastline.org/'
+  },
   GE: {
     credits: 'Google Earth',
   },

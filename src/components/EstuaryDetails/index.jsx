@@ -48,7 +48,6 @@ const Image = styled.img`
 
 const ImageCredits = styled.div`
   font-size: 0.7rem;
-  text-align: right;
   color: ${themeGet('colors.grey.500')};
 `
 

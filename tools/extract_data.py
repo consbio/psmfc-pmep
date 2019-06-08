@@ -166,11 +166,34 @@ image_df = (
     .rename(columns={"Image_Link": "imageURL"})
 )
 
-
 # Only process those with images
 image_df = image_df.loc[~image_df.imageURL.isnull()].copy()
+
+### Download and resize photos
+for id, row in image_df.iterrows():
+    outfilename = os.path.join(image_dir, "{}.jpg".format(id))
+
+    # Skip existing files
+    if os.path.exists(outfilename):
+        continue
+
+    print("Downloading {}...".format(id))
+    r = requests.get(row.imageURL)
+    img = Image.open(BytesIO(r.content))
+
+    # Convert to RGB so we can output as a JPG
+    if img.mode == "RGBA":
+        img = img.convert("RGB")
+
+    # Create thumbnail, automatically handles aspect ratio based on smallest dimension
+    img.thumbnail((thumbnail_size, thumbnail_size * 2))
+    img.save(os.path.join(outfilename))
+
+
 # drop constant part of URL
-image_df.imageURL = image_df.imageURL.str.replace('https://maps.psmfc.org/imagelibrary/PMEP/Images/Estuary_Images/','')
+image_df.imageURL = image_df.imageURL.str.replace(
+    "https://maps.psmfc.org/imagelibrary/PMEP/Images/Estuary_Images/", ""
+)
 image_df["imageCredits"] = image_df.Credits.apply(get_photo_credit_code)
 image_df = image_df[["imageURL", "imageCredits"]]
 
@@ -192,19 +215,3 @@ df = df[~df.index.duplicated(keep="first")]
 df.id = df.id.astype("str")
 df.to_json(os.path.join(out_dir, "estuaries.json"), orient="records")
 
-
-### Download and resize photos
-for id, row in image_df.iterrows():
-    outfilename = os.path.join(image_dir, "{}.jpg".format(id))
-
-    # Skip existing files
-    if os.path.exists(outfilename):
-        continue
-
-    print("Downloading {}...".format(id))
-    r = requests.get(row.Image_Link)
-    img = Image.open(BytesIO(r.content))
-
-    # Create thumbnail, automatically handles aspect ratio based on smallest dimension
-    img.thumbnail((thumbnail_size, thumbnail_size * 2))
-    img.save(os.path.join(outfilename))

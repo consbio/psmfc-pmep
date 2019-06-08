@@ -70,6 +70,8 @@ def get_photo_credit_code(credits):
         return "WA"
     if "Oregon" in credits:
         return "OR"
+    if "California" in credits:
+        return "CA"
     if "Google" in credits:
         return "GE"
 
