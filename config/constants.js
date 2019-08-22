@@ -90,15 +90,15 @@ export const lifeStageLabels = {
 }
 
 // used to find the bin for which twl < bin
-// values of -1 indicate twl not assessed
-export const twlBins = [0, 20, 40, 60, 80, 101]
+// 999 indicates not assessed
+export const twlBins = [10, 40, 60, 90, 101, 1000]
 export const twlBinLabels = [
-  'Not assessed',
-  '< 20%',
+  '< 10%',
   '20 - 39%',
   '40 - 59%',
-  '60 - 79%',
-  '≥ 80%',
+  '60 - 89%',
+  '≥ 90%',
+  'Not assessed',
 ]
 
 export const nfhpCodes = [0, 1, 2, 3, 4, 5]

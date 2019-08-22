@@ -31,7 +31,7 @@ out_dir = Path("./data")
 boundaries_gdb = "PMEP_West_Coast_USA_Estuary_Extent_V1.gdb"
 points_gdb = "PMEP_Estuary_Points_V1_3.gdb"
 biotic_gdb = "PMEP_West_Coast_USA_Estuarine_Biotic_Habitat_V1_1.gdb"
-twl_gdb = "PMEP_Tidal_Wetland_Loss_V1.gdb"
+twl_gdb = "RestoredAreas_TWL_Sharing.gdb"
 
 # State of the Knowledge and NFHAP summary data
 # Sent by PSFMC staff separately on 11/3/2017
@@ -189,6 +189,17 @@ twl_acres = (
     .astype("Int64")
     .rename("twlAcres")
 )
+# calculate the area restored
+twr_acres = (
+    (
+        twl.loc[twl.TWL_Type == "restored"].groupby("PMEP_EstuaryID").TWL_Hectares.sum()
+        * 2.47105
+    )
+    .round(0)
+    .astype("Int64")
+    .rename("twrAcres")
+)
+
 
 
 ### Photos
@@ -238,6 +249,7 @@ df = (
     .join(biotic_areas)
     .join(tw_acres)
     .join(twl_acres)
+    .join(twr_acres)
     .join(image_df)
 )
 

@@ -7,10 +7,10 @@ import { Button } from 'components/Button'
 import { Columns, Column } from 'components/Grid'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
 import Tabs, { Tab as BaseTab } from 'components/Tabs'
+import { OutboundLink } from 'components/Link'
 import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
 
-import { OutboundLink } from 'react-ga'
 import SpeciesList from './SpeciesList'
 import BioticList from './BioticList'
 import TidalWetlandLoss from './TidalWetlandLoss'
@@ -109,6 +109,7 @@ const EstuaryDetails = ({
   NFHPJoin,
   twAcres,
   twlAcres,
+  twrAcres,
   showZoom,
   onBack,
   onZoomTo,
@@ -154,25 +155,21 @@ const EstuaryDetails = ({
 
           {imageURL !== null && (
             <Section>
-              <OutboundLink from="/" to={imageURL} target="_blank">
+              <OutboundLink from="/" to={imageURL}>
                 <Image src={getImage(id)} />
-                {imageCredits && (
-                  <ImageCredits>
-                    Photo:{' '}
-                    {imageCredits.url ? (
-                      <OutboundLink
-                        from="/"
-                        to={imageCredits.url}
-                        target="_blank"
-                      >
-                        {imageCredits.credits}
-                      </OutboundLink>
-                    ) : (
-                      imageCredits.credits
-                    )}
-                  </ImageCredits>
-                )}
               </OutboundLink>
+              {imageCredits && (
+                <ImageCredits>
+                  Photo:{' '}
+                  {imageCredits.url ? (
+                    <OutboundLink from="/" to={imageCredits.url}>
+                      {imageCredits.credits}
+                    </OutboundLink>
+                  ) : (
+                    imageCredits.credits
+                  )}
+                </ImageCredits>
+              )}
             </Section>
           )}
 
@@ -199,7 +196,7 @@ const EstuaryDetails = ({
               {countSpecies || 'No'} focal species are found in this estuary.
             </Value>
           </Section>
-          
+
           <Section>
             <TabHeader>Biotic habitats:</TabHeader>
             <Value>
@@ -221,7 +218,7 @@ const EstuaryDetails = ({
         <Tab id="threats" label="Threats">
           <Section>
             <TabHeader>Tidal wetland loss:</TabHeader>
-            <TidalWetlandLoss lost={twlAcres} area={twAcres} />
+            <TidalWetlandLoss area={twAcres} lost={twlAcres} restored={twrAcres} />
           </Section>
 
           <Section>
@@ -250,6 +247,7 @@ EstuaryDetails.propTypes = {
   NFHPJoin: PropTypes.number.isRequired,
   twAcres: PropTypes.number,
   twlAcres: PropTypes.number,
+  twrAcres: PropTypes.number,
   showZoom: PropTypes.bool,
   onBack: PropTypes.func,
   onZoomTo: PropTypes.func,
@@ -258,6 +256,7 @@ EstuaryDetails.propTypes = {
 EstuaryDetails.defaultProps = {
   twAcres: null,
   twlAcres: null,
+  twrAcres: null,
   imageURL: null,
   imageCredits: null,
   showZoom: true,

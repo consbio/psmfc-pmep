@@ -167,8 +167,8 @@ export const filters = [
       const twAcres = record.get('twAcres')
       const twlAcres = record.get('twlAcres')
 
-      // -1 means not assessed
-      const percent = twAcres ? Math.min(100, (100 * twlAcres) / twAcres) : -1
+      // 999 means not assessed
+      const percent = twAcres ? Math.min(100, (100 * twlAcres) / twAcres) : 999
       return twlBins.findIndex(bin => percent < bin)
     },
     // store the index of the bin

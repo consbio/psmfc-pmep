@@ -32,6 +32,7 @@ export const useData = () => {
             species
             twAcres
             twlAcres
+            twrAcres
             imageURL
             imageCredits
           }
