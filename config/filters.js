@@ -17,6 +17,8 @@ import {
   bioticInfo,
   sppCountClasses,
   sppCountClassLabels,
+  twlBins,
+  twlBinLabels,
 } from './constants'
 
 /**
@@ -157,6 +159,22 @@ export const filters = [
         .toArray(),
     filterFunc: hasValue,
     isArray: true,
+  },
+  {
+    field: 'twl',
+    title: 'Tidal Wetland Loss',
+    getValue: record => {
+      const twAcres = record.get('twAcres')
+      const twlAcres = record.get('twlAcres')
+
+      // -1 means not assessed
+      const percent = twAcres ? Math.min(100, (100 * twlAcres) / twAcres) : -1
+      return twlBins.findIndex(bin => percent < bin)
+    },
+    // store the index of the bin
+    values: twlBins.map((_, i) => i),
+    labels: twlBinLabels,
+    filterFunc: hasValue,
   },
   {
     field: 'nfhp2015',

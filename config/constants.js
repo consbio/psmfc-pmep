@@ -89,6 +89,18 @@ export const lifeStageLabels = {
   JP: 'juvenile present',
 }
 
+// used to find the bin for which twl < bin
+// values of -1 indicate twl not assessed
+export const twlBins = [0, 20, 40, 60, 80, 101]
+export const twlBinLabels = [
+  'Not assessed',
+  '< 20%',
+  '20 - 39%',
+  '40 - 59%',
+  '60 - 79%',
+  '≥ 80%',
+]
+
 export const nfhpCodes = [0, 1, 2, 3, 4, 5]
 export const nfhpLabels = [
   'Very High',
@@ -239,8 +251,9 @@ export const imageCredits = {
     url: 'https://www.oregonshorezone.info/images.html',
   },
   CA: {
-    credits: '© 2002-2019 Kenneth & Gabrielle Adelman, California Coastal Records Project',
-    url: 'https://www.californiacoastline.org/'
+    credits:
+      '© 2002-2019 Kenneth & Gabrielle Adelman, California Coastal Records Project',
+    url: 'https://www.californiacoastline.org/',
   },
   GE: {
     credits: 'Google Earth',

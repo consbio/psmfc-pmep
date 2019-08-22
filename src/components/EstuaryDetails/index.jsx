@@ -13,6 +13,7 @@ import { formatNumber } from 'util/format'
 import { OutboundLink } from 'react-ga'
 import SpeciesList from './SpeciesList'
 import BioticList from './BioticList'
+import TidalWetlandLoss from './TidalWetlandLoss'
 import NFHP from './NFHP'
 import EstuaryType from './EstuaryType'
 import { stateNames, estuaryTypes } from '../../../config/constants'
@@ -106,6 +107,8 @@ const EstuaryDetails = ({
   SoKJoin,
   nfhp2015,
   NFHPJoin,
+  twAcres,
+  twlAcres,
   showZoom,
   onBack,
   onZoomTo,
@@ -196,6 +199,7 @@ const EstuaryDetails = ({
               {countSpecies || 'No'} focal species are found in this estuary.
             </Value>
           </Section>
+          
           <Section>
             <TabHeader>Biotic habitats:</TabHeader>
             <Value>
@@ -216,10 +220,14 @@ const EstuaryDetails = ({
         </Tab>
         <Tab id="threats" label="Threats">
           <Section>
+            <TabHeader>Tidal wetland loss:</TabHeader>
+            <TidalWetlandLoss lost={twlAcres} area={twAcres} />
+          </Section>
+
+          <Section>
             <TabHeader>Risk of fish habitat degradation:</TabHeader>
             <NFHP level={nfhp2015} status={NFHPJoin} />
           </Section>
-          {/* TODO: tidal wetland loss goes here */}
         </Tab>
       </TabContainer>
     </>
@@ -230,7 +238,7 @@ EstuaryDetails.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   imageURL: PropTypes.string,
-  imageCredits: PropTypes.string,
+  imageCredits: PropTypes.object,
   state: PropTypes.string.isRequired,
   type: PropTypes.number.isRequired,
   acres: PropTypes.number.isRequired,
@@ -240,12 +248,16 @@ EstuaryDetails.propTypes = {
   SoKJoin: PropTypes.number.isRequired,
   nfhp2015: PropTypes.number.isRequired,
   NFHPJoin: PropTypes.number.isRequired,
+  twAcres: PropTypes.number,
+  twlAcres: PropTypes.number,
   showZoom: PropTypes.bool,
   onBack: PropTypes.func,
   onZoomTo: PropTypes.func,
 }
 
 EstuaryDetails.defaultProps = {
+  twAcres: null,
+  twlAcres: null,
   imageURL: null,
   imageCredits: null,
   showZoom: true,
