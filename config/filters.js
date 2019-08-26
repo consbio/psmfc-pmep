@@ -19,6 +19,7 @@ import {
   sppCountClassLabels,
   twlBins,
   twlBinLabels,
+  twrLabels,
 } from './constants'
 
 /**
@@ -174,6 +175,19 @@ export const filters = [
     // store the index of the bin
     values: twlBins.map((_, i) => i),
     labels: twlBinLabels,
+    filterFunc: hasValue,
+  },
+  {
+    field: 'twr',
+    title: 'Tidal Wetland Restoration',
+    getValue: record => {
+      if (!record.get('twAcres')) return 2 // Not assessed
+      if (!record.get('twrAcres')) return 1 // No restoration
+      return 0
+    },
+    // store the index of the bin
+    values: [0, 1, 2],
+    labels: twrLabels,
     filterFunc: hasValue,
   },
   {

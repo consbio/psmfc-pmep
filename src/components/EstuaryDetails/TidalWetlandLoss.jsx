@@ -6,9 +6,9 @@ import { Flex } from 'components/Grid'
 import HelpText from 'components/elements/HelpText'
 import Donut from 'components/Donut'
 import { formatNumber } from 'util/format'
-import styled from 'util/style'
+import styled, { theme } from 'util/style'
 
-const Section = styled(Flex)``
+const Section = styled(Flex).attrs({ mt: '1rem' })``
 const StyledDonut = styled(Donut)`
   flex: 0 0 auto;
   margin: 0 1rem 1rem 0;
@@ -31,8 +31,9 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
       <Section>
         <StyledDonut
           percent={percentLost}
+          color={theme.colors.secondary[300]}
           percentLabel={formatNumber(percentLost, 0)}
-          label="area lost"
+          label="lost"
           size={100}
           donutWidth={10}
         />
@@ -49,7 +50,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
           <StyledDonut
             percent={percentRestored}
             percentLabel={formatNumber(percentRestored, 0)}
-            label="area lost"
+            label="restored"
             size={100}
             donutWidth={10}
           />

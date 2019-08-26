@@ -101,6 +101,12 @@ export const twlBinLabels = [
   'Not assessed',
 ]
 
+export const twrLabels = [
+  'Some restoration',
+  'No known restoration',
+  'Not assessed',
+]
+
 export const nfhpCodes = [0, 1, 2, 3, 4, 5]
 export const nfhpLabels = [
   'Very High',
