@@ -89,14 +89,19 @@ export const lifeStageLabels = {
   JP: 'juvenile present',
 }
 
+export const twColors = {
+  lost: '#FCEBC3',
+  restored: '#BED7FA',
+  retained: '#47A587',
+}
+
 // used to find the bin for which twl < bin
 // 999 indicates not assessed
-export const twlBins = [10, 40, 60, 90, 101, 1000]
+export const twlBins = [10, 50, 90, 101, 1000]
 export const twlBinLabels = [
   '< 10%',
-  '20 - 39%',
-  '40 - 59%',
-  '60 - 89%',
+  '10 - 49%',
+  '50 - 89%',
   '≥ 90%',
   'Not assessed',
 ]

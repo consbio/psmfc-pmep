@@ -7,11 +7,12 @@ import HelpText from 'components/elements/HelpText'
 import Donut from 'components/Donut'
 import { formatNumber } from 'util/format'
 import styled, { theme } from 'util/style'
+import { twColors } from '../../../config/constants'
 
-const Section = styled(Flex).attrs({ mt: '1rem' })``
+const Section = styled(Flex).attrs({ alignItems: 'center', mt: '1rem' })``
 const StyledDonut = styled(Donut)`
   flex: 0 0 auto;
-  margin: 0 1rem 1rem 0;
+  margin-right: 1rem;
 `
 
 const Note = styled(HelpText).attrs({ fontSize: '0.8rem' })``
@@ -23,45 +24,71 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
     )
   }
 
+  const retained = area - lost - restored
+
   const percentLost = Math.min(100, (100 * lost) / area)
   const percentRestored = Math.min(100, (100 * restored) / area)
+  const percentRetained = Math.max(0, (100 * retained) / area)
 
   return (
     <>
+      <HelpText>
+        Tidal vegetated wetlands historically occupied approximately{' '}
+        {formatNumber(area, 0)} acres.
+      </HelpText>
+
       <Section>
         <StyledDonut
           percent={percentLost}
-          color={theme.colors.secondary[300]}
           percentLabel={formatNumber(percentLost, 0)}
+          color={twColors.lost}
           label="lost"
           size={100}
           donutWidth={10}
         />
         <HelpText>
-          Tidal vegetated wetlands have been lost on approximately{' '}
-          <b>{formatNumber(lost, 0)}</b> acres of the{' '}
-          <b>{formatNumber(area, 0)}</b> acres of their estimated historical
-          extent.
+          These wetlands have been lost on approximately{' '}
+          <b>{formatNumber(lost, 0)}</b> acres.
         </HelpText>
       </Section>
 
-      {restored && (
+      {restored > 0 ? (
         <Section>
           <StyledDonut
             percent={percentRestored}
             percentLabel={formatNumber(percentRestored, 0)}
+            color={`${twColors.restored}`}
+            offset={percentLost}
             label="restored"
             size={100}
             donutWidth={10}
           />
           <HelpText>
-            Tidal vegetated wetlands have been restored on approximately{' '}
+            These wetlands have been restored on approximately{' '}
             <b>{formatNumber(restored, 0)}</b> acres.
           </HelpText>
         </Section>
-      )}
+      ) : null}
 
-      <Note mb="1rem">
+      {retained > 0 ? (
+        <Section>
+          <StyledDonut
+            percent={percentRetained}
+            percentLabel={formatNumber(percentRetained, 0)}
+            color={`${twColors.retained}66`}
+            offset={percentLost + percentRestored}
+            label="retained"
+            size={100}
+            donutWidth={10}
+          />
+          <HelpText>
+            These wetlands have been retained (not lost or restored) on
+            approximately <b>{formatNumber(retained, 0)}</b> acres.
+          </HelpText>
+        </Section>
+      ) : null}
+
+      <Note my="1rem">
         Tidal vegetated wetland loss was assessed by comparing the current
         extent of tidal wetlands in the{' '}
         <OutboundLink from="/" to="https://www.fws.gov/wetlands/">
@@ -90,8 +117,8 @@ TidalWetlandLoss.propTypes = {
 }
 
 TidalWetlandLoss.defaultProps = {
-  area: null,
-  lost: null,
+  area: 0,
+  lost: 0,
   restored: PropTypes.number,
 }
 
