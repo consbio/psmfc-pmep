@@ -4,18 +4,31 @@ import PropTypes from 'prop-types'
 import { OutboundLink } from 'components/Link'
 import { Flex } from 'components/Grid'
 import HelpText from 'components/elements/HelpText'
-import Donut from 'components/Donut'
+import { MultiValueDonut } from 'components/Donut'
 import { formatNumber } from 'util/format'
-import styled, { theme } from 'util/style'
+import styled from 'util/style'
 import { twColors } from '../../../config/constants'
 
 const Section = styled(Flex).attrs({ alignItems: 'center', mt: '1rem' })``
-const StyledDonut = styled(Donut)`
+const StyledDonut = styled(MultiValueDonut)`
   flex: 0 0 auto;
   margin-right: 1rem;
 `
 
 const Note = styled(HelpText).attrs({ fontSize: '0.8rem' })``
+
+const Patch = styled.div`
+  width: 1rem;
+  height: 1rem;
+  background: ${({ color }) => color};
+  margin-right: 0.5rem;
+`
+
+const Legend = styled(Flex).attrs({ alignItems: 'center' })`
+  &:not(:first-child) {
+    margin-top: 0.25rem;
+  }
+`
 
 const TidalWetlandLoss = ({ area, lost, restored }) => {
   if (!area) {
@@ -25,10 +38,24 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
   }
 
   const retained = area - lost - restored
-
   const percentLost = Math.min(100, (100 * lost) / area)
   const percentRestored = Math.min(100, (100 * restored) / area)
   const percentRetained = Math.max(0, (100 * retained) / area)
+
+  const donutEntries = [
+    {
+      percent: percentLost,
+      color: twColors.lost,
+    },
+    {
+      percent: percentRestored,
+      color: twColors.restored,
+    },
+    {
+      percent: percentRetained,
+      color: twColors.retained,
+    },
+  ]
 
   return (
     <>
@@ -37,6 +64,40 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
         {formatNumber(area, 0)} acres.
       </HelpText>
 
+      {/* Experimental, pending review */}
+      <Section>
+        <StyledDonut entries={donutEntries} size={100} donutWidth={20} />
+
+        <div>
+          <Legend>
+            <Patch color={twColors.lost} />
+            <HelpText>
+              <b>{formatNumber(lost, 0)}</b> acres (
+              {formatNumber(percentLost, 0)}%) lost
+            </HelpText>
+          </Legend>
+
+          {percentRestored > 0 ? (
+            <Legend>
+              <Patch color={twColors.restored} />
+              <HelpText>
+                <b>{formatNumber(restored, 0)}</b> acres (
+                {formatNumber(percentRestored, 0)}%) restored
+              </HelpText>
+            </Legend>
+          ) : null}
+
+          <Legend>
+            <Patch color={twColors.retained} />
+            <HelpText>
+              <b>{formatNumber(retained, 0)}</b> acres (
+              {formatNumber(percentRetained, 0)}%) retained
+            </HelpText>
+          </Legend>
+        </div>
+      </Section>
+
+      {/* 
       <Section>
         <StyledDonut
           percent={percentLost}
@@ -86,7 +147,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
             approximately <b>{formatNumber(retained, 0)}</b> acres.
           </HelpText>
         </Section>
-      ) : null}
+      ) : null} */}
 
       <Note my="1rem">
         Tidal vegetated wetland loss was assessed by comparing the current
