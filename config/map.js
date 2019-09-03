@@ -1,5 +1,6 @@
 import { createSteps } from 'util/map'
-import { bioticInfo, PNWBounds } from './constants'
+import { flatten } from 'util/data'
+import { bioticInfo, twInfo, PNWBounds } from './constants'
 
 export const transparentColor = 'rgba(0,0,0,0)'
 export const boundaryColor = '#a18ac9'
@@ -24,6 +25,14 @@ export const bioticLayer = {
     'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_flat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
   sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
   idProperty: 'CMECS_BC_Code',
+}
+
+// Tidal wetland loss and restoration source information
+export const twLayer = {
+  tileURL:
+    'https://honu.psmfc.org/server/rest/services/Hosted/PMEP_Tidal_Wetlands_Loss_Summary_V2/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+  sourceLayer: 'PMEP_Tidal_Wetlands_Loss_Summary_V2',
+  idProperty: 'TWL_Type',
 }
 
 /* --------- Cluster information --------- */
@@ -55,16 +64,14 @@ const clusterRadii = createSteps(clusters, 'radius')
 // extract biotic code and color info into Mapbox style expression
 // so that we can style the layer based on code
 // structure is: [code, color, code2, color2, ...]
-// TODO: Convert this to use proper ID for each CMECS type
-let bioticStyle = []
-// Object.values(bioticInfo).forEach(({ vtID, color }) => {
-//   bioticStyle = bioticStyle.concat([vtID, color])
-// })
-Object.entries(bioticInfo).forEach(([key, { color }]) => {
-  bioticStyle = bioticStyle.concat([key, color])
-})
 // final entry must be the default color
-bioticStyle.push(transparentColor)
+const bioticStyle = flatten(
+  Object.entries(bioticInfo).map(([key, { color }]) => [key, color])
+).concat(transparentColor)
+
+const twStyle = flatten(
+  Object.entries(twInfo).map(([key, { color }]) => [key, color])
+).concat(transparentColor)
 
 /**
  * Map configuration information used to construct map and populate layers
@@ -90,6 +97,13 @@ export const sources = {
   biotics: {
     type: 'vector',
     tiles: [bioticLayer.tileURL],
+    minzoom: 5,
+    maxzoom: 15,
+    tileSize: 512,
+  },
+  tidalWetlands: {
+    type: 'vector',
+    tiles: [twLayer.tileURL],
     minzoom: 5,
     maxzoom: 15,
     tileSize: 512,
@@ -162,12 +176,32 @@ export const layers = [
     minzoom: 7.5,
     maxzoom: 22,
     type: 'fill',
+
     paint: {
       'fill-opacity': {
         base: 1,
         stops: [[7.5, 0.1], [9, 0.5]],
       },
       'fill-color': ['match', ['get', bioticLayer.idProperty], ...bioticStyle],
+    },
+  },
+  {
+    id: 'tw-fill',
+    source: 'tidalWetlands',
+    'source-layer': twLayer.sourceLayer,
+    minzoom: 7.5,
+    maxzoom: 22,
+    type: 'fill',
+    filter: ['!=', ['get', twLayer.idProperty], 'N/A'],
+    layout: {
+      visibility: 'none',
+    },
+    paint: {
+      'fill-opacity': {
+        base: 1,
+        stops: [[7.5, 0.1], [9, 0.5]],
+      },
+      'fill-color': ['match', ['get', twLayer.idProperty], ...twStyle],
     },
   },
   {
@@ -331,5 +365,17 @@ export const legends = {
         }
       })
     },
+  },
+  'tw-fill': {
+    getLegend: () =>
+      Object.entries(twInfo)
+        .sort(([, { label: left }], [, { label: right }]) =>
+          left < right ? -1 : 1
+        )
+        .map(([key, { label, color }]) => ({
+          type: 'fill',
+          label: `Tidal wetlands ${label}`,
+          color: `${color}99`, // add a bit of transparency to mute color
+        })),
   },
 }

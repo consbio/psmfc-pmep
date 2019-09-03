@@ -12,6 +12,7 @@ import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 
 import Legend from './Legend'
 import StyleSelector from './StyleSelector'
+import LayerToggle from './LayerToggle'
 import {
   config,
   sources,
@@ -32,8 +33,6 @@ const Map = ({
   onSelectFeature,
   onBoundsChange,
 }) => {
-  console.log('map render')
-
   // if there is no window, we cannot render this component
   if (!hasWindow) {
     return null
@@ -46,6 +45,7 @@ const Map = ({
   const baseStyleRef = useRef(null)
   const selectedFeatureRef = useRef(selectedFeature)
   const [legendEntries, setLegendEntries] = useState([])
+  const [activeLayer, setActiveLayer] = useState('biotics') // options are biotics and tw
 
   useEffect(() => {
     const { padding, bounds: initBounds } = config
@@ -279,16 +279,20 @@ const Map = ({
     const { current: map } = mapRef
     if (!(map && map.isStyleLoaded())) return []
 
+    const queryLayers = [
+      'biotics-fill',
+      'tw-fill',
+      'boundaries-fill',
+      'boundaries-outline-highlight',
+      'clusters',
+      'points',
+    ]
+
+    // Create an index that preserves the above order for sorting
+    const layerIndex = { ...queryLayers }
+
     // Group layers with visible features
-    const visibleFeatures = map.queryRenderedFeatures({
-      layers: [
-        'clusters',
-        'points',
-        'boundaries-fill',
-        'biotics-fill',
-        'boundaries-outline-highlight',
-      ],
-    })
+    const visibleFeatures = map.queryRenderedFeatures({ layers: queryLayers })
     const grouped = groupByLayer(visibleFeatures)
 
     // only show point or boundary for estuaries when in view, not both
@@ -299,7 +303,9 @@ const Map = ({
 
     let entries = []
     Object.entries(grouped)
-      .sort(([leftLayer], [rightLayer]) => (leftLayer > rightLayer ? 1 : -1))
+      .sort(([leftLayer], [rightLayer]) =>
+        layerIndex[leftLayer] > layerIndex[rightLayer] ? -1 : 1
+      )
       .forEach(([layer, features]) => {
         if (legends[layer]) {
           entries = entries.concat(legends[layer].getLegend(features))
@@ -307,6 +313,26 @@ const Map = ({
       })
 
     return entries
+  }
+
+  const handleLayerToggle = newLayer => {
+    const { current: map } = mapRef
+
+    if (!map) return
+
+    setActiveLayer(newLayer)
+
+    const isBiotics = newLayer === 'biotics'
+    map.setLayoutProperty(
+      'biotics-fill',
+      'visibility',
+      isBiotics ? 'visible' : 'none'
+    )
+    map.setLayoutProperty(
+      'tw-fill',
+      'visibility',
+      isBiotics ? 'none' : 'visible'
+    )
   }
 
   const handleBasemapChange = styleID => {
@@ -348,6 +374,16 @@ const Map = ({
   return (
     <Relative>
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
+
+      <LayerToggle
+        value={activeLayer}
+        options={[
+          { value: 'biotics', label: 'Estuarine Biotic Habitat' },
+          { value: 'tw', label: 'Tidal Wetland Loss' },
+        ]}
+        onChange={handleLayerToggle}
+      />
+
       <Legend entries={legendEntries} />
       {mapRef.current && mapRef.current.isStyleLoaded && (
         <StyleSelector
@@ -382,116 +418,3 @@ Map.defaultProps = {
 }
 
 export default Map
-
-// T0DO: features must have an ID
-// highlight boundaries on hover
-// map.on('mouseenter', 'boundaries-fill', e => {
-//   const [feature] = map.queryRenderedFeatures(e.point, {
-//     layers: ['boundaries-fill'],
-//   })
-
-//   map.setFilter('boundaries-outline-highlight', [
-//     '==',
-//     ['get', 'id'],
-//     feature.properties.id,
-//   ])
-// })
-// map.on('mouseleave', 'boundaries-fill', () => {
-//   map.setFilter('boundaries-outline-highlight', [
-//     '==',
-//     ['get', 'id'],
-//     Infinity,
-//   ])
-// })
-
-// useEffect(() => {
-//   console.log('grid changed', grid)
-
-//   const { current: map } = mapRef
-//   if (!map.loaded()) return
-
-//   // clear out any previous highlights
-//   layers.forEach(({ id }) => {
-//     updateHighlight(id, null)
-//   })
-
-//   layers.forEach(({ id }) => {
-//     map.setLayoutProperty(id, 'visibility', grid === id ? 'visible' : 'none')
-//   })
-
-//   // update zoom in note
-//   if (gridRef.current === 'na_grts' && map.getZoom() < 5) {
-//     noteNode.current.innerHTML = 'Zoom in further to see GRTS grid...'
-//   } else {
-//     noteNode.current.innerHTML = ''
-//   }
-// }, [grid])
-
-// const updateHighlight = (gridID, id) => {
-//   const { current: map } = mapRef
-//   const layer = `${gridID}-highlight`
-
-//   if (id !== null) {
-//     map.setPaintProperty(layer, 'fill-color', [
-//       'match',
-//       ['get', 'id'],
-//       id,
-//       '#b5676d',
-//       TRANSPARENT,
-//     ])
-//   } else {
-//     map.setPaintProperty(layer, 'fill-color', TRANSPARENT)
-//   }
-// }
-
-// const getFeatureAtPoint = point => {
-//   const { current: map } = mapRef
-//   const { current: curGrid } = gridRef
-
-//   if (!(map && curGrid)) return null
-
-//   const [feature] = map.queryRenderedFeatures(point, {
-//     layers: [`${curGrid}-highlight`],
-//   })
-//   if (feature) {
-//     console.log('got feature at point', feature)
-//     updateHighlight(curGrid, feature.properties.id)
-//     onSelectFeature(feature.properties)
-//   }
-//   return feature
-// }
-
-// useEffect(() => {
-//   const { current: map } = mapRef
-//   const { current: marker } = markerRef
-
-//   if (!map.loaded()) return
-
-//   if (location !== null) {
-//     onSelectFeature(null)
-//     const { latitude, longitude } = location
-//     map.flyTo({ center: [longitude, latitude], zoom: 10 })
-
-//     map.once('moveend', () => {
-//       const point = map.project([longitude, latitude])
-//       const feature = getFeatureAtPoint(point)
-//       // source may still be loading, try again in 1 second
-//       if (!feature) {
-//         setTimeout(() => {
-//           getFeatureAtPoint(point)
-//         }, 1000)
-//       }
-//     })
-
-//     if (!marker) {
-//       markerRef.current = new mapboxgl.Marker()
-//         .setLngLat([longitude, latitude])
-//         .addTo(map)
-//     } else {
-//       marker.setLngLat([longitude, latitude])
-//     }
-//   } else if (marker) {
-//     marker.remove()
-//     markerRef.current = null
-//   }
-// }, [location])

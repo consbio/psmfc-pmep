@@ -7,7 +7,7 @@ import HelpText from 'components/elements/HelpText'
 import { MultiValueDonut } from 'components/Donut'
 import { formatNumber } from 'util/format'
 import styled from 'util/style'
-import { twColors } from '../../../config/constants'
+import { twInfo } from '../../../config/constants'
 
 const Section = styled(Flex).attrs({ alignItems: 'center', mt: '1rem' })``
 const StyledDonut = styled(MultiValueDonut)`
@@ -30,6 +30,12 @@ const Legend = styled(Flex).attrs({ alignItems: 'center' })`
   }
 `
 
+// add a bit of transparency to mute colors, and transform to a simpler object
+const colors = Object.assign(
+  {},
+  ...Object.entries(twInfo).map(([key, { color }]) => ({ [key]: `${color}99` }))
+)
+
 const TidalWetlandLoss = ({ area, lost, restored }) => {
   if (!area) {
     return (
@@ -45,15 +51,15 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
   const donutEntries = [
     {
       percent: percentLost,
-      color: twColors.lost,
+      color: colors.lost,
     },
     {
       percent: percentRestored,
-      color: twColors.restored,
+      color: colors.restored,
     },
     {
       percent: percentRetained,
-      color: twColors.retained,
+      color: colors.retained,
     },
   ]
 
@@ -70,7 +76,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
 
         <div>
           <Legend>
-            <Patch color={twColors.lost} />
+            <Patch color={colors.lost} />
             <HelpText>
               <b>{formatNumber(lost, 0)}</b> acres (
               {formatNumber(percentLost, 0)}%) lost
@@ -79,7 +85,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
 
           {percentRestored > 0 ? (
             <Legend>
-              <Patch color={twColors.restored} />
+              <Patch color={colors.restored} />
               <HelpText>
                 <b>{formatNumber(restored, 0)}</b> acres (
                 {formatNumber(percentRestored, 0)}%) restored
@@ -88,7 +94,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
           ) : null}
 
           <Legend>
-            <Patch color={twColors.retained} />
+            <Patch color={colors.retained} />
             <HelpText>
               <b>{formatNumber(retained, 0)}</b> acres (
               {formatNumber(percentRetained, 0)}%) retained
@@ -96,58 +102,6 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
           </Legend>
         </div>
       </Section>
-
-      {/* 
-      <Section>
-        <StyledDonut
-          percent={percentLost}
-          percentLabel={formatNumber(percentLost, 0)}
-          color={twColors.lost}
-          label="lost"
-          size={100}
-          donutWidth={10}
-        />
-        <HelpText>
-          These wetlands have been lost on approximately{' '}
-          <b>{formatNumber(lost, 0)}</b> acres.
-        </HelpText>
-      </Section>
-
-      {restored > 0 ? (
-        <Section>
-          <StyledDonut
-            percent={percentRestored}
-            percentLabel={formatNumber(percentRestored, 0)}
-            color={`${twColors.restored}`}
-            offset={percentLost}
-            label="restored"
-            size={100}
-            donutWidth={10}
-          />
-          <HelpText>
-            These wetlands have been restored on approximately{' '}
-            <b>{formatNumber(restored, 0)}</b> acres.
-          </HelpText>
-        </Section>
-      ) : null}
-
-      {retained > 0 ? (
-        <Section>
-          <StyledDonut
-            percent={percentRetained}
-            percentLabel={formatNumber(percentRetained, 0)}
-            color={`${twColors.retained}66`}
-            offset={percentLost + percentRestored}
-            label="retained"
-            size={100}
-            donutWidth={10}
-          />
-          <HelpText>
-            These wetlands have been retained (not lost or restored) on
-            approximately <b>{formatNumber(retained, 0)}</b> acres.
-          </HelpText>
-        </Section>
-      ) : null} */}
 
       <Note my="1rem">
         Tidal vegetated wetland loss was assessed by comparing the current

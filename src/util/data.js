@@ -22,3 +22,11 @@ export const packedToObject = (entries, modifier) =>
     result[key] = modifier ? modifier(value) : value
     return result
   }, {})
+
+/** Flatten an array of arrays into a single array
+ * @param {Array of Arrays} - arrays
+ */
+export const flatten = arrays =>
+  arrays.reduce((result, entry) => result.concat(...entry), [])
+
+window.flatten = flatten

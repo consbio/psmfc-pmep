@@ -35,7 +35,7 @@ const Donut = ({ entries, backgroundColor, size, donutWidth, ...props }) => {
 
       {entries.map(({ percent, color }, i) => (
         <Circle
-          key={offsets[i]}
+          key={`${color}-${offsets[i]}`}
           r={radius}
           cx={halfsize}
           cy={halfsize}
@@ -63,7 +63,6 @@ Donut.propTypes = {
   backgroundColor: PropTypes.string,
   size: PropTypes.number, // width of the chart
   offset: PropTypes.number, // additional percentage to rotate the indicator (e.g., sum of percents of preceding charts in a series)
-  active: PropTypes.bool,
 }
 
 Donut.defaultProps = {
@@ -71,7 +70,6 @@ Donut.defaultProps = {
   backgroundColor: theme.colors.grey[200],
   size: 200,
   offset: 0,
-  active: false,
 }
 
 export default Donut

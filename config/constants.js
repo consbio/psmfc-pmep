@@ -89,12 +89,6 @@ export const lifeStageLabels = {
   JP: 'juvenile present',
 }
 
-export const twColors = {
-  lost: '#FCEBC3',
-  restored: '#BED7FA',
-  retained: '#47A587',
-}
-
 // used to find the bin for which twl < bin
 // 999 indicates not assessed
 export const twlBins = [10, 50, 90, 101, 1000]
@@ -250,6 +244,22 @@ export const bioticInfo = {
     color: 'rgb(35,50,0)',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/578.html',
   },
+}
+
+export const twInfo = {
+  lost: {
+    label: 'lost',
+    color: '#E69800',
+  },
+  restored: {
+    label: 'restored',
+    color: '#98E600',
+  },
+  retained: { label: 'retained', color: '#66CDAB' },
+  // 'N/A': {
+  //   label: 'not assessed',
+  //   color: '#FFFFFFFF',
+  // },
 }
 
 export const imageCredits = {
