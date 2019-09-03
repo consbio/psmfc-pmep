@@ -28,5 +28,3 @@ export const packedToObject = (entries, modifier) =>
  */
 export const flatten = arrays =>
   arrays.reduce((result, entry) => result.concat(...entry), [])
-
-window.flatten = flatten
