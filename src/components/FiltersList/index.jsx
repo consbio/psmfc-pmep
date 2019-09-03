@@ -12,7 +12,9 @@ import { filters as rawFilters } from '../../../config/filters'
 const Wrapper = styled(Flex).attrs({
   flexDirection: 'column',
   flex: 1,
-})``
+})`
+  height: 100%;
+`
 
 const Header = styled(Columns).attrs({
   flex: 0,
@@ -47,6 +49,7 @@ const ResetIcon = styled(FaRegTimesCircle).attrs({
 
 const Filters = styled(Box).attrs({ flex: 1, pr: '1rem' })`
   overflow-y: auto;
+  height: 100%;
 `
 
 // filter out internal filters

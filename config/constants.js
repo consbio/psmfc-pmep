@@ -89,6 +89,23 @@ export const lifeStageLabels = {
   JP: 'juvenile present',
 }
 
+// used to find the bin for which twl < bin
+// 999 indicates not assessed
+export const twlBins = [10, 50, 90, 101, 1000]
+export const twlBinLabels = [
+  '< 10%',
+  '10 - 49%',
+  '50 - 89%',
+  '≥ 90%',
+  'Not assessed',
+]
+
+export const twrLabels = [
+  'Some restoration',
+  'No known restoration',
+  'Not assessed',
+]
+
 export const nfhpCodes = [0, 1, 2, 3, 4, 5]
 export const nfhpLabels = [
   'Very High',
@@ -229,6 +246,22 @@ export const bioticInfo = {
   },
 }
 
+export const twInfo = {
+  lost: {
+    label: 'lost',
+    color: '#E69800',
+  },
+  restored: {
+    label: 'restored',
+    color: '#98E600',
+  },
+  retained: { label: 'retained', color: '#66CDAB' },
+  // 'N/A': {
+  //   label: 'not assessed',
+  //   color: '#FFFFFFFF',
+  // },
+}
+
 export const imageCredits = {
   WA: {
     credits: '© Washington State Department of Ecology',
@@ -239,8 +272,9 @@ export const imageCredits = {
     url: 'https://www.oregonshorezone.info/images.html',
   },
   CA: {
-    credits: '© 2002-2019 Kenneth & Gabrielle Adelman, California Coastal Records Project',
-    url: 'https://www.californiacoastline.org/'
+    credits:
+      '© 2002-2019 Kenneth & Gabrielle Adelman, California Coastal Records Project',
+    url: 'https://www.californiacoastline.org/',
   },
   GE: {
     credits: 'Google Earth',

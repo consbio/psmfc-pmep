@@ -4,12 +4,7 @@ import { fromJS } from 'immutable'
 
 import { isDebug } from 'util/dom'
 import { packedToObject } from 'util/data'
-import {
-  regions,
-  estuaryTypes,
-  imageCredits,
-  imageRoot,
-} from '../../../config/constants'
+import { regions, imageCredits, imageRoot } from '../../../config/constants'
 
 /**
  * Custom react hook to wrap getting data using GraphQL in gatsby
@@ -35,6 +30,9 @@ export const useData = () => {
             NFHPJoin
             biotic
             species
+            twAcres
+            twlAcres
+            twrAcres
             imageURL
             imageCredits
           }

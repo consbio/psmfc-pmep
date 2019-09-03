@@ -29,7 +29,7 @@ OutboundLink.propTypes = {
 }
 
 OutboundLink.defaultProps = {
-  target: ``,
+  target: `_blank`,
   className: ``,
 }
 
