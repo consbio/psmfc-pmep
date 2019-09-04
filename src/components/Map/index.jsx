@@ -318,7 +318,7 @@ const Map = ({
   const handleLayerToggle = newLayer => {
     const { current: map } = mapRef
 
-    if (!map) return
+    if (!(map && map.isStyleLoaded)) return
 
     setActiveLayer(newLayer)
 
@@ -375,22 +375,23 @@ const Map = ({
     <Relative>
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
 
-      <LayerToggle
-        value={activeLayer}
-        options={[
-          { value: 'biotics', label: 'Estuarine Biotic Habitat' },
-          { value: 'tw', label: 'Tidal Wetland Loss' },
-        ]}
-        onChange={handleLayerToggle}
-      />
-
       <Legend entries={legendEntries} />
       {mapRef.current && mapRef.current.isStyleLoaded && (
-        <StyleSelector
-          styles={styles}
-          token={accessToken}
-          onChange={handleBasemapChange}
-        />
+        <>
+          <LayerToggle
+            value={activeLayer}
+            options={[
+              { value: 'biotics', label: 'Estuarine Biotic Habitat' },
+              { value: 'tw', label: 'Tidal Wetland Loss' },
+            ]}
+            onChange={handleLayerToggle}
+          />
+          <StyleSelector
+            styles={styles}
+            token={accessToken}
+            onChange={handleBasemapChange}
+          />
+        </>
       )}
     </Relative>
   )
