@@ -66,7 +66,7 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
   return (
     <>
       <HelpText>
-        Tidal vegetated wetlands historically occupied approximately{' '}
+        Vegetated tidal wetlands historically occupied approximately{' '}
         {formatNumber(area, 0)} acres.
       </HelpText>
 
@@ -104,19 +104,20 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
       </Section>
 
       <Note my="1rem">
-        Tidal vegetated wetland loss was assessed by comparing the current
+        Vegetated tidal wetland loss was assessed by comparing the current
         extent of tidal wetlands in the{' '}
         <OutboundLink from="/" to="https://www.fws.gov/wetlands/">
           National Wetland Inventory
         </OutboundLink>{' '}
         (NWI) to the historical estuary extent shown in this tool (open water
-        areas were excluded from the analysis). This approach worked best for
-        larger estuaries. Changes in estuary topography due to fill, outdated
-        information from the NWI, and incomplete information on restored tidal
-        wetlands may result in errors in these estimates of tidal wetland loss.{' '}
+        and aquatic vegetated areas were excluded from the analysis). This
+        approach worked best for larger estuaries. Changes in estuary topography
+        due to fill, outdated information from the NWI, and incomplete
+        information on restored tidal wetlands may result in errors in these
+        estimates of tidal wetland loss.{' '}
         <OutboundLink
           from="/"
-          to="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0218558"
+          to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment"
         >
           Read more...
         </OutboundLink>
