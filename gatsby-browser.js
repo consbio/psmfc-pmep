@@ -1,5 +1,5 @@
 import GoogleAnalytics from 'react-ga'
-import Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser'
 import { siteMetadata } from './gatsby-config'
 
 /**
