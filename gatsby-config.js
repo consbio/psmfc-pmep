@@ -3,6 +3,9 @@ const config = require('./config/meta')
 module.exports = {
   siteMetadata: {
     siteUrl: config.siteUrl,
+    googleAnalyticsId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
+    sentryDSN: process.env.GATSBY_SENTRY_DSN,
+    mapboxToken: process.env.GATSBY_MAPBOX_API_TOKEN,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -41,7 +44,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: config.googleAnalyticsId,
+        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
         anonymize: true,
       },
     },

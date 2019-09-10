@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 
 import styled, { css, themeGet } from 'util/style'
 
+import LightIcon from 'images/light-v9.png'
+import StreetsIcon from 'images/streets-v11.png'
+import SatelliteIcon from 'images/satellite-streets-v11.jpg'
+
 const Wrapper = styled.div`
   cursor: pointer;
   position: absolute;
@@ -18,21 +22,22 @@ const Basemap = styled.img`
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
   margin: 0;
 
-  ${({ size }) => css`
-    width: ${size};
-    height: ${size};
-    border-radius: ${size};
-  `}
+  width: 64px;
+  height: 64px;
+  border-radius: 64px;
 
   &:not(:first-child) {
     margin-left: 0.25rem;
   }
 `
 
-const getSrc = ({ styleID, z, x, y, token }) =>
-  `https://api.mapbox.com/styles/v1/mapbox/${styleID}/tiles/256/${z}/${x}/${y}?access_token=${token}`
+const icons = {
+  'light-v9': LightIcon,
+  'satellite-streets-v11': SatelliteIcon,
+  'streets-v11': StreetsIcon,
+}
 
-const StyleSelector = ({ token, styles, tile, size, onChange }) => {
+const StyleSelector = ({ styles, onChange }) => {
   const [basemap, setBasemap] = useState(styles[0])
   const [isOpen, setIsOpen] = useState(false)
 
@@ -60,8 +65,7 @@ const StyleSelector = ({ token, styles, tile, size, onChange }) => {
     return (
       <Wrapper>
         <Basemap
-          size={size}
-          src={getSrc({ styleID: nextBasemap, token, ...tile })}
+          src={icons[nextBasemap]}
           onClick={() => handleBasemapClick(nextBasemap)}
         />
       </Wrapper>
@@ -75,8 +79,7 @@ const StyleSelector = ({ token, styles, tile, size, onChange }) => {
       {isOpen ? (
         <>
           <Basemap
-            size={size}
-            src={getSrc({ styleID: nextBasemap, token, ...tile })}
+            src={icons[nextBasemap]}
             onClick={() => handleBasemapClick(nextBasemap)}
           />
           {styles
@@ -85,43 +88,22 @@ const StyleSelector = ({ token, styles, tile, size, onChange }) => {
               <Basemap
                 key={styleID}
                 isActive={styleID === basemap}
-                size={size}
-                src={getSrc({ styleID, token, ...tile })}
+                src={icons[styleID]}
                 onClick={() => handleBasemapClick(styleID)}
               />
             ))}
         </>
       ) : (
-        <Basemap
-          size={size}
-          src={getSrc({ styleID: nextBasemap, token, ...tile })}
-          onClick={toggleOpen}
-        />
+        <Basemap src={icons[nextBasemap]} onClick={toggleOpen} />
       )}
     </Wrapper>
   )
 }
 
 StyleSelector.propTypes = {
-  token: PropTypes.string.isRequired,
-  // list of mapbox style IDs
+  // list of mapbox style IDs - corresponding images must be loaded here
   styles: PropTypes.arrayOf(PropTypes.string).isRequired,
-  tile: PropTypes.shape({
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
-    z: PropTypes.number.isRequired,
-  }),
-  size: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-}
-
-StyleSelector.defaultProps = {
-  tile: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
-  size: '64px',
 }
 
 // don't rerender based on container

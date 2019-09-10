@@ -1,16 +1,16 @@
-const GoogleAnalytics = require('react-ga')
-const Sentry = require('@sentry/browser')
-const config = require('./config/meta')
+import GoogleAnalytics from 'react-ga'
+import Sentry from '@sentry/browser'
+import { siteMetadata } from './gatsby-config'
 
 /**
  * Initialize Google Analytics and Sentry
  */
 export const onClientEntry = () => {
   if (process.env.NODE_ENV === 'production') {
-    GoogleAnalytics.initialize(config.googleAnalyticsId)
+    GoogleAnalytics.initialize(siteMetadata.googleAnalyticsId)
 
     Sentry.init({
-      dsn: config.sentryDSN,
+      dsn: siteMetadata.sentryDSN,
     })
     window.Sentry = Sentry
   }
