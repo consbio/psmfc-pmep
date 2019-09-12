@@ -24,10 +24,10 @@ const Header = styled(Columns).attrs({
   border-bottom: 1px solid ${themeGet('colors.grey.200')};
 `
 
-export const Count = styled.span`
+export const Count = styled.div`
   color: ${themeGet('colors.grey.600')};
   font-size: 0.8em;
-  line-height: 1.2;
+  line-height: 1;
 `
 
 const ResetButton = styled(Button).attrs({ secondary: true })`
@@ -78,10 +78,11 @@ const index = () => {
       <Header alignItems="baseline">
         <Column>
           <Count>
-            {state.get('filteredCount')} estuaries currently visible
+            {state.get('filteredCount')} estuaries currently visible in the
+            current extent
           </Count>
         </Column>
-        <Column>
+        <Column flex="0 0 auto">
           {hasFilters && (
             <Text textAlign="right">
               <ResetButton onClick={handleReset}>
