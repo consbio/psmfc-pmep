@@ -1,15 +1,12 @@
 import { createSteps } from 'util/map'
 import { flatten } from 'util/data'
 import { bioticInfo, twInfo, PNWBounds } from './constants'
+import { siteMetadata } from '../gatsby-config'
 
 export const transparentColor = 'rgba(0,0,0,0)'
 export const boundaryColor = '#a18ac9'
 export const highlightColor = '#ee7d14'
 export const defaultRadius = 12
-
-// Mapbox public token.
-const mapboxToken =
-  'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
 
 /* --------- Vector tile source information --------- */
 export const boundaryLayer = {
@@ -77,7 +74,7 @@ const twStyle = flatten(
  * Map configuration information used to construct map and populate layers
  */
 export const config = {
-  accessToken: mapboxToken,
+  accessToken: siteMetadata.mapboxToken,
   // center: [-120.9, 40.75],
   // zoom: 4,
   bounds: PNWBounds,
