@@ -102,6 +102,10 @@ export const filters = [
   {
     field: 'species',
     title: 'Focal Species Present',
+    description:
+      'These ecologically and economically important fish and invertebrate species were selected to encompass the diversity of life histories, habitat use, and ecological roles of species found in estuaries along the West Coast.',
+    moreInfoURL:
+      'http://www.pacificfishhabitat.org/wp-content/uploads/2017/09/tnc_ca_fishnurseries_lowres_min.pdf',
     values: species,
     labels: species.map(splitWords),
     // getValue: record => record.get('species').map(spp => spp.split(':')[0]),
@@ -164,6 +168,10 @@ export const filters = [
   {
     field: 'twl',
     title: 'Tidal Wetland Loss',
+    description:
+      'Vegetated tidal wetland loss was assessed by comparing the current extent of tidal wetlands in the National Wetland Inventory to the historical estuary extent shown in this tool.',
+    moreInfoURL:
+      'http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment',
     getValue: record => {
       const twAcres = record.get('twAcres')
       const twlAcres = record.get('twlAcres')
@@ -178,21 +186,11 @@ export const filters = [
     filterFunc: hasValue,
   },
   {
-    field: 'twr',
-    title: 'Tidal Wetland Restoration',
-    getValue: record => {
-      if (!record.get('twAcres')) return 2 // Not assessed
-      if (!record.get('twrAcres')) return 1 // No restoration
-      return 0
-    },
-    // store the index of the bin
-    values: [0, 1, 2],
-    labels: twrLabels,
-    filterFunc: hasValue,
-  },
-  {
     field: 'nfhp2015',
     title: 'Risk of Fish Habitat Degradation (2015)',
+    description:
+      'This assessment used a cumulative disturbance index to estimate risk of fish habitat degradation in estuarine habitats.',
+    moreInfoURL: 'http://assessment.fishhabitat.org/',
     values: nfhpCodes,
     labels: nfhpLabels,
     filterFunc: hasValue,

@@ -4,6 +4,7 @@ import { Map, Set } from 'immutable'
 import { FaRegTimesCircle, FaCaretDown, FaCaretRight } from 'react-icons/fa'
 
 import HelpText from 'components/elements/HelpText'
+import { OutboundLink } from 'components/Link'
 import { Context as Crossfilter, SET_FILTER } from 'components/Crossfilter'
 import { Flex } from 'components/Grid'
 
@@ -62,7 +63,15 @@ const Bars = styled.div`
   padding: 0.5rem 0 0 1rem;
 `
 
-const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
+const Filter = ({
+  field,
+  title,
+  description,
+  moreInfoURL,
+  values,
+  labels,
+  isOpen: initIsOpen,
+}) => {
   const [isOpen, setIsOpen] = useState(initIsOpen)
   const { state, dispatch } = useContext(Crossfilter)
 
@@ -79,7 +88,6 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
       type: SET_FILTER,
       payload: {
         field,
-        // TODO: adapt to other types
         filterValue: filterValues.has(value)
           ? filterValues.delete(value)
           : filterValues.add(value),
@@ -126,7 +134,19 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
             />
           ))}
 
-          {help && <HelpText>{help}</HelpText>}
+          {description && (
+            <HelpText fontSize="smaller" mb="1rem">
+              {description}
+              {moreInfoURL && (
+                <>
+                  {' '}
+                  <OutboundLink from="/compare" to={moreInfoURL}>
+                    Read more...
+                  </OutboundLink>
+                </>
+              )}
+            </HelpText>
+          )}
         </Bars>
       )}
     </Wrapper>
@@ -136,16 +156,18 @@ const Filter = ({ field, title, values, labels, help, isOpen: initIsOpen }) => {
 Filter.propTypes = {
   field: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  moreInfoURL: PropTypes.string,
   values: PropTypes.array.isRequired,
   labels: PropTypes.array,
-  help: PropTypes.string,
   isOpen: PropTypes.bool,
 }
 
 Filter.defaultProps = {
   labels: null,
-  help: null,
   isOpen: false,
+  description: null,
+  moreInfoURL: null,
 }
 
 export default Filter

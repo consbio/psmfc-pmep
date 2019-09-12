@@ -60,7 +60,7 @@ const Habitat = () => {
             <br />
             In 2014, The Pacific Marine & Estuarine Fish Habitat Partnership
             assessed the nursery habitat potential for 15 ecologically and
-            economically important fish and intertebrate species within&nbsp;
+            economically important fish and invertebrate species within&nbsp;
             <OutboundLink
               from="/"
               to="http://pmep.psmfc.org/wp-content/uploads/2017/09/tnc_ca_fishnurseries_lowres_min.pdf"
