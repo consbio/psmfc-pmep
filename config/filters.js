@@ -118,23 +118,6 @@ export const filters = [
     isArray: true,
   },
   {
-    field: 'region',
-    title: 'PMEP Region',
-    values: regions,
-    labels: regions,
-    filterFunc: hasValue,
-  },
-  {
-    field: 'state',
-    title: 'State',
-    values: states.map(state => stateNames[state]),
-    labels: states.map(state => stateNames[state]),
-    // index the estuaries that cross state boundaries in each state
-    getValue: record => stateNames[record.get('state')].split(' / '),
-    filterFunc: hasValue,
-    isArray: true,
-  },
-  {
     field: 'numSpps',
     title: 'Number of Focal Species Present',
     values: sppCountClasses,
@@ -151,6 +134,24 @@ export const filters = [
     },
     filterFunc: hasValue,
   },
+  {
+    field: 'region',
+    title: 'PMEP Region',
+    values: regions,
+    labels: regions,
+    filterFunc: hasValue,
+  },
+  {
+    field: 'state',
+    title: 'State',
+    values: states.map(state => stateNames[state]),
+    labels: states.map(state => stateNames[state]),
+    // index the estuaries that cross state boundaries in each state
+    getValue: record => stateNames[record.get('state')].split(' / '),
+    filterFunc: hasValue,
+    isArray: true,
+  },
+
   {
     field: 'biotic',
     title: 'Estuarine Biotic Habitats Present',
@@ -169,7 +170,7 @@ export const filters = [
     field: 'twl',
     title: 'Tidal Wetland Loss',
     description:
-      'Vegetated tidal wetland loss was assessed by comparing the current extent of tidal wetlands in the National Wetland Inventory to the historical estuary extent shown in this tool.',
+      'Vegetated tidal wetland loss was assessed by comparing the current extent of tidal wetlands in the National Wetland Inventory to the historical estuary extent shown in this tool. The latest version of this assessment also includes identification of restored tidal wetlands.',
     moreInfoURL:
       'http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment',
     getValue: record => {
