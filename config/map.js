@@ -75,8 +75,6 @@ const twStyle = flatten(
  */
 export const config = {
   accessToken: siteMetadata.mapboxToken,
-  // center: [-120.9, 40.75],
-  // zoom: 4,
   bounds: PNWBounds,
   minZoom: 1.75,
   styles: ['light-v9', 'satellite-streets-v11', 'streets-v11'],

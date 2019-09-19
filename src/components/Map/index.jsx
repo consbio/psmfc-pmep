@@ -13,6 +13,7 @@ import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 import Legend from './Legend'
 import StyleSelector from './StyleSelector'
 import LayerToggle from './LayerToggle'
+import FullExtentButton from './FullExtentButton'
 import {
   config,
   sources,
@@ -371,6 +372,14 @@ const Map = ({
     })
   }
 
+  const goToFullExtent = () => {
+    const { current: map } = mapRef
+
+    if (!(map && map.isStyleLoaded)) return
+
+    map.fitBounds(config.bounds, { padding: 20, duration: 1000 })
+  }
+
   return (
     <Relative>
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
@@ -391,6 +400,7 @@ const Map = ({
             token={accessToken}
             onChange={handleBasemapChange}
           />
+          <FullExtentButton onClick={goToFullExtent} />
         </>
       )}
     </Relative>
