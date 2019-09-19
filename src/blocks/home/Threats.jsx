@@ -3,7 +3,11 @@ import { graphql, useStaticQuery } from 'gatsby'
 
 import { BackgroundImage } from 'components/Image'
 import { OutboundLink } from 'components/Link'
-import { DarkSection as Section, InverseTitle as Title } from './styles'
+import {
+  DarkSection as Section,
+  InverseTitle as Title,
+  Subtitle,
+} from './styles'
 
 const Threats = () => {
   const data = useStaticQuery(graphql`
@@ -42,6 +46,40 @@ const Threats = () => {
           transport.
         </p>
 
+        <Subtitle>Vegetated tidal wetland loss:</Subtitle>
+        <p>
+          Many areas of vegetated tidal wetlands have been lost to agriculture,
+          development, and other land use changes. PMEP recently assessed
+          vegetated tidal wetland loss by comparing the current extent of tidal
+          wetlands in the{' '}
+          <OutboundLink from="/" to="https://www.fws.gov/wetlands/">
+            National Wetland Inventory
+          </OutboundLink>{' '}
+          (NWI) to the historical estuary extent shown in this tool. Open water
+          and aquatic vegetated areas were excluded from the analysis. This
+          approach worked best for larger estuaries. Changes in estuary
+          topography due to fill, outdated information from the NWI, and
+          incomplete information on restored tidal wetlands may result in errors
+          in these estimates of tidal wetland loss.
+          <br />
+          <br />
+          Where information is available, this assessment includes details about
+          vegetated tidal wetlands that have been restored.
+        </p>
+
+        <p>
+          For more information about tidal loss and restoration, please see the{' '}
+          <OutboundLink
+            from="/"
+            to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment"
+          >
+            assessment overview page.
+          </OutboundLink>
+          <br />
+          <br />
+        </p>
+
+        <Subtitle>Risk of fish habitat degradation:</Subtitle>
         <p>
           In 2015 the National Fish Habitat Partnership assessed the status of
           fish habitats across the United States. This assessment analyzed
@@ -76,7 +114,7 @@ const Threats = () => {
         </p>
 
         <p>
-          For more information about these assessments, please see the{' '}
+          For more information about this assessment, please see the{' '}
           <OutboundLink
             from="/"
             to="http://assessment.fishhabitat.org/"

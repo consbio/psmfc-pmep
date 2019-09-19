@@ -49,3 +49,12 @@ export const Title = styled(Text).attrs({
 export const InverseTitle = styled(Title)`
   color: #fff;
 `
+
+export const Subtitle = styled(Text).attrs({
+  fontSize: ['1.25rem', '1.5rem'],
+  mb: '0.5rem',
+  as: 'h2',
+})`
+  font-weight: bold;
+  line-height: 1.2;
+`
