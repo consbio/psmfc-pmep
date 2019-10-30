@@ -19,7 +19,7 @@ export const boundaryLayer = {
 // CMECS biotics vector tile source information
 export const bioticLayer = {
   tileURL:
-    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/West_Coast_USA_Estuarine_Biotic_Habitat_flat_vector_tiles/VectorTileServer/tile/{z}/{y}/{x}.pbf',
+    'https://tiles.arcgis.com/tiles/kpMKjjLr8H1rZ4XO/arcgis/rest/services/PMEP_Biotic_Component_VectorTilePackage_V1_2_dissolved/VectorTileServer/tile/{z}/{y}/{x}.pbf',
   sourceLayer: 'West Coast USA Estuarine Biotic Habitat',
   idProperty: 'CMECS_BC_Code',
 }
@@ -351,14 +351,17 @@ export const legends = {
         )
       ).sort()
 
-      return codes.map(code => {
-        const { label, color } = bioticInfo[code]
-        return {
-          type: 'fill',
-          label,
-          color,
-        }
-      })
+      // FIXME: remove the filter
+      return codes
+        .filter(code => bioticInfo[code])
+        .map(code => {
+          const { label, color } = bioticInfo[code]
+          return {
+            type: 'fill',
+            label,
+            color,
+          }
+        })
     },
   },
   'tw-fill': {
