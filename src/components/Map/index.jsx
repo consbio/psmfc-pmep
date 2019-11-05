@@ -1,5 +1,5 @@
 /* eslint-disable max-len, no-underscore-dangle */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { List, fromJS } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -8,6 +8,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 import styled from 'util/style'
 import { hasWindow } from 'util/dom'
+import { indexBy } from 'util/data'
 import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
 
 import Legend from './Legend'
@@ -21,11 +22,28 @@ import {
   legends,
   boundaryLayer,
 } from '../../../config/map'
+import { bioticInfo, twInfo } from '../../../config/constants'
 
 const Relative = styled.div`
   position: relative;
   flex: 1 0 auto;
+  z-index: 1;
 `
+
+// const TooltipPatch = styled.div`
+//   width: 1rem;
+//   height: 1rem;
+//   background-color: ${({ color }) => color};
+//   margin-right: 0.5rem;
+//   display: inline-block;
+// `
+
+const renderTooltipContent = (title, color, label) =>
+  `
+  <b>${title}</b><br/>
+  <div style="display:inline-block; width:1rem; height:1rem; background-color:${color};">&nbsp;</div>
+  <div style="display: inline-block;">${label}</div>
+  `
 
 const Map = ({
   data,
@@ -47,6 +65,8 @@ const Map = ({
   const selectedFeatureRef = useRef(selectedFeature)
   const [legendEntries, setLegendEntries] = useState([])
   const [activeLayer, setActiveLayer] = useState('biotics') // options are biotics and tw
+
+  const index = useMemo(() => indexBy(data.toJS(), 'id'), [data])
 
   useEffect(() => {
     const { padding, bounds: initBounds } = config
@@ -108,7 +128,6 @@ const Map = ({
       const [feature] = map.queryRenderedFeatures(e.point, {
         layers: ['points', 'boundaries-fill'],
       })
-      console.log('clicked features, first is', feature)
 
       if (!feature) return
       const {
@@ -150,12 +169,9 @@ const Map = ({
       anchor: 'left',
       offset: 20,
     })
-    map.on('mouseenter', 'clusters', e => {
+    map.on('mouseenter', 'clusters', ({ features: [feature] }) => {
       map.getCanvas().style.cursor = 'pointer'
 
-      const [feature] = map.queryRenderedFeatures(e.point, {
-        layers: ['clusters'],
-      })
       const clusterId = feature.properties.cluster_id
 
       // highlight
@@ -195,12 +211,8 @@ const Map = ({
     })
 
     // show tooltip for single points
-    map.on('mouseenter', 'points', e => {
+    map.on('mouseenter', 'points', ({ features: [feature] }) => {
       map.getCanvas().style.cursor = 'pointer'
-
-      const [feature] = map.queryRenderedFeatures(e.point, {
-        layers: ['points'],
-      })
 
       map.setFilter('points-highlight', [
         'any',
@@ -210,7 +222,7 @@ const Map = ({
 
       tooltip
         .setLngLat(feature.geometry.coordinates)
-        .setHTML(feature.properties.name)
+        .setHTML(`<b>${feature.properties.name}</b>`)
         .addTo(map)
     })
     map.on('mouseleave', 'points', () => {
@@ -220,6 +232,90 @@ const Map = ({
         'id',
         selectedFeatureRef.current || Infinity,
       ])
+      tooltip.remove()
+    })
+
+    // show tooltip for boundaries
+    map.on('mousemove', 'boundaries-fill', ({ point, features: [feature] }) => {
+      map.getCanvas().style.cursor = 'pointer'
+
+      if (!feature) return
+
+      const {
+        properties: { PMEP_EstuaryID },
+      } = feature
+
+      // map.setFilter('boundaries-outline-highlight', [
+      //   'any',
+      //   ['==', ['get', 'PMEP_EstuaryID'], PMEP_EstuaryID],
+      //   [
+      //     '==',
+      //     ['get', 'PMEP_EstuaryID'],
+      //     selectedFeatureRef.current || Infinity,
+      //   ],
+      // ])
+
+      tooltip
+        .setLngLat(map.unproject(point))
+        .setHTML(`<b>${index[PMEP_EstuaryID].name}</b>`)
+        .addTo(map)
+    })
+
+    map.on('mouseleave', 'boundaries-fill', () => {
+      map.getCanvas().style.cursor = ''
+      // map.setFilter('boundaries-outline-highlight', [
+      //   '==',
+      //   ['get', 'PMEP_EstuaryID'],
+      //   selectedFeatureRef.current || Infinity,
+      // ])
+      tooltip.remove()
+    })
+
+    // setup tooltip for biotic data
+    map.on('mousemove', 'biotics-fill', ({ point, features: [feature] }) => {
+      map.getCanvas().style.cursor = 'pointer'
+
+      const {
+        properties: { CMECS_BC_Code, PMEP_EstuaryID },
+      } = feature
+
+      if (!CMECS_BC_Code) return
+
+      const { color, label } = bioticInfo[CMECS_BC_Code]
+
+      tooltip
+        .setLngLat(map.unproject(point))
+        .setHTML(renderTooltipContent(index[PMEP_EstuaryID].name, color, label))
+        .addTo(map)
+    })
+
+    map.on('mouseleave', 'biotics-fill', () => {
+      map.getCanvas().style.cursor = ''
+      tooltip.remove()
+    })
+
+    // setup tooltip for tidal wetland loss data
+    map.on('mousemove', 'tw-fill', ({ point, features: [feature] }) => {
+      map.getCanvas().style.cursor = 'pointer'
+
+      const {
+        properties: { TWL_Type, PMEP_EstuaryID },
+      } = feature
+
+      tooltip
+        .setLngLat(map.unproject(point))
+        .setHTML(
+          renderTooltipContent(
+            index[PMEP_EstuaryID].name,
+            twInfo[TWL_Type].color,
+            `Tidal wetlands ${TWL_Type}`
+          )
+        )
+        .addTo(map)
+    })
+
+    map.on('mouseleave', 'tw-fill', () => {
+      map.getCanvas().style.cursor = ''
       tooltip.remove()
     })
 
@@ -245,8 +341,6 @@ const Map = ({
 
     const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
     map.getSource('points').setData(geoJSON)
-
-    // TODO: set filter on the estuary boundaries?
   }, [data])
 
   // Update selected point / polygon

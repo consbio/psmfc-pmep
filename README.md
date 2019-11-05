@@ -29,7 +29,7 @@ Must contain an integer attribute `PMEP_ID` which is used to join to other attri
 
 ### CMECS Biotic layer:
 
-Must contain a string attribute `CMECS_ID` (TODO) which is used to join to styling and other attributes within this project.
+Must contain a string attribute `CMECS_ID` which is used to join to styling and other attributes within this project.
 
 To add a new CMECS Biotic class, add a new entry for it to `/config/constants.js::bioticInfo`. Each entry has a key for the CMECS ID, and values for labels, colors, and crosslinks:
 

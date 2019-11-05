@@ -127,6 +127,60 @@ export const layers = [
       'fill-color': boundaryColor,
     },
   },
+
+  {
+    id: 'biotics-fill',
+    source: 'biotics',
+    'source-layer': bioticLayer.sourceLayer,
+    minzoom: 7.5,
+    maxzoom: 22,
+    type: 'fill',
+
+    paint: {
+      'fill-opacity': {
+        base: 1,
+        stops: [[7.5, 0.1], [9, 0.5]],
+      },
+      'fill-color': ['match', ['get', bioticLayer.idProperty], ...bioticStyle],
+    },
+  },
+  {
+    id: 'biotics-boundary',
+    source: 'biotics',
+    'source-layer': bioticLayer.sourceLayer,
+    minzoom: 7.5,
+    maxzoom: 22,
+    type: 'line',
+    paint: {
+      'line-width': {
+        base: 0.1,
+        stops: [[5, 0.1], [8, 0.5], [10, 1]],
+      },
+      'line-opacity': {
+        stops: [[5, 0.1], [7, 0.5], [10, 1]],
+      },
+      'line-color': '#AAA',
+    },
+  },
+  {
+    id: 'tw-fill',
+    source: 'tidalWetlands',
+    'source-layer': twLayer.sourceLayer,
+    minzoom: 7.5,
+    maxzoom: 22,
+    type: 'fill',
+    filter: ['!=', ['get', twLayer.idProperty], 'N/A'],
+    layout: {
+      visibility: 'none',
+    },
+    paint: {
+      'fill-opacity': {
+        base: 1,
+        stops: [[7.5, 0.1], [9, 0.5]],
+      },
+      'fill-color': ['match', ['get', twLayer.idProperty], ...twStyle],
+    },
+  },
   {
     id: 'boundaries-outline',
     source: 'boundaries',
@@ -162,41 +216,6 @@ export const layers = [
         stops: [[5, 0.5], [8, 1]],
       },
       'line-color': highlightColor,
-    },
-  },
-  {
-    id: 'biotics-fill',
-    source: 'biotics',
-    'source-layer': bioticLayer.sourceLayer,
-    minzoom: 7.5,
-    maxzoom: 22,
-    type: 'fill',
-
-    paint: {
-      'fill-opacity': {
-        base: 1,
-        stops: [[7.5, 0.1], [9, 0.5]],
-      },
-      'fill-color': ['match', ['get', bioticLayer.idProperty], ...bioticStyle],
-    },
-  },
-  {
-    id: 'tw-fill',
-    source: 'tidalWetlands',
-    'source-layer': twLayer.sourceLayer,
-    minzoom: 7.5,
-    maxzoom: 22,
-    type: 'fill',
-    filter: ['!=', ['get', twLayer.idProperty], 'N/A'],
-    layout: {
-      visibility: 'none',
-    },
-    paint: {
-      'fill-opacity': {
-        base: 1,
-        stops: [[7.5, 0.1], [9, 0.5]],
-      },
-      'fill-color': ['match', ['get', twLayer.idProperty], ...twStyle],
     },
   },
   {
@@ -351,17 +370,14 @@ export const legends = {
         )
       ).sort()
 
-      // FIXME: remove the filter
-      return codes
-        .filter(code => bioticInfo[code])
-        .map(code => {
-          const { label, color } = bioticInfo[code]
-          return {
-            type: 'fill',
-            label,
-            color,
-          }
-        })
+      return codes.map(code => {
+        const { label, color } = bioticInfo[code]
+        return {
+          type: 'fill',
+          label,
+          color,
+        }
+      })
     },
   },
   'tw-fill': {

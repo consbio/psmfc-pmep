@@ -4,7 +4,7 @@ import { graphql, useStaticQuery } from 'gatsby'
 import { BackgroundImage } from 'components/Image'
 import { Box, Flex } from 'components/Grid'
 import { OutboundLink } from 'components/Link'
-import styled from 'util/style'
+import styled, { themeGet } from 'util/style'
 import { DarkSection as Section, InverseTitle as Title } from './styles'
 import { bioticTypes, bioticInfo } from '../../../config/constants'
 
@@ -27,7 +27,9 @@ const BioticListHeader = styled.h4`
 `
 
 const BioticList = styled.ul`
-  color: #fff;
+  li {
+    color: ${themeGet('colors.highlight.500')};
+  }
 `
 
 const Background = () => {
@@ -130,14 +132,18 @@ const Background = () => {
             <BioticList>
               {bioticTypes.map(b => (
                 <li key={b}>
-                  <OutboundLink
-                    from="/"
-                    to={bioticInfo[b].link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {bioticInfo[b].label}
-                  </OutboundLink>
+                  {bioticInfo[b].link ? (
+                    <OutboundLink
+                      from="/"
+                      to={bioticInfo[b].link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {bioticInfo[b].label}
+                    </OutboundLink>
+                  ) : (
+                    bioticInfo[b].label
+                  )}
                 </li>
               ))}
             </BioticList>

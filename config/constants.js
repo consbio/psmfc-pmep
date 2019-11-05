@@ -144,9 +144,13 @@ export const sppCountClassLabels = [
 ]
 
 export const bioticTypes = [
+  '2',
+  '2.2',
   '2.5',
   '2.5.1',
   '2.5.2',
+  '2.5.2.1',
+  '2.5.2.1.18',
   '2.6',
   '2.6.1',
   '2.6.1.1',
@@ -160,88 +164,116 @@ export const bioticTypes = [
 
 // Links to NatureServe's CMECs site, descriptions were extracted from there
 export const bioticInfo = {
+  '2': {
+    label: 'Benthic/Attached Biota',
+    description:
+      'Areas where biota lives on, in, or in close association with the seafloor or other substrates (e.g., pilings, buoys), extending down into the sediment to include the sub-surface layers of substrate that contain multi-cellular life.',
+    color: '#CDAA66',
+    link: 'https://www.cmecscatalog.org/cmecs/classification/unit/389.html',
+  },
+  '2.2': {
+    label: 'Faunal Bed',
+    description:
+      'Seabeds dominated or characterized by a cover of animals that are closely associated with the bottom, including attached, clinging, sessile, infaunal, burrowing, laying, interstitial, and slow-moving animals, but not animals that have created substrate (Reef Biota).',
+    color: '#A68F62',
+    link: 'https://www.cmecscatalog.org/cmecs/classification/unit/391.html',
+  },
   '2.5': {
     label: 'Aquatic Vegetation Bed',
     description:
       'Subtidal or intertidal bottoms and other areas dominated by rooted vascular plants, attached macroalgae, or mosses, which are usually submersed in the water column or floating on the surface. They may be exposed during low tides.',
-    color: 'rgb(102, 205, 171)',
+    color: '#66CDAB',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/394.html',
   },
   '2.5.1': {
     label: 'Benthic Macroalgae',
     description:
       'Aquatic beds dominated by macroalgae attached to the substrate, such as kelp, intertidal fucoids, and calcareous algae. Macroalgal communities can exist at all depths within the photic zone, on diverse substrates, and across a range of energy and water chemistry regimes.',
-    color: 'rgb(0, 168, 132)',
+    color: '#00A884',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/433.html',
   },
   '2.5.2': {
     label: 'Aquatic Vascular Vegetation',
     description:
       'Aquatic vascular vegetation beds dominated by submerged, rooted, vascular species (such as seagrasses, Figure 8.15) or submerged or rooted floating freshwater tidal vascular vegetation.',
-    color: 'rgb(68, 101, 137)',
+    color: '#448970',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/434.html',
+  },
+  '2.5.2.1': {
+    label: 'Seagrass Bed',
+    description:
+      'Tidal aquatic vegetation beds dominated by any number of seagrass or eelgrass species, including Cymocedea sp., Halodule sp., Thalassia sp., Halophilla sp., Vallisnera sp., Ruppia sp., Phyllospadix sp., and Zostera sp.',
+    color: '#38A800',
+    link: 'https://www.cmecscatalog.org/cmecs/classification/unit/567.html',
+  },
+  '2.5.2.1.18': {
+    label: 'Eelgrass',
+    description:
+      'Eelgrass (Zostera spp.) is a marine flowering plant that is found in temperature zones in soft-bottom habitats in estuaries and coastal environments worldwide. Eelgrass is the most common seagrass taxon along the U.S. West Coast and occurs from Alaska to Baja California.',
+    color: '#A3FF73',
+    // link: '' // not available from CMECS site yet
   },
   '2.6': {
     label: 'Emergent Wetland',
     description:
       'Areas in this class are characterized by erect, rooted, herbaceous hydrophytes—excluding emergent mosses and lichens. This vegetation is present for most of the growing season in most years. These wetlands are usually dominated by perennial plants. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
-    color: 'rgb(115, 178, 255)',
+    color: '#73B2FF',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/395.html',
   },
   '2.6.1': {
     label: 'Emergent Tidal Marsh',
     description:
       'Communities dominated by emergent, halophytic, herbaceous vegetation (with occasional woody forbs or shrubs) along low-wave-energy, intertidal areas of estuaries and rivers.',
-    color: 'rgb(0, 77, 168)',
+    color: '#004DA8',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/435.html',
   },
   '2.6.1.1': {
     label: 'Brackish Emergent Tidal Marsh',
     description:
       'Marshes dominated by species with a wide range of salinity tolerance. Depending on the salinity levels (0.5-30), more or less salt-intolerant species may be present. ',
-    color: 'rgb(0, 15, 90)',
+    color: '#000F5A',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/568.html',
   },
   '2.7': {
     label: 'Scrub-Shrub Wetland',
     description:
       'Areas in this class are dominated by woody vegetation that is generally less than 6 meters tall. Characteristic species include true shrubs, young trees, and trees or shrubs that are small or stunted due to environmental conditions. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
-    color: 'rgb(215, 215, 158)',
+    color: '#D7D79E',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/396.html',
   },
   '2.7.1': {
     label: 'Tidal Scrub-Shrub Wetland',
     description:
       'Estuarine or tidal riverine areas dominated by shrub vegetation that has less than 10% tree cover.',
-    color: 'rgb(230, 230, 0)',
+    color: '#E6E600',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/437.html',
   },
   '2.7.1.1': {
     label: 'Brackish Tidal Scrub-Shrub Wetland',
     description:
       'Tidal areas dominated by shrub or immature tree species that are less than 6 meters tall and have a range of salt tolerance.',
-    color: 'rgb(115, 115, 0)',
+    color: '#737300',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/574.html',
   },
   '2.8': {
     label: 'Forested Wetland',
     description:
       'Areas in this class are characterized by woody vegetation that is generally 6 meters or taller. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
-    color: 'rgb(171, 205, 102)',
+    color: '#ABCD66',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/397.html',
   },
   '2.8.1': {
     label: 'Tidal Forested Wetland',
     description:
       'Estuarine or tidal riverine areas with greater than 10% tree cover',
-    color: 'rgb(76, 115, 0)',
+    color: '#4C7300',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/438.html',
   },
   '2.8.1.1': {
     label: 'Brackish Tidal Forest/Woodland',
     description:
       'Tidal areas dominated by tree species that are greater than 6 meters tall and have a range of salt tolerance. Salinities may range from 0.5-30.',
-    color: 'rgb(35,50,0)',
+    color: '#233200',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/578.html',
   },
 }

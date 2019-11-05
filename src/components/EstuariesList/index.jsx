@@ -45,8 +45,6 @@ export const NoResults = styled(Box)`
 `
 
 const EstuariesList = ({ onSelect }) => {
-  console.log('render estuaries list')
-
   const { state, dispatch: filterDispatch } = useContext(CrossfilterContext)
 
   const listRef = useRef(null)

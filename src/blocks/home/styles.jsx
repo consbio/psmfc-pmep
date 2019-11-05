@@ -35,6 +35,9 @@ export const DarkSection = styled(Section)`
   a {
     color: ${themeGet('colors.highlight.500')};
   }
+  a:hover {
+    text-decoration: underline;
+  }
 `
 
 export const Title = styled(Text).attrs({

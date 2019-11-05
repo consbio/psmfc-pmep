@@ -30,7 +30,7 @@ out_dir = Path("./data")
 # Data are downloaded from: http://www.pacificfishhabitat.org/data/
 boundaries_gdb = "PMEP_West_Coast_USA_Estuary_Extent_V1.gdb"
 points_gdb = "PMEP_Estuary_Points_V1_3.gdb"
-biotic_gdb = "PMEP_West_Coast_USA_Estuarine_Biotic_Habitat_V1_1.gdb"
+biotic_gdb = "PMEP_West_Coast_USA_Estuarine_Biotic_Habitat_V1_2.gdb"
 twl_gdb = "RestoredAreas_TWL_Sharing.gdb"
 
 # State of the Knowledge and NFHAP summary data

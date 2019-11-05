@@ -28,8 +28,6 @@ const Help = styled(ExpandableParagraph)`
 `
 
 const Explore = () => {
-  console.log('render explore')
-
   const [data, index] = useData()
   const [selectedId, setSelectedId] = useState(null)
   const boundsRef = useRef(PNWBounds) // store bounds so they are updated without rerendering

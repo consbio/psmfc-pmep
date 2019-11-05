@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa'
 
+import { OutboundLink } from 'components/Link'
 import { Flex } from 'components/Grid'
 import HelpText from 'components/elements/HelpText'
 import styled, { themeGet, theme } from 'util/style'
@@ -68,7 +69,7 @@ const BioticListItem = ({ type, acres, maxAcres }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen)
 
-  const { label, color, description } = bioticInfo[type]
+  const { label, color, description, link } = bioticInfo[type]
   const position = acres / maxAcres
 
   return (
@@ -84,7 +85,20 @@ const BioticListItem = ({ type, acres, maxAcres }) => {
         {position > 0 && (
           <Bar color={color} width={position} onClick={toggle} />
         )}
-        {isOpen && <HelpText>{description}</HelpText>}
+        {isOpen && (
+          <HelpText>
+            {description}
+
+            {link && (
+              <>
+                <br />
+                <OutboundLink from="/details" to={link}>
+                  More information.
+                </OutboundLink>
+              </>
+            )}
+          </HelpText>
+        )}
       </Content>
     </Wrapper>
   )

@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from 'rebass'
 
-import { Flex, Box } from 'components/Grid'
+import { Flex, Box, Columns, Column as BaseColumn } from 'components/Grid'
 
 import styled, { themeGet } from 'util/style'
 
 const Wrapper = styled.div`
   cursor: pointer;
   position: absolute;
-  max-width: 200px;
   right: 10px;
   bottom: 24px;
   z-index: 10000;
@@ -18,19 +17,22 @@ const Wrapper = styled.div`
   border: 1px solid ${themeGet('colors.grey.400')};
   box-shadow: 1px 1px 4px #666;
   padding: 0.25rem 0.5rem 0.5rem;
+  max-height: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+`
+
+const Column = styled(BaseColumn)`
+  max-width: 200px;
+
+  &:not(:first-child) {
+    margin-left: 1rem;
+  }
 `
 
 const Title = styled(Text).attrs({
   fontSize: ['0.8rem', '0.8rem', '1rem'],
 })``
-
-const Entry = styled(Flex).attrs({
-  alignItems: 'center',
-})`
-  &:not(:first-child) {
-    margin-top: 0.25rem;
-  }
-`
 
 const Patch = styled(Box).attrs({
   flex: 0,
@@ -84,29 +86,84 @@ Circle.defaultProps = {
   scale: 1,
 }
 
+const EntryWrapper = styled(Flex).attrs({
+  alignItems: 'center',
+})`
+  &:not(:first-child) {
+    margin-top: 0.25rem;
+  }
+`
+
+const Entry = ({ type, label, ...entry }) => (
+  <EntryWrapper>
+    {type === 'circle' ? (
+      <Circle scale={0.5} {...entry} />
+    ) : (
+      <Patch {...entry} />
+    )}
+    <Label>{label}</Label>
+  </EntryWrapper>
+)
+
+Entry.propTypes = {
+  type: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+}
+
 const Legend = ({ title, entries }) => {
   if (!entries.length) return null
 
   const [isClosed, setIsClosed] = useState(false)
   const toggle = () => setIsClosed(prevIsClosed => !prevIsClosed)
 
+  const cols = []
+  // if (entries.length > 6) {
+  //   const numCols = entries.length / 4
+  //   for (let i = 0; i < numCols; i += 1) {
+  //     cols.push(entries.slice(i * 4, i * 4 + 4))
+  //   }
+  //   console.log(entries, cols)
+  // }
+
   return (
-    <Wrapper onClick={toggle}>
+    <Wrapper
+      title={isClosed ? 'click to open' : 'click to hide'}
+      onClick={toggle}
+    >
       {isClosed ? (
         <Title>{title}</Title>
       ) : (
-        <div>
-          {entries.map(({ type, label, ...entry }) => (
-            <Entry key={label}>
-              {type === 'circle' ? (
-                <Circle scale={0.5} {...entry} />
-              ) : (
-                <Patch {...entry} />
-              )}
-              <Label>{label}</Label>
-            </Entry>
-          ))}
-        </div>
+        <Columns>
+          {cols.length ? (
+            <>
+              {cols.map((colEntries, i) => (
+                <Column key={i}>
+                  {colEntries.map(entry => (
+                    <Entry key={entry.label} {...entry} />
+                  ))}
+                </Column>
+              ))}
+              {/* <Column>
+                {entries.slice(0, Math.round(entries.length / 2)).map(entry => (
+                  <Entry key={entry.label} {...entry} />
+                ))}
+              </Column>
+              <Column>
+                {entries
+                  .slice(Math.round(entries.length / 2), entries.length)
+                  .map(entry => (
+                    <Entry key={entry.label} {...entry} />
+                  ))}
+              </Column> */}
+            </>
+          ) : (
+            <Column>
+              {entries.map(entry => (
+                <Entry key={entry.label} {...entry} />
+              ))}
+            </Column>
+          )}
+        </Columns>
       )}
     </Wrapper>
   )
