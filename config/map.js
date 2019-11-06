@@ -375,7 +375,7 @@ export const legends = {
         return {
           type: 'fill',
           label,
-          color,
+          color: `${color}99`,
         }
       })
     },

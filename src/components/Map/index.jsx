@@ -30,18 +30,10 @@ const Relative = styled.div`
   z-index: 1;
 `
 
-// const TooltipPatch = styled.div`
-//   width: 1rem;
-//   height: 1rem;
-//   background-color: ${({ color }) => color};
-//   margin-right: 0.5rem;
-//   display: inline-block;
-// `
-
 const renderTooltipContent = (title, color, label) =>
   `
   <b>${title}</b><br/>
-  <div style="display:inline-block; width:1rem; height:1rem; background-color:${color};">&nbsp;</div>
+  <div style="display:inline-block; width:1rem; height:1rem; background-color:${color}99;">&nbsp;</div>
   <div style="display: inline-block;">${label}</div>
   `
 
@@ -237,23 +229,13 @@ const Map = ({
 
     // show tooltip for boundaries
     map.on('mousemove', 'boundaries-fill', ({ point, features: [feature] }) => {
-      map.getCanvas().style.cursor = 'pointer'
+      if (map.getZoom() < 10) return
 
-      if (!feature) return
+      map.getCanvas().style.cursor = 'pointer'
 
       const {
         properties: { PMEP_EstuaryID },
       } = feature
-
-      // map.setFilter('boundaries-outline-highlight', [
-      //   'any',
-      //   ['==', ['get', 'PMEP_EstuaryID'], PMEP_EstuaryID],
-      //   [
-      //     '==',
-      //     ['get', 'PMEP_EstuaryID'],
-      //     selectedFeatureRef.current || Infinity,
-      //   ],
-      // ])
 
       tooltip
         .setLngLat(map.unproject(point))
@@ -263,16 +245,13 @@ const Map = ({
 
     map.on('mouseleave', 'boundaries-fill', () => {
       map.getCanvas().style.cursor = ''
-      // map.setFilter('boundaries-outline-highlight', [
-      //   '==',
-      //   ['get', 'PMEP_EstuaryID'],
-      //   selectedFeatureRef.current || Infinity,
-      // ])
       tooltip.remove()
     })
 
     // setup tooltip for biotic data
     map.on('mousemove', 'biotics-fill', ({ point, features: [feature] }) => {
+      if (map.getZoom() < 10) return
+
       map.getCanvas().style.cursor = 'pointer'
 
       const {
