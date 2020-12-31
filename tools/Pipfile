@@ -6,8 +6,8 @@ name = "pypi"
 [packages]
 pandas = "*"
 geopandas = "*"
-pillow = "*"
 requests = "*"
+pillow = "*"
 
 [dev-packages]
 pylint = "*"

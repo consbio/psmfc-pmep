@@ -7,6 +7,7 @@ module.exports = {
     sentryDSN: process.env.GATSBY_SENTRY_DSN,
     mapboxToken: process.env.GATSBY_MAPBOX_API_TOKEN,
   },
+  flags : { DEV_SSR: true },
   plugins: [
     `gatsby-plugin-react-helmet`,
     {
