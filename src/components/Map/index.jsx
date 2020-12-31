@@ -1,5 +1,5 @@
 /* eslint-disable max-len, no-underscore-dangle */
-import React, { useEffect, useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { List, fromJS } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
@@ -21,6 +21,7 @@ import {
   layers,
   legends,
   boundaryLayer,
+  twLayer,
 } from '../../../config/map'
 import { bioticInfo, twInfo } from '../../../config/constants'
 
@@ -54,11 +55,11 @@ const Map = ({
   const mapNode = useRef(null)
   const mapRef = useRef(null)
   const baseStyleRef = useRef(null)
+  const indexRef = useRef(null)
+  const fullDataCount = useRef(null) // set to full size of data array on first mount, this is a shortcut to know if data are filtered
   const selectedFeatureRef = useRef(selectedFeature)
   const [legendEntries, setLegendEntries] = useState([])
   const [activeLayer, setActiveLayer] = useState('biotics') // options are biotics and tw
-
-  const index = useMemo(() => indexBy(data.toJS(), 'id'), [data])
 
   useEffect(() => {
     const { padding, bounds: initBounds } = config
@@ -99,6 +100,8 @@ const Map = ({
 
     // Construct GeoJSON points from data
     sources.points.data = data ? toGeoJSONPoints(data.toJS()) : []
+    indexRef.current = data ? indexBy(data.toJS(), 'id') : null
+    fullDataCount.current = data ? data.count() : 0
 
     map.on('load', () => {
       // snapshot existing map config
@@ -237,9 +240,14 @@ const Map = ({
         properties: { PMEP_EstuaryID },
       } = feature
 
+      if (!indexRef.current[PMEP_EstuaryID]) {
+        console.error('Could not fetch data for estuary', PMEP_EstuaryID)
+        return
+      }
+
       tooltip
         .setLngLat(map.unproject(point))
-        .setHTML(`<b>${index[PMEP_EstuaryID].name}</b>`)
+        .setHTML(`<b>${indexRef.current[PMEP_EstuaryID].name}</b>`)
         .addTo(map)
     })
 
@@ -260,11 +268,22 @@ const Map = ({
 
       if (!CMECS_BC_Code) return
 
+      if (!indexRef.current[PMEP_EstuaryID]) {
+        console.error('Could not fetch data for estuary', PMEP_EstuaryID)
+        return
+      }
+
       const { color, label } = bioticInfo[CMECS_BC_Code]
 
       tooltip
         .setLngLat(map.unproject(point))
-        .setHTML(renderTooltipContent(index[PMEP_EstuaryID].name, color, label))
+        .setHTML(
+          renderTooltipContent(
+            indexRef.current[PMEP_EstuaryID].name,
+            color,
+            label
+          )
+        )
         .addTo(map)
     })
 
@@ -281,11 +300,16 @@ const Map = ({
         properties: { TWL_Type, PMEP_EstuaryID },
       } = feature
 
+      if (!indexRef.current[PMEP_EstuaryID]) {
+        console.error('Could not fetch data for estuary', PMEP_EstuaryID)
+        return
+      }
+
       tooltip
         .setLngLat(map.unproject(point))
         .setHTML(
           renderTooltipContent(
-            index[PMEP_EstuaryID].name,
+            indexRef.current[PMEP_EstuaryID].name,
             twInfo[TWL_Type].color,
             `Tidal wetlands ${TWL_Type}`
           )
@@ -313,13 +337,49 @@ const Map = ({
     }
   }, [])
 
-  // Update clusters when the filtered data change
+  // Update map when the filtered data change
+  // also note that this fires when the map first mounts
   useEffect(() => {
     const { current: map } = mapRef
     if (!(map && map.isStyleLoaded())) return
 
-    const geoJSON = data ? toGeoJSONPoints(data.toJS()) : []
+    const records = data.toJS()
+
+    // update clusters / points
+    // note: we have to update the data to force rebuilding of clusters
+    const geoJSON = data ? toGeoJSONPoints(records) : []
     map.getSource('points').setData(geoJSON)
+
+    // update map layers based on state of filters
+    // note: TWL is a special case because we need to filter out N/A as well
+    const filterLayers = [
+      'boundaries-fill',
+      'boundaries-outline',
+      'biotics-fill',
+      'biotics-boundary',
+    ]
+
+    if (records.length < fullDataCount.current) {
+      const ids = records.map(({ id }) => id)
+      const filterExpr = ['in', ['get', 'PMEP_EstuaryID'], ['literal', ids]]
+
+      filterLayers.forEach(id => {
+        map.setFilter(id, filterExpr)
+      })
+
+      map.setFilter('tw-fill', [
+        'all',
+        ['!=', ['get', twLayer.idProperty], 'N/A'],
+        filterExpr,
+      ])
+    } else {
+      // reset filters
+      filterLayers.forEach(id => {
+        map.setFilter(id, null)
+      })
+
+      map.setFilter('tw-fill', ['!=', ['get', twLayer.idProperty], 'N/A'])
+    }
   }, [data])
 
   // Update selected point / polygon

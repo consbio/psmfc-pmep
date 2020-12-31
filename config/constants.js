@@ -288,9 +288,10 @@ export const twInfo = {
     color: '#98E600',
   },
   retained: { label: 'retained', color: '#66CDAB' },
+  // Not displayed in legend or map, but exists in source and is filtered out
   // 'N/A': {
   //   label: 'not assessed',
-  //   color: '#FFFFFFFF',
+  //   color: '#FFFFFF',
   // },
 }
 

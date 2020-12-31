@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import PropTypes from 'prop-types'
 import { Text, Image } from 'rebass'
 import { FaSlidersH, FaBinoculars } from 'react-icons/fa'
@@ -7,6 +7,7 @@ import { Link } from 'components/Link'
 
 import { Flex } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
+import {hasWindow} from 'util/dom'
 
 import SiteLogo from 'images/pmep_logo_color.svg'
 
@@ -33,7 +34,8 @@ const Title = styled.h1`
 const Logo = styled(Image).attrs({
   src: SiteLogo,
   as: 'img',
-  width: ['3rem'],
+  width: '3rem',
+  height: '3rem',
   my: '-0.5rem',
   mr: '0.25rem',
 })``
@@ -50,7 +52,9 @@ const NavLink = styled(Link)`
 const NavItem = styled(Flex).attrs({
   alignItems: 'center',
   px: ['0.5em', '0.5rem', '1rem'],
-})``
+})`
+  text-decoration: ${({active}) => active ? 'underline' : 'inherit'};
+`
 
 const CompareIcon = styled(FaSlidersH)`
   width: 1em;
@@ -66,7 +70,10 @@ const ExploreIcon = styled(FaBinoculars)`
   opacity: 0.6;
 `
 
-const Header = ({ siteTitle }) => (
+const Header = ({ siteTitle }) => {
+  const path = hasWindow && window.location ? window.location.pathname : null
+
+  return (
   <Wrapper as="header">
     <Title>
       <Link to="/">
@@ -79,13 +86,13 @@ const Header = ({ siteTitle }) => (
     <Text as="h2" fontSize={['1.25rem']} m={0}>
       <Flex>
         <NavLink to="/compare">
-          <NavItem>
+          <NavItem active={path === '/compare'}>
             <CompareIcon />
             <div>Compare</div>
           </NavItem>
         </NavLink>
         <NavLink to="/explore">
-          <NavItem>
+          <NavItem active={path=== '/explore'}>
             <ExploreIcon />
             Explore
           </NavItem>
@@ -93,7 +100,7 @@ const Header = ({ siteTitle }) => (
       </Flex>
     </Text>
   </Wrapper>
-)
+)}
 
 Header.propTypes = {
   siteTitle: PropTypes.string.isRequired,
