@@ -255,8 +255,9 @@ export const layers = [
       'circle-stroke-color': '#fff',
     },
   },
+
   {
-    id: 'points-highlight',
+    id: 'points-hover',
     type: 'circle',
     source: 'points',
     maxzoom: 15,

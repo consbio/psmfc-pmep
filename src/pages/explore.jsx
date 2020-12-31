@@ -30,42 +30,28 @@ const Help = styled(ExpandableParagraph)`
 const Explore = () => {
   const [data, index] = useData()
   const [selectedId, setSelectedId] = useState(null)
-  const boundsRef = useRef(PNWBounds) // store bounds so they are updated without rerendering
-  const [{ prevBounds, nextBounds }, setBounds] = useState({
-    prevBounds: List(PNWBounds),
-  })
-  const [showZoom, setShowZoom] = useState(true)
+  const [bounds, setBounds] = useState(List(PNWBounds))
+  const [location, setLocation] = useState(null)
 
   const handleSelect = id => {
     console.log('onSelect', id)
-    setSelectedId(id)
+    setSelectedId(() => id)
   }
 
   const handleSelectFromList = id => {
+    const record = index.get(id.toString())
+    setLocation(() => [record.get('lon'), record.get('lat')])
     handleSelect(id)
-    setBounds({
-      prevBounds: List(boundsRef.current),
-      nextBounds: index.get(id.toString()).get('bounds'),
-    })
-    setShowZoom(false)
   }
 
   const handleZoomTo = () => {
-    setBounds({
-      prevBounds: List(boundsRef.current),
-      nextBounds: index.get(selectedId.toString()).get('bounds'),
-    })
+    setBounds(() => index.get(selectedId.toString()).get('bounds'))
   }
 
   const handleBack = () => {
     setSelectedId(null)
-    setBounds({ nextBounds: List(prevBounds), prevBounds: List() })
-    setShowZoom(true)
   }
 
-  const handleBoundsChange = bounds => {
-    boundsRef.current = bounds
-  }
 
   return (
     <CrossfilterProvider data={data} filters={filters}>
@@ -76,7 +62,6 @@ const Explore = () => {
             {selectedId !== null ? (
               <EstuaryDetails
                 {...index.get(selectedId.toString()).toJS()}
-                showZoom={showZoom}
                 onBack={handleBack}
                 onZoomTo={handleZoomTo}
               />
@@ -97,10 +82,10 @@ const Explore = () => {
             )}
           </Sidebar>
           <FilteredMap
-            bounds={nextBounds}
+            bounds={bounds}
+            location={location}
             selectedFeature={selectedId}
             onSelectFeature={handleSelect}
-            onBoundsChange={handleBoundsChange}
           />
         </Wrapper>
       </Layout>

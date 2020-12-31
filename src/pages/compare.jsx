@@ -31,10 +31,7 @@ const Help = styled(ExpandableParagraph)`
 const Compare = () => {
   const [data, index] = useData()
   const [selectedId, setSelectedId] = useState(null)
-  const boundsRef = useRef(PNWBounds) // store bounds as they are updated without rerendering
-  const [{ prevBounds, nextBounds }, setBounds] = useState({
-    prevBounds: List(PNWBounds),
-  })
+  const [bounds, setBounds] = useState(List(PNWBounds))
 
   const handleSelect = id => {
     console.log('onSelect', id)
@@ -42,19 +39,11 @@ const Compare = () => {
   }
 
   const handleZoomTo = () => {
-    setBounds({
-      prevBounds: List(boundsRef.current || []),
-      nextBounds: index.get(selectedId.toString()).get('bounds'),
-    })
+    setBounds(() => index.get(selectedId.toString()).get('bounds'))
   }
 
   const handleBack = () => {
     setSelectedId(null)
-    setBounds({ nextBounds: List(prevBounds || []), prevBounds: List() })
-  }
-
-  const handleBoundsChange = bounds => {
-    boundsRef.current = bounds
   }
 
   return (
@@ -98,10 +87,9 @@ const Compare = () => {
           </Sidebar>
 
           <FilteredMap
-            bounds={nextBounds}
+            bounds={bounds}
             selectedFeature={selectedId}
             onSelectFeature={handleSelect}
-            onBoundsChange={handleBoundsChange}
           />
         </Wrapper>
       </Layout>

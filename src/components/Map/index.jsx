@@ -42,6 +42,7 @@ const Map = ({
   data,
   selectedFeature,
   bounds,
+  location,
   onSelectFeature,
   onBoundsChange,
 }) => {
@@ -58,6 +59,7 @@ const Map = ({
   const indexRef = useRef(null)
   const fullDataCount = useRef(null) // set to full size of data array on first mount, this is a shortcut to know if data are filtered
   const selectedFeatureRef = useRef(selectedFeature)
+  const locationMarkerRef = useRef(null)
   const [legendEntries, setLegendEntries] = useState([])
   const [activeLayer, setActiveLayer] = useState('biotics') // options are biotics and tw
 
@@ -170,11 +172,7 @@ const Map = ({
       const clusterId = feature.properties.cluster_id
 
       // highlight
-      map.setFilter('points-highlight', [
-        '==',
-        ['get', 'cluster_id'],
-        clusterId,
-      ])
+      map.setFilter('points-hover', ['==', ['get', 'cluster_id'], clusterId])
 
       map
         .getSource('points')
@@ -197,11 +195,7 @@ const Map = ({
     })
     map.on('mouseleave', 'clusters', () => {
       map.getCanvas().style.cursor = ''
-      map.setFilter('points-highlight', [
-        '==',
-        'id',
-        selectedFeatureRef.current || Infinity,
-      ])
+      map.setFilter('points-hover', ['==', 'id', Infinity])
       tooltip.remove()
     })
 
@@ -209,11 +203,7 @@ const Map = ({
     map.on('mouseenter', 'points', ({ features: [feature] }) => {
       map.getCanvas().style.cursor = 'pointer'
 
-      map.setFilter('points-highlight', [
-        'any',
-        ['==', 'id', feature.properties.id],
-        ['==', 'id', selectedFeatureRef.current || Infinity],
-      ])
+      map.setFilter('points-hover', ['==', 'id', feature.properties.id])
 
       tooltip
         .setLngLat(feature.geometry.coordinates)
@@ -222,11 +212,7 @@ const Map = ({
     })
     map.on('mouseleave', 'points', () => {
       map.getCanvas().style.cursor = ''
-      map.setFilter('points-highlight', [
-        '==',
-        'id',
-        selectedFeatureRef.current || Infinity,
-      ])
+      map.setFilter('points-hover', ['==', 'id', Infinity])
       tooltip.remove()
     })
 
@@ -333,6 +319,7 @@ const Map = ({
     })
 
     return () => {
+      removeLocationMarker()
       map.remove()
     }
   }, [])
@@ -389,7 +376,27 @@ const Map = ({
     const { current: map } = mapRef
     if (!(map && map.isStyleLoaded())) return
 
-    map.setFilter('points-highlight', ['==', 'id', selectedFeature || Infinity])
+    if (selectedFeature === null) {
+      removeLocationMarker()
+      map.setFilter('points', ['!', ['has', 'point_count']])
+    } else {
+      if (!indexRef.current[selectedFeature]) return
+
+      const { lon, lat } = indexRef.current[selectedFeature]
+
+      if (locationMarkerRef.current === null) {
+        locationMarkerRef.current = new mapboxgl.Marker({
+          color: '#ee7d14'
+        })
+          .setLngLat([lon, lat])
+          .addTo(map)
+      } else {
+        locationMarkerRef.current.setLngLat([lon, lat])
+      }
+
+      map.setFilter('points', ['all', ['!', ['has', 'point_count']], ['!=', ['get', 'id'], selectedFeature]])
+    }
+
     map.setFilter('boundaries-outline-highlight', [
       '==',
       ['get', boundaryLayer.idProperty],
@@ -407,6 +414,16 @@ const Map = ({
       map.fitBounds(bounds.toJS(), { padding: 20, maxZoom: 14, duration: 2000 })
     }
   }, [bounds])
+
+  useEffect(() => {
+    if (!location) return
+    const { current: map } = mapRef
+
+    if (!map) return
+
+    map.panTo(location)
+
+  }, [location])
 
   // memoize this?
   const getLegendEntries = () => {
@@ -513,6 +530,14 @@ const Map = ({
     map.fitBounds(config.bounds, { padding: 20, duration: 1000 })
   }
 
+  const removeLocationMarker = () => {
+    if (locationMarkerRef.current !== null) {
+      locationMarkerRef.current.remove()
+      locationMarkerRef.current = null
+    }
+  }
+
+
   return (
     <Relative>
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
@@ -549,6 +574,7 @@ Map.propTypes = {
     })
   ).isRequired,
   bounds: ImmutablePropTypes.listOf(PropTypes.number),
+  location: PropTypes.arrayOf(PropTypes.number),
   selectedFeature: PropTypes.number,
   onSelectFeature: PropTypes.func,
   onBoundsChange: PropTypes.func,

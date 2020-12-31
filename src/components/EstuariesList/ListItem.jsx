@@ -41,7 +41,7 @@ const ListItem = ({ name, type, state, acres, ...props }) => (
         {stateNames[state] || ''}
       </Column>
       <Column>
-        <Text textAlign="right">
+        <Text textAlign="right" fontSize='smaller'>
           {estuaryTypes[type].label}
           <br />({formatNumber(acres, 0)} acres)
         </Text>
