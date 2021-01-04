@@ -14,6 +14,7 @@ const Wrapper = styled(Flex).attrs({
   flex: 1,
 })`
   height: 100%;
+  overflow: hidden;
 `
 
 const Header = styled(Columns).attrs({
