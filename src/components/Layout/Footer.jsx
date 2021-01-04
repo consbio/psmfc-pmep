@@ -23,15 +23,7 @@ const Wrapper = styled(Flex).attrs({
 const Footer = () => (
   <Wrapper as="footer">
     <div>
-      Partners:{' '}
-      <OutboundLink
-        from="/"
-        to="http://www.northpacificlcc.org/"
-        target="_blank"
-      >
-        NPLCC
-      </OutboundLink>{' '}
-      and{' '}
+      Partners: NPLCC and{' '}
       <OutboundLink
         from="/"
         to="http://www.pacificfishhabitat.org/"

@@ -54,14 +54,7 @@ const CBI = () => (
             Pacific Marine & Estuarine Fish Habitat Partnership
           </OutboundLink>
           &nbsp;and with financial support from the&nbsp;
-          <OutboundLink
-            from="/"
-            to="http://www.northpacificlcc.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
             North Pacific Landscape Conservation Cooperative{' '}
-          </OutboundLink>
           and National Oceanic and Atmpospheric Administration -{' '}
           <OutboundLink
             from="/"

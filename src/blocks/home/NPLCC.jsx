@@ -31,24 +31,10 @@ const NPLCC = () => (
       <WideColumn>
         <p>
           The North Pacific Landscape Conservation Cooperative (NPLCC)
-          collaborates with many partners to put science to work toward more
-          effective, landscape-level conservation. The NPLCC prioritizes
+          collaborated with many partners to put science to work toward more
+          effective, landscape-level conservation. The NPLCC prioritized
           identification and sharing of information about natural resources
           throughout the region.
-          <br />
-          <br />
-          To get involved and find out more about NPLCC, including available
-          funding opportunities, projects supported by NPLCC, and additional
-          conservation-oriented resources within the region, please&nbsp;
-          <OutboundLink
-            from="/"
-            to="http://www.northpacificlcc.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            click here
-          </OutboundLink>
-          .
           <br />
           <br />
           To access and collaborate around geospatial data within the NPLCC

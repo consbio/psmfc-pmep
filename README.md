@@ -2,7 +2,7 @@
 
 This application allows you to easily explore estuaries along the U.S. West Coast.
 
-This application was developed by the [Conservation Biology Institute](https://consbio.org/) in partnership with the [Pacific Marine & Estuarine Fish Habitat Partnership](http://www.pacificfishhabitat.org/) (PMEP), [Pacific States Marine Fisheries Commission](https://www.psmfc.org/) (PSMFC), and U.S. Fish and Wildlife Service - [North Pacific Landscape Conservation Cooperative](http://northpacificlcc.org/) (NPLCC).
+This application was developed by the [Conservation Biology Institute](https://consbio.org/) in partnership with the [Pacific Marine & Estuarine Fish Habitat Partnership](http://www.pacificfishhabitat.org/) (PMEP), [Pacific States Marine Fisheries Commission](https://www.psmfc.org/) (PSMFC), and U.S. Fish and Wildlife Service - North Pacific Landscape Conservation Cooperative (NPLCC).
 
 Data on estuary boundaries, biotic habitats, and focal species presence were developed by PMEP and are available for download [here](http://www.pacificfishhabitat.org/data/).
 
