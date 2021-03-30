@@ -57,9 +57,11 @@ const Top = () => {
     query TopSectionQuery {
       image: file(relativePath: { eq: "6307999051_5d2c4d7ce4_o.jpg" }) {
         childImageSharp {
-          fluid(maxWidth: 3200) {
-            ...GatsbyImageSharpFluid_withWebp
-          }
+          gatsbyImageData(
+            layout: FULL_WIDTH
+            formats: [AUTO, WEBP]
+            placeholder: BLURRED
+          )
         }
       }
     }
@@ -67,7 +69,7 @@ const Top = () => {
 
   return (
     <BackgroundImage
-      fluid={data.image.childImageSharp.fluid}
+      image={data.image.childImageSharp.gatsbyImageData}
       credits={{
         author: 'Siletz Bay, Oregon by stokes rx',
         url: 'https://www.flickr.com/photos/stokesrx/6307999051',

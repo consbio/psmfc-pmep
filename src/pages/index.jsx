@@ -16,10 +16,10 @@ import {
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Home" />
+    {/* <SEO title="Home" /> */}
 
     <TopSection />
-
+{/*
     <AboutSection />
 
     <BackgroundSection />
@@ -32,7 +32,7 @@ const IndexPage = () => (
 
     <NPLCC />
 
-    <Credits />
+    <Credits /> */}
   </Layout>
 )
 

@@ -1,36 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import GoogleAnalytics from 'react-ga'
+import { OutboundLink as Link } from 'gatsby-plugin-google-gtag'
 
-const OutboundLink = ({ to, from, target, children, className }) => (
-  <a
-    href={to}
-    target={target}
-    className={className}
-    rel="noopener"
-    onClick={() => {
-      GoogleAnalytics.event({
-        category: 'Outbound Link',
-        action: `[clicked] ${from}`,
-        label: to,
-      })
-    }}
-  >
+
+const OutboundLink = ({ to, target, rel, children, ...props }) => (
+  <Link href={to} target={target} rel={rel} {...props}>
     {children}
-  </a>
+  </Link>
 )
 
 OutboundLink.propTypes = {
   to: PropTypes.string.isRequired,
-  from: PropTypes.string.isRequired,
   target: PropTypes.string,
+  rel: PropTypes.string,
   children: PropTypes.any.isRequired,
-  className: PropTypes.string,
 }
 
 OutboundLink.defaultProps = {
-  target: `_blank`,
-  className: ``,
+  target: '_blank',
+  rel: 'noopener noreferrer',
 }
 
 export default OutboundLink

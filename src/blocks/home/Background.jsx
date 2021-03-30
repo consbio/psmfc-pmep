@@ -33,20 +33,28 @@ const BioticList = styled.ul`
 `
 
 const Background = () => {
-  const data = useStaticQuery(graphql`
+  const {
+    data: {
+      image: {
+        childImageSharp: { gatsbyImageData },
+      },
+    },
+  } = useStaticQuery(graphql`
     query BackgroundSectionQuery {
       image: file(relativePath: { eq: "5452214882_af06b1e896_o.jpg" }) {
         childImageSharp {
-          fluid(maxWidth: 3200) {
-            ...GatsbyImageSharpFluid_withWebp
-          }
+          gatsbyImageData(
+            layout: FULL_WIDTH
+            formats: [AUTO, WEBP]
+            placeholder: BLURRED
+          )
         }
       }
     }
   `)
   return (
     <BackgroundImage
-      fluid={data.image.childImageSharp.fluid}
+      image={gatsbyImageData}
       credits={{
         author: 'Salmon River by Sam Beebe',
         url: 'https://www.flickr.com/photos/28585409@N04/5452214882',
@@ -130,7 +138,7 @@ const Background = () => {
           <Column>
             <BioticListHeader>Estuarine biotic habitats:</BioticListHeader>
             <BioticList>
-              {bioticTypes.map(b => (
+              {bioticTypes.map((b) => (
                 <li key={b}>
                   {bioticInfo[b].link ? (
                     <OutboundLink

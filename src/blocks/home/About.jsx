@@ -1,32 +1,19 @@
 import React from 'react'
+import { Box, Flex,Grid, Container, Heading, Image } from 'theme-ui'
 
-import { Box, Flex } from 'components/Grid'
 import { Link } from 'components/Link'
-import styled, { themeGet } from 'util/style'
 import CompareImg from 'images/compare.jpg'
 import ExploreImg from 'images/explore.jpg'
-import { Section, Title } from './styles'
 
-const Columns = styled(Flex).attrs({
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-})``
-
-const Column = styled(Box).attrs({
-  width: ['100%', '100%', '48%'],
-})``
-
-const Screenshot = styled.img`
-  border: 1px solid ${themeGet('colors.grey.200')};
-  box-shadow: 1px 1px 3px ${themeGet('colors.grey.500')};
-  margin: 1rem;
-`
 
 const About = () => (
-  <Section>
-    <Title>The West Coast Estuaries Explorer</Title>
-    <Columns>
-      <Column>
+  <Container sx={{
+    py: '3rem',
+    px: '1.5rem',
+  }}>
+    <Heading as="h2">The West Coast Estuaries Explorer</Heading>
+    <Grid gap={4} columns={[1, 1, 2]}>
+      <Box sx={{width: ['100%', '100%', '48%']}}>
         <p>
           This application enables you to&nbsp;
           <Link to="/compare">compare</Link>&nbsp; estuaries to each other along
@@ -40,14 +27,12 @@ const About = () => (
           update to show you the number of estuaries in that area that meet
           different conditions.
         </p>
-      </Column>
-      <Column>
-        <Screenshot src={CompareImg} alt="Compare screenshot" />
-      </Column>
-    </Columns>
+      </Box>
+      <Box sx={{width: ['100%', '100%', '48%']}}>
+        <Image src={CompareImg} alt="Compare screenshot" variant="images.screenshot" />
+      </Box>
 
-    <Columns>
-      <Column>
+      <Box sx={{width: ['100%', '100%', '48%']}}>
         <p>
           You can also&nbsp;
           <Link to="/explore">explore</Link>
@@ -76,12 +61,12 @@ const About = () => (
           </a>
           .
         </p>
-      </Column>
-      <Column>
-        <Screenshot src={ExploreImg} alt="Explore screenshot" />
-      </Column>
-    </Columns>
-  </Section>
+      </Box>
+      <Box sx={{width: ['100%', '100%', '48%']}}>
+        <Image src={ExploreImg} alt="Explore screenshot" variant="images.screenshot" />
+      </Box>
+    </Grid>
+  </Container>
 )
 
 export default About

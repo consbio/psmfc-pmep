@@ -1,7 +1,7 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
 import { Box, Flex } from 'components/Grid'
 import { OutboundLink } from 'components/Link'
@@ -38,9 +38,11 @@ const Habitat = () => {
     query HabitatSectionQuery {
       image: file(relativePath: { eq: "24284520556_f27ecedab4_z.jpg" }) {
         childImageSharp {
-          fluid(maxWidth: 960) {
-            ...GatsbyImageSharpFluid_withWebp
-          }
+          gatsbyImageData(
+            layout: FULL_WIDTH
+            formats: [AUTO, WEBP]
+            placeholder: BLURRED
+          )
         }
       }
     }
@@ -87,8 +89,8 @@ const Habitat = () => {
           </p>
         </WideColumn>
         <Column>
-          <Img
-            fluid={data.image.childImageSharp.fluid}
+          <GatsbyImage
+            image={data.image.childImageSharp.gatsbyImageData}
             alt="Double Crested Cormorant and Starry Flounder"
           />
 

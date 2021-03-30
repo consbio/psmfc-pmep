@@ -20,19 +20,18 @@ const Content = styled(Container)`
   }
 `
 
-const StyledBackground = styled(BackgroundImage)`
-  height: 100%;
-`
-
 const NotFoundPage = ({ data: { headerImage } }) => (
   <Layout>
     <SEO title="404: Not found" />
 
-    <StyledBackground
-      fluid={headerImage.childImageSharp.fluid}
+    <BackgroundImage
+      image={headerImage.childImageSharp.gatsbyImageData}
       credits={{
         author: 'stokes rx',
         url: 'https://www.flickr.com/photos/stokesrx/6307999051',
+      }}
+      style={{
+        height: '100%',
       }}
     >
       <Content p="2rem">
@@ -42,7 +41,7 @@ const NotFoundPage = ({ data: { headerImage } }) => (
           Try going <Link to="/">Home</Link>
         </h3>
       </Content>
-    </StyledBackground>
+    </BackgroundImage>
   </Layout>
 )
 
@@ -56,9 +55,11 @@ export const pageQuery = graphql`
   query NotFoundPageQuery {
     headerImage: file(relativePath: { eq: "6307999051_5d2c4d7ce4_o.jpg" }) {
       childImageSharp {
-        fluid(maxWidth: 3200) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
+        gatsbyImageData(
+          layout: FULL_WIDTH
+          formats: [AUTO, WEBP]
+          placeholder: BLURRED
+        )
       }
     }
   }

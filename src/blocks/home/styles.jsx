@@ -1,6 +1,6 @@
 import { Text } from 'rebass'
+import { Container } from 'theme-ui'
 
-import { Container } from 'components/Grid'
 import styled, { themeGet } from 'util/style'
 
 export const Section = styled(Container).attrs({

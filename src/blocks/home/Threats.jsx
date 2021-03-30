@@ -16,16 +16,18 @@ const Threats = () => {
         relativePath: { eq: "Humboldt_Bay_and_Eureka_aerial_view.jpg" }
       ) {
         childImageSharp {
-          fluid(maxWidth: 3200) {
-            ...GatsbyImageSharpFluid_withWebp
-          }
+          gatsbyImageData(
+            layout: FULL_WIDTH
+            formats: [AUTO, WEBP]
+            placeholder: BLURRED
+          )
         }
       }
     }
   `)
   return (
     <BackgroundImage
-      fluid={data.image.childImageSharp.fluid}
+      image={data.image.childImageSharp.gatsbyImageData}
       credits={{
         author: 'Humboldt Bay by U.S. Army Corps of Engineers',
         url:
