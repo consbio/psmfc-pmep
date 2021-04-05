@@ -22,14 +22,14 @@ const IndexPage = () => (
     <BackgroundSection />
 
     <Habitat />
-    {/*
+
     <Threats />
 
     <PMEP />
 
     <NPLCC />
 
-    <Credits /> */}
+    <Credits />
   </Layout>
 )
 

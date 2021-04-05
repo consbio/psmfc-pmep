@@ -4,6 +4,7 @@ import { Box, Container, Grid, Text, Heading } from 'theme-ui'
 
 import { BackgroundImage } from 'components/Image'
 import { OutboundLink } from 'components/Link'
+import List from 'components/elements/List'
 
 import { bioticTypes, bioticInfo } from '../../../config/constants'
 
@@ -86,10 +87,7 @@ const Background = () => {
 
           <Box>
             <Heading as="h4">Estuarine biotic habitats:</Heading>
-            <Box
-              as="ul"
-              sx={{ m: '0 0 0 1.25rem', p: 0, color: 'highlight.500' }}
-            >
+            <List sx={{ color: 'highlight.500' }}>
               {bioticTypes.map((b) => (
                 <li key={b}>
                   {bioticInfo[b].link ? (
@@ -101,7 +99,7 @@ const Background = () => {
                   )}
                 </li>
               ))}
-            </Box>
+            </List>
           </Box>
         </Grid>
       </Container>

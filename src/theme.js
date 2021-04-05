@@ -61,7 +61,7 @@ module.exports = {
   },
   lineHeights: {
     body: 1.4,
-    heading: 1,
+    heading: 1.2,
   },
   sizes: {
     container: '960px',
@@ -96,6 +96,7 @@ module.exports = {
     heading: {
       fontFamily: 'heading',
       fontWeight: 'heading',
+      mb: '0.5rem',
     },
   },
   buttons: {
@@ -163,17 +164,13 @@ module.exports = {
       },
       h2: {
         fontSize: ['1.5rem', '3rem'],
-        mb: '0.5rem',
       },
-      h4: {
-        mb: '0.5rem',
+      h3: {
+        fontSize: ['1.25rem', '1.5rem'],
       },
       p: {
         fontSize: '1.1rem',
         color: 'grey.800',
-      },
-      'ul li': {
-        margin: 0,
       },
     },
   },

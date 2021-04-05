@@ -23,13 +23,7 @@ const Credits = ({ author, url }) => (
     }}
   >
     Photo:&nbsp;
-    {url ? (
-      <OutboundLink from="/" to={url} target="_blank" rel="noopener noreferrer">
-        {author}
-      </OutboundLink>
-    ) : (
-      author
-    )}
+    {url ? <OutboundLink to={url}>{author}</OutboundLink> : author}
   </Box>
 )
 

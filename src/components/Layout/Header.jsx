@@ -50,6 +50,8 @@ const Header = ({ siteTitle }) => {
                 fontSize: ['1.5rem', '1.5rem', '1.75rem'],
                 fontWeight: 'normal',
                 color: 'primary.500',
+                mb: 0,
+                lineHeight: 1,
               }}
             >
               {siteTitle}
@@ -58,7 +60,15 @@ const Header = ({ siteTitle }) => {
         </Link>
       </Box>
 
-      <Heading as="h2" sx={{ fontSize: ['1.25rem'], fontWeight: 'normal' }}>
+      <Heading
+        as="h2"
+        sx={{
+          fontSize: ['1.25rem'],
+          fontWeight: 'normal',
+          lineHeight: 1,
+          mb: 0,
+        }}
+      >
         <Flex sx={{ alignItems: 'center' }}>
           <Link to="/compare">
             <Flex

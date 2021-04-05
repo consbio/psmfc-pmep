@@ -1,25 +1,11 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
-import { Container, Heading, Box, Flex, Grid } from 'theme-ui'
+import { Container, Heading, Box, Grid } from 'theme-ui'
 
 import { GatsbyImage } from 'gatsby-plugin-image'
 
 import { OutboundLink } from 'components/Link'
-import styled, { themeGet } from 'util/style'
-import { Section, Title } from './styles'
-
-// const Columns = styled(Flex).attrs({
-//   flexWrap: 'wrap',
-//   justifyContent: 'space-between',
-// })``
-
-// const Column = styled(Box).attrs({
-//   width: ['100%', '100%', '30%'],
-// })``
-
-// const WideColumn = styled(Box).attrs({
-//   width: ['100%', '100%', '60%'],
-// })``
+import List from 'components/elements/List'
 
 const Habitat = () => {
   const data = useStaticQuery(graphql`
@@ -38,7 +24,7 @@ const Habitat = () => {
 
   return (
     <Container variant="section">
-      <Title>Estuaries provide essential habitat</Title>
+      <Heading as="h2">Estuaries provide essential habitat</Heading>
       <Grid columns={[0, '2fr 1fr']} gap={6}>
         <Box as="p">
           Thousands of species of birds, mammals, fish and other wildlife depend
@@ -91,7 +77,7 @@ const Habitat = () => {
           </Box>
 
           <Heading as="h4">Focal fish species:</Heading>
-          <Box as="ul" sx={{ m: '0 0 0 1.25rem', p: 0 }}>
+          <List>
             <li>
               <OutboundLink to="http://eol.org/pages/46561010">
                 Bat Ray
@@ -157,12 +143,12 @@ const Habitat = () => {
                 Steelhead
               </OutboundLink>
             </li>
-          </Box>
+          </List>
 
           <Heading as="h4" sx={{ mt: '2rem' }}>
             Focal invertebrate species:
           </Heading>
-          <Box as="ul" sx={{ m: '0 0 0 1.25rem', p: 0 }}>
+          <List>
             <li>
               <OutboundLink to="http://eol.org/pages/1021223">
                 Bay Shrimp
@@ -173,7 +159,7 @@ const Habitat = () => {
                 Dungeness Crab
               </OutboundLink>
             </li>
-          </Box>
+          </List>
         </Box>
       </Grid>
     </Container>
