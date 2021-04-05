@@ -56,16 +56,32 @@ module.exports = {
   fontSizes: [12, 14, 16, 18, 24, 32, 48, 64, 72, 112],
   fontWeights: {
     body: 400,
-    heading: 400,
+    heading: 700,
     bold: 700,
   },
   lineHeights: {
     body: 1.4,
     heading: 1,
   },
+  sizes: {
+    container: '960px',
+  },
   layout: {
-    container: {
-      maxWidth: '960px',
+    section: {
+      py: '3rem',
+      px: '1.5rem',
+    },
+    'section-dark': {
+      py: '3rem',
+      px: '1.5rem',
+      color: '#FFF',
+      p: {
+        color: '#FFF',
+      },
+      bg: 'rgba(0, 0, 0, 0.8)',
+      a: {
+        color: 'highlight.500',
+      },
     },
     sidebar: {
       width: ['100%', '468px'],
@@ -144,6 +160,13 @@ module.exports = {
       },
       'h1,h2,h3,h4': {
         textTransform: 'uppercase', // per PMEP branding guidelines
+      },
+      p: {
+        fontSize: '1.1rem',
+        color: 'grey.800',
+      },
+      'ul li': {
+        margin: 0,
       },
     },
   },
