@@ -161,6 +161,13 @@ module.exports = {
       'h1,h2,h3,h4': {
         textTransform: 'uppercase', // per PMEP branding guidelines
       },
+      h2: {
+        fontSize: ['1.5rem', '3rem'],
+        mb: '0.5rem',
+      },
+      h4: {
+        mb: '0.5rem',
+      },
       p: {
         fontSize: '1.1rem',
         color: 'grey.800',
