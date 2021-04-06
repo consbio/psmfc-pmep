@@ -1,35 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Flex, Text } from 'theme-ui'
+import { Box, Text } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import styled, { themeGet } from 'util/style'
+import List from 'components/elements/List'
 import { splitWords } from 'util/format'
 import { sppEOLIDs } from '../../../config/constants'
-
-const List = styled.ul`
-  line-height: 1.2;
-  li {
-    margin: 0;
-
-    & + li {
-      margin-top: 0.5rem;
-    }
-  }
-`
-
-const Stage = styled.span`
-  margin-left: 0.5em;
-  font-size: 0.9rem;
-  font-style: italic;
-  color: ${themeGet('colors.grey.700')};
-`
-
-const Section = styled.section`
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid ${themeGet('colors.grey.200')};
-`
 
 const SoKLink = () => (
   <OutboundLink
@@ -88,7 +64,15 @@ const SpeciesList = ({ species: data, status }) => {
             inventoried in this estuary. <b>{juvenileCount}</b> use the estuary
             mostly in their juvenile stage.
           </Text>
-          <List>
+          <List
+            sx={{
+              mt: '0.5rem',
+              mb: '1rem',
+              '& li + li': {
+                mt: '0.25rem',
+              },
+            }}
+          >
             {entries.map(({ species, stage }) => (
               <li key={species}>
                 <OutboundLink
@@ -98,7 +82,20 @@ const SpeciesList = ({ species: data, status }) => {
                   rel="noopener noreferrer"
                 >
                   {splitWords(species)}
-                  {stage === 'JP' && <Stage>(juvenile)</Stage>}
+                  {stage === 'JP' && (
+                    <Text
+                      as="span"
+                      sx={{
+                        display: 'inline-block',
+                        ml: '0.5rem',
+                        fontSize: '0.9rem',
+                        fontStyle: 'italic',
+                        color: 'grey.700',
+                      }}
+                    >
+                      (juvenile)
+                    </Text>
+                  )}
                 </OutboundLink>
               </li>
             ))}

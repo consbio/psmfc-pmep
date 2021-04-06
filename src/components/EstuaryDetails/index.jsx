@@ -7,7 +7,6 @@ import { TimesCircle } from '@emotion-icons/fa-regular'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
 import Tabs, { Tab } from 'components/Tabs'
 import { OutboundLink } from 'components/Link'
-import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
 
 import SpeciesList from './SpeciesList'
@@ -16,18 +15,6 @@ import TidalWetlandLoss from './TidalWetlandLoss'
 import NFHP from './NFHP'
 import EstuaryType from './EstuaryType'
 import { stateNames, estuaryTypes } from '../../../config/constants'
-
-const TabHeader = styled.div`
-  font-size: 1.25rem;
-`
-
-const Section = styled.section`
-  &:not(:first-child) {
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
-    border-top: 1px solid ${themeGet('colors.grey.200')};
-  }
-`
 
 const getImage = (id) =>
   /* eslint-disable-next-line */
@@ -151,9 +138,11 @@ const EstuaryDetails = ({
               {estuaryTypes[type].label}
               <br />
               <br />
-              <ExpandableParagraph snippet={estuaryTypes[type].snippet}>
-                <EstuaryType type={type} />
-              </ExpandableParagraph>
+              <Text variant="help">
+                <ExpandableParagraph snippet={estuaryTypes[type].snippet}>
+                  <EstuaryType type={type} />
+                </ExpandableParagraph>
+              </Text>
             </Box>
           </Box>
 

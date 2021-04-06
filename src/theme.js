@@ -5,6 +5,7 @@ module.exports = {
   colors: {
     white: 'hsl(0, 0%, 100%)',
     black: 'hsl(0, 0%, 0%)',
+    text: 'hsla(0,0%,0%,0.8)',
     link: '#1488ee',
     // generated using:
     // https://palx.jxnblk.com/ee7d14
@@ -85,8 +86,8 @@ module.exports = {
     },
     block: {
       '&:not(:first-of-type)': {
-        pt: '0.5rem',
-        mt: '0.5rem',
+        pt: '1rem',
+        mt: '1rem',
         borderTop: '1px solid',
         borderTopColor: 'grey.200',
       },
@@ -153,7 +154,7 @@ module.exports = {
       body: {
         margin: 0,
         height: '100%',
-        color: 'hsla(0,0%,0%,0.8)',
+        color: 'text',
       },
       '#___gatsby': {
         height: '100%',

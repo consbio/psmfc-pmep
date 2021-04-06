@@ -1,7 +1,6 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Button } from 'theme-ui'
-import { darken } from '@theme-ui/color'
 
 const buttonGroupCSS = {
   button: {

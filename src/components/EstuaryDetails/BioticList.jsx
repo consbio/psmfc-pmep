@@ -1,22 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Text, Box } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import { Flex } from 'components/Grid'
-import HelpText from 'components/elements/HelpText'
-import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
 import BioticListItem from './BioticListItem'
-
-const Header = styled(HelpText)`
-  margin-bottom: 2rem;
-`
-
-const Section = styled.section`
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid ${themeGet('colors.grey.200')};
-`
 
 const BioticList = ({ biotic }) => {
   // convert to array: [{type: <type>, acres: <acres>}...]
@@ -36,29 +24,30 @@ const BioticList = ({ biotic }) => {
 
   if (entries.length === 0 || totalAcres === 0) {
     return (
-      <HelpText>No biotic habitats have been mapped for this estuary.</HelpText>
+      <Text variant="help">
+        No biotic habitats have been mapped for this estuary.
+      </Text>
     )
   }
 
   return (
     <>
-      <Header>
+      <Text sx={{ color: 'grey.900' }}>
         There are <b>{entries.length}</b> biotic habitats mapped in this
         estuary, occupying a total of <b>{formatNumber(totalAcres)}</b> acres.
         Click the name below for more information.
-      </Header>
+      </Text>
 
-      {entries.map(entry => (
-        <BioticListItem key={entry.type} maxAcres={maxAcres} {...entry} />
-      ))}
-      <Section>
-        <HelpText>
+      <Box sx={{ mt: '1rem' }}>
+        {entries.map((entry) => (
+          <BioticListItem key={entry.type} maxAcres={maxAcres} {...entry} />
+        ))}
+      </Box>
+
+      <Box variant="layout.block">
+        <Text variant="help">
           These habitats represent the Biotic Component (BC) of the{' '}
-          <OutboundLink
-            from="/"
-            to="https://iocm.noaa.gov/cmecs/"
-            target="_blank"
-          >
+          <OutboundLink to="https://iocm.noaa.gov/cmecs/">
             Coastal and Marine Ecological Classification Standard
           </OutboundLink>{' '}
           (CMECS) for estuaries of the West Coast of the contiguous United
@@ -71,16 +60,12 @@ const BioticList = ({ biotic }) => {
           <br />
           <br />
           For more information and data access,{' '}
-          <OutboundLink
-            from="/"
-            to="http://www.pacificfishhabitat.org/data/estuarine-biotic-habitat"
-            target="_blank"
-          >
+          <OutboundLink to="http://www.pacificfishhabitat.org/data/estuarine-biotic-habitat">
             click here
           </OutboundLink>
           .
-        </HelpText>
-      </Section>
+        </Text>
+      </Box>
     </>
   )
 }
