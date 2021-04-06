@@ -33,12 +33,12 @@ const Explore = () => {
   const [bounds, setBounds] = useState(List(PNWBounds))
   const [location, setLocation] = useState(null)
 
-  const handleSelect = id => {
+  const handleSelect = (id) => {
     console.log('onSelect', id)
     setSelectedId(() => id)
   }
 
-  const handleSelectFromList = id => {
+  const handleSelectFromList = (id) => {
     const record = index.get(id.toString())
     setLocation(() => [record.get('lon'), record.get('lat')])
     handleSelect(id)
@@ -51,7 +51,6 @@ const Explore = () => {
   const handleBack = () => {
     setSelectedId(null)
   }
-
 
   return (
     <CrossfilterProvider data={data} filters={filters}>
@@ -67,7 +66,7 @@ const Explore = () => {
               />
             ) : (
               <>
-                <SidebarHeader title="Explore Estuaries" icon="binoculars" />
+                <SidebarHeader title="Explore Estuaries" icon="explore" />
                 <Help
                   snippet="Click on an estuary in the list below or in the map for more
                   detailed information..."

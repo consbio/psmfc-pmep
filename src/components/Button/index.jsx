@@ -5,7 +5,6 @@ import {
   SecondaryButton,
   WarningButton,
 } from './Button'
-import ButtonGroup from './ButtonGroup'
 import ToggleButton from './ToggleButton'
 
 export {
@@ -14,6 +13,5 @@ export {
   PrimaryButton,
   SecondaryButton,
   WarningButton,
-  ButtonGroup,
   ToggleButton,
 }

@@ -12,6 +12,7 @@
     "@mapbox/geo-viewport": "^0.4.1",
     "@rebass/grid": "^6.0.0",
     "@sentry/react": "^6.2.3",
+    "@theme-ui/color": "^0.6.2",
     "@theme-ui/components": "^0.6.0",
     "@theme-ui/css": "^0.6.0",
     "babel-plugin-styled-components": "^1.12.0",

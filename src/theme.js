@@ -83,11 +83,6 @@ module.exports = {
         color: 'highlight.500',
       },
     },
-    sidebar: {
-      width: ['100%', '468px'],
-      borderRightWidth: ['0px', '1px'],
-      borderRightColor: 'grey.8',
-    },
   },
   text: {
     default: {
@@ -98,14 +93,21 @@ module.exports = {
       fontWeight: 'heading',
       mb: '0.5rem',
     },
+    help: {
+      lineHeight: 1.4,
+      color: 'grey.700',
+      display: 'block',
+      fontSize: '0.8rem',
+    },
   },
   buttons: {
     primary: {
       cursor: 'pointer',
-      // FIXME: enable
-      // '&:hover': {
-      //   bg: darken('primary', 0.1),
-      // },
+      color: '#FFF',
+      bg: 'primary.300',
+      '&:hover': {
+        bg: 'primary.500',
+      },
     },
     secondary: {
       cursor: 'pointer',
@@ -121,8 +123,8 @@ module.exports = {
       cursor: 'pointer',
       outline: 'none',
       background: 'none',
-      color: 'grey.5',
-      '&:hover': { color: 'grey.9' },
+      color: 'grey.500',
+      '&:hover': { color: 'grey.900' },
     },
   },
   images: {

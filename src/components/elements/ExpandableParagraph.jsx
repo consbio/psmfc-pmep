@@ -1,49 +1,52 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Box, Text } from 'theme-ui'
 
-import styled, { themeGet } from 'util/style'
+const linkCSS = {
+  display: 'inline-block',
+  color: 'primary.500',
+  cursor: 'pointer',
+  '&:hover': {
+    TextDecoration: 'underline',
+  },
+}
 
-const Wrapper = styled.div`
-  cursor: pointer;
-  line-height: 1.2;
-`
-
-const Snippet = styled.p``
-
-const PseudoLink = styled.span`
-  color: ${themeGet('colors.primary.500')};
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-const ExpandableParagraph = ({ snippet, children, ...props }) => {
+const ExpandableParagraph = ({ snippet, children, sx }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => {
-    setIsOpen(prevIsOpen => !prevIsOpen)
+    setIsOpen((prevIsOpen) => !prevIsOpen)
   }
   return (
-    <Wrapper onClick={toggle} {...props}>
+    <Box onClick={toggle} sx={{ cursor: 'pointer', lineHeight: 1.2, ...sx }}>
       {isOpen ? (
-        <p>
+        <div>
           {children}
           <br />
-          <PseudoLink>Show less...</PseudoLink>
-        </p>
+          <Text as="span" sx={linkCSS}>
+            Show less...
+          </Text>
+        </div>
       ) : (
-        <Snippet>
-          {snippet} <PseudoLink>Show more...</PseudoLink>
-        </Snippet>
+        <div>
+          {snippet}{' '}
+          <Text as="span" sx={linkCSS}>
+            Show more...
+          </Text>
+        </div>
       )}
-    </Wrapper>
+    </Box>
   )
 }
 
 ExpandableParagraph.propTypes = {
   snippet: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]).isRequired,
+  sx: PropTypes.object,
+}
+
+ExpandableParagraph.defaultProps = {
+  sx: {},
 }
 
 export default ExpandableParagraph

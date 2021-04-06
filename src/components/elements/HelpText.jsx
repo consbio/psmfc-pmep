@@ -1,10 +1,15 @@
-import { Text } from 'rebass'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Text } from 'theme-ui'
 
-import styled, { themeGet } from 'util/style'
+// TODO: remove and just use variant directly
+const HelpText = ({ children }) => <Text variant="help">{children}</Text>
 
-const HelpText = styled(Text)`
-  line-height: 1.4;
-  color: ${themeGet('colors.grey.700')};
-`
+HelpText.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+}
 
 export default HelpText

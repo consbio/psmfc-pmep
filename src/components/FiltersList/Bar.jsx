@@ -1,75 +1,65 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
+import { Box, Flex } from 'theme-ui'
 
-import { Flex, Columns, Column } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
-
-const Wrapper = styled.div`
-  cursor: pointer;
-  line-height: 1;
-  margin-bottom: 1rem;
-
-  transition: opacity 300ms;
-  opacity: ${({ isExcluded }) => (isExcluded ? 0.25 : 1)};
-
-  &:hover {
-    opacity: ${({ isExcluded }) => (isExcluded ? 0.5 : 1)};
-  }
-`
-
-const Labels = styled(Columns).attrs({
-  justifyContent: 'space-between',
-})`
-  color: ${({ active }) =>
-    active ? themeGet('colors.highlight.500') : themeGet('colors.grey.700')};
-  font-size: 0.8rem;
-`
-
-const IndicatorWrapper = styled(Flex).attrs({
-  flexWrap: 'nowrap',
-})`
-  height: 0.5rem;
-  border-radius: 0.25rem;
-  background-color: ${themeGet('colors.grey.200')};
-  border: 1px solid ${themeGet('colors.grey.200')};
-  overflow: hidden;
-`
-
-const Indicator = styled.div`
-  background-color: ${({ active }) =>
-    active ? themeGet('colors.highlight.500') : themeGet('colors.primary.500')};
-  flex-grow: ${({ width }) => width};
-  transition: flex-grow 300ms;
-`
-
-const Filler = styled.div`
-  flex-grow: ${({ width }) => width};
-  transition: flex-grow 300ms;
-`
 
 const Bar = ({ isFiltered, isExcluded, label, count, total, onClick }) => {
   const position = count / total
   const remainder = 1 - position
 
   return (
-    <Wrapper onClick={onClick} isExcluded={isExcluded}>
-      <Labels active={isFiltered}>
-        <Column>{label}</Column>
-        <Column flex={0}>{formatNumber(count)}</Column>
-      </Labels>
-      <IndicatorWrapper>
-        {position > 0 && (
-          <Indicator
-            active={isFiltered}
-            isExcluded={isExcluded}
-            width={position}
-          />
-        )}
+    <Box
+      onClick={onClick}
+      isExcluded={isExcluded}
+      sx={{
+        cursor: 'pointer',
+        lineHeight: 1,
+        mb: '0.75rem',
+        transition: 'opacity 300ms',
+        opacity: isExcluded ? 0.25 : 1,
+        '&:hover': {
+          opacity: isExcluded ? 0.5 : 1,
+        },
+      }}
+    >
+      <Flex
+        sx={{
+          justifyContent: 'space-between',
+          fontSize: '0.8rem',
+          color: isFiltered ? 'highlight.500' : 'grey.700',
+        }}
+      >
+        <Box>{label}</Box>
+        <Box flex={0}>{formatNumber(count)}</Box>
+      </Flex>
 
-        {remainder > 0 && <Filler width={remainder} />}
-      </IndicatorWrapper>
-    </Wrapper>
+      <Flex
+        sx={{
+          mt: '0.25rem',
+          flexWrap: 'nowrap',
+          height: '0.5rem',
+          borderRadius: '1rem',
+          bg: 'grey.200',
+          border: '1px solid',
+          borderColor: 'grey.200',
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: isFiltered ? 'highlight.500' : 'primary.500',
+            transition: 'flex-grow 300ms',
+          }}
+          style={{
+            flexGrow: `${position}`,
+          }}
+        />
+        <Box
+          style={{ flexGrow: `${remainder}`, transition: 'flex-grow 300ms' }}
+        />
+      </Flex>
+    </Box>
   )
 }
 

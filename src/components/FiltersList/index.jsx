@@ -1,57 +1,10 @@
 import React, { useContext } from 'react'
-import { FaRegTimesCircle } from 'react-icons/fa'
-import { Text } from 'rebass'
+import { Flex, Box, Text, Button } from 'theme-ui'
+import { TimesCircle } from '@emotion-icons/fa-regular'
 
 import { Context as Crossfilter, RESET_FILTERS } from 'components/Crossfilter'
-import { Button } from 'components/Button'
-import { Flex, Box, Columns, Column } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
 import Filter from './Filter'
 import { filters as rawFilters } from '../../../config/filters'
-
-const Wrapper = styled(Flex).attrs({
-  flexDirection: 'column',
-  flex: 1,
-})`
-  height: 100%;
-  overflow: hidden;
-`
-
-const Header = styled(Columns).attrs({
-  flex: 0,
-  px: '1rem',
-  pb: '0.5rem',
-})`
-  border-bottom: 1px solid ${themeGet('colors.grey.200')};
-`
-
-export const Count = styled.div`
-  color: ${themeGet('colors.grey.600')};
-  font-size: 0.8em;
-  line-height: 1;
-`
-
-const ResetButton = styled(Button).attrs({ secondary: true })`
-  font-size: 0.8rem;
-  padding: 0.1rem 0.5rem;
-`
-
-const ResetButtonContents = styled(Flex).attrs({
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-})``
-
-const ResetIcon = styled(FaRegTimesCircle).attrs({
-  size: '1em',
-})`
-  margin-right: 0.25rem;
-  cursor: pointer;
-`
-
-const Filters = styled(Box).attrs({ flex: 1, pr: '1rem' })`
-  overflow-y: auto;
-  height: 100%;
-`
 
 // filter out internal filters
 const filters = rawFilters.filter(({ internal }) => !internal)
@@ -75,34 +28,67 @@ const index = () => {
   }
 
   return (
-    <Wrapper>
-      <Header alignItems="baseline">
-        <Column>
-          <Count>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        flex: '1 1 auto',
+        height: '100%',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        sx={{
+          flex: '0 0 auto',
+          pb: '0.5rem',
+          px: '1rem',
+          borderBottom: '1px solid',
+          borderBottomColor: 'grey.200',
+        }}
+      >
+        <Box>
+          <Text
+            sx={{
+              fontSize: '0.8rem',
+              color: 'grey.600',
+              lineHeight: 1,
+            }}
+          >
             {state.get('filteredCount')} estuaries currently visible in the
             current extent
-          </Count>
-        </Column>
-        <Column flex="0 0 auto">
-          {hasFilters && (
-            <Text textAlign="right">
-              <ResetButton onClick={handleReset}>
-                <ResetButtonContents>
-                  <ResetIcon />
-                  <div>reset all filters</div>
-                </ResetButtonContents>
-              </ResetButton>
-            </Text>
-          )}
-        </Column>
-      </Header>
+          </Text>
+        </Box>
+        {hasFilters && (
+          <Button
+            variant="primary"
+            onClick={handleReset}
+            sx={{
+              flex: '0 0 auto',
+              mt: '0.5rem',
+              fontSize: '0.8rem',
+            }}
+          >
+            <Flex sx={{ alignItems: 'center' }}>
+              <TimesCircle size="1.5em" style={{ marginRight: '0.25rem' }} />
+              <Box>reset all filters</Box>
+            </Flex>
+          </Button>
+        )}
+      </Box>
 
-      <Filters>
-        {filters.map(filter => (
+      <Box
+        sx={{
+          flex: '1 1 auto',
+          height: '100%',
+          overflow: 'auto',
+          pr: '1rem',
+          pb: '2rem',
+        }}
+      >
+        {filters.map((filter) => (
           <Filter key={filter.field} {...filter} />
         ))}
-      </Filters>
-    </Wrapper>
+      </Box>
+    </Flex>
   )
 }
 
