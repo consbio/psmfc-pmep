@@ -1,30 +1,6 @@
 import React from 'react'
-import { Container, Box, Flex, Text } from 'theme-ui'
-// import { FaExclamationTriangle } from 'react-icons/fa'
+import { Container, Box, Text } from 'theme-ui'
 import { ExclamationTriangle } from '@emotion-icons/fa-solid'
-
-// import styled, { themeGet } from 'util/style'
-
-// const IconHeader = styled.h1`
-//   text-align: center;
-// `
-
-// const StyledIcon = styled(FaExclamationTriangle)`
-//   height: 10rem;
-//   width: 10rem;
-//   margin-right: 1rem;
-//   color: #fff;
-// `
-
-// const WarningBox = styled(Box)`
-//   margin-top: 2rem;
-//   padding: 2rem;
-//   background-color: ${themeGet('colors.primary.900')};
-
-//   h1 {
-//     color: #fff;
-//   }
-// `
 
 const UnsupportedBrowser = () => (
   <Container>

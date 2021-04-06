@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, Text } from 'theme-ui'
+import { Flex, Box } from 'theme-ui'
 
 import { nfhpCodes, nfhpLabels, nfhpColors } from '../../../config/constants'
 

@@ -8,7 +8,7 @@ import theme from 'theme'
 const calculateRotation = (halfsize, offset) =>
   `rotate(${(offset / 100) * 360 - 90} ${halfsize},${halfsize})`
 
-const Donut = ({ entries, backgroundColor, size, donutWidth, ...props }) => {
+const Donut = ({ entries, backgroundColor, size, donutWidth }) => {
   const halfsize = size * 0.5
   const radius = halfsize - donutWidth * 0.5
   const circumference = 2 * Math.PI * radius

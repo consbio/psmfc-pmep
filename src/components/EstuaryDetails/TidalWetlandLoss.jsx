@@ -5,7 +5,6 @@ import { Box, Flex, Text } from 'theme-ui'
 import { OutboundLink } from 'components/Link'
 import { MultiValueDonut, Legend } from 'components/Donut'
 import { formatNumber } from 'util/format'
-import styled from 'util/style'
 import { twInfo } from '../../../config/constants'
 
 // add a bit of transparency to mute colors, and transform to a simpler object

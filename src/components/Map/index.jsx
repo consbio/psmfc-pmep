@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { List, fromJS } from 'immutable'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Box } from 'theme-ui'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-import styled from 'util/style'
 import { hasWindow } from 'util/dom'
 import { indexBy } from 'util/data'
 import { getCenterAndZoom, toGeoJSONPoints, groupByLayer } from 'util/map'
@@ -24,12 +24,6 @@ import {
   twLayer,
 } from '../../../config/map'
 import { bioticInfo, twInfo } from '../../../config/constants'
-
-const Relative = styled.div`
-  position: relative;
-  flex: 1 0 auto;
-  z-index: 1;
-`
 
 const renderTooltipContent = (title, color, label) =>
   `
@@ -116,12 +110,12 @@ const Map = ({
       })
 
       // add layers
-      layers.forEach(layer => {
+      layers.forEach((layer) => {
         map.addLayer(layer)
       })
     })
 
-    map.on('click', e => {
+    map.on('click', (e) => {
       const [feature] = map.queryRenderedFeatures(e.point, {
         layers: ['points', 'boundaries-fill'],
       })
@@ -140,7 +134,7 @@ const Map = ({
     })
 
     // clicking on clusters zooms in
-    map.on('click', 'clusters', e => {
+    map.on('click', 'clusters', (e) => {
       const [feature] = map.queryRenderedFeatures(e.point, {
         layers: ['clusters'],
       })
@@ -350,7 +344,7 @@ const Map = ({
       const ids = records.map(({ id }) => id)
       const filterExpr = ['in', ['get', 'PMEP_EstuaryID'], ['literal', ids]]
 
-      filterLayers.forEach(id => {
+      filterLayers.forEach((id) => {
         map.setFilter(id, filterExpr)
       })
 
@@ -361,7 +355,7 @@ const Map = ({
       ])
     } else {
       // reset filters
-      filterLayers.forEach(id => {
+      filterLayers.forEach((id) => {
         map.setFilter(id, null)
       })
 
@@ -386,7 +380,7 @@ const Map = ({
 
       if (locationMarkerRef.current === null) {
         locationMarkerRef.current = new mapboxgl.Marker({
-          color: '#ee7d14'
+          color: '#ee7d14',
         })
           .setLngLat([lon, lat])
           .addTo(map)
@@ -394,7 +388,11 @@ const Map = ({
         locationMarkerRef.current.setLngLat([lon, lat])
       }
 
-      map.setFilter('points', ['all', ['!', ['has', 'point_count']], ['!=', ['get', 'id'], selectedFeature]])
+      map.setFilter('points', [
+        'all',
+        ['!', ['has', 'point_count']],
+        ['!=', ['get', 'id'], selectedFeature],
+      ])
     }
 
     map.setFilter('boundaries-outline-highlight', [
@@ -422,7 +420,6 @@ const Map = ({
     if (!map) return
 
     map.panTo(location)
-
   }, [location])
 
   // memoize this?
@@ -466,7 +463,7 @@ const Map = ({
     return entries
   }
 
-  const handleLayerToggle = newLayer => {
+  const handleLayerToggle = (newLayer) => {
     const { current: map } = mapRef
 
     if (!(map && map.isStyleLoaded)) return
@@ -486,7 +483,7 @@ const Map = ({
     )
   }
 
-  const handleBasemapChange = styleID => {
+  const handleBasemapChange = (styleID) => {
     const { current: map } = mapRef
     const { current: baseStyle } = baseStyleRef
 
@@ -500,7 +497,7 @@ const Map = ({
       .filter((_, key) => !baseSources.has(key))
     const userLayers = snapshot
       .get('layers')
-      .filter(layer => !baseLayers.includes(layer))
+      .filter((layer) => !baseLayers.includes(layer))
 
     map.setStyle(`mapbox://styles/mapbox/${styleID}`)
 
@@ -516,7 +513,7 @@ const Map = ({
         map.addSource(id, source.toJS())
       })
 
-      userLayers.forEach(layer => {
+      userLayers.forEach((layer) => {
         map.addLayer(layer.toJS())
       })
     })
@@ -537,9 +534,8 @@ const Map = ({
     }
   }
 
-
   return (
-    <Relative>
+    <Box sx={{ position: 'relative', flex: '1 0 auto', zIndex: 1 }}>
       <div ref={mapNode} style={{ width: '100%', height: '100%' }} />
 
       <Legend entries={legendEntries} />
@@ -561,7 +557,7 @@ const Map = ({
           <FullExtentButton onClick={goToFullExtent} />
         </>
       )}
-    </Relative>
+    </Box>
   )
 }
 
@@ -583,6 +579,7 @@ Map.propTypes = {
 Map.defaultProps = {
   bounds: List(),
   selectedFeature: null,
+  location: null,
   onSelectFeature: () => {},
   onBoundsChange: () => {},
 }

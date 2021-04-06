@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Grid, Container, Heading, Image } from 'theme-ui'
+import { Box, Grid, Container, Heading, Image } from 'theme-ui'
 
 import { Link, OutboundLink } from 'components/Link'
 import CompareImg from 'images/compare.jpg'

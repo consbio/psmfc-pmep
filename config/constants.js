@@ -1,4 +1,4 @@
-import { theme } from 'util/style'
+import theme from 'theme'
 
 export const PNWBounds = [-124.7, 32.5, -117.1, 49]
 
@@ -126,7 +126,12 @@ export const nfhpColors = {
 }
 
 // Size classes adapted from page 127 in SoK, converted to acres
-export const sizeClasses = [[0, 25], [25, 250], [250, 2500], [2500, Infinity]]
+export const sizeClasses = [
+  [0, 25],
+  [25, 250],
+  [250, 2500],
+  [2500, Infinity],
+]
 export const sizeClassLabels = [
   '0 - 25 acres',
   '25 - 250 acres',
@@ -164,21 +169,21 @@ export const bioticTypes = [
 
 // Links to NatureServe's CMECs site, descriptions were extracted from there
 export const bioticInfo = {
-  '2': {
+  2: {
     label: 'Benthic/Attached Biota',
     description:
       'Areas where biota lives on, in, or in close association with the seafloor or other substrates (e.g., pilings, buoys), extending down into the sediment to include the sub-surface layers of substrate that contain multi-cellular life.',
     color: '#CDAA66',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/389.html',
   },
-  '2.2': {
+  2.2: {
     label: 'Faunal Bed',
     description:
       'Seabeds dominated or characterized by a cover of animals that are closely associated with the bottom, including attached, clinging, sessile, infaunal, burrowing, laying, interstitial, and slow-moving animals, but not animals that have created substrate (Reef Biota).',
     color: '#A68F62',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/391.html',
   },
-  '2.5': {
+  2.5: {
     label: 'Aquatic Vegetation Bed',
     description:
       'Subtidal or intertidal bottoms and other areas dominated by rooted vascular plants, attached macroalgae, or mosses, which are usually submersed in the water column or floating on the surface. They may be exposed during low tides.',
@@ -213,7 +218,7 @@ export const bioticInfo = {
     color: '#A3FF73',
     // link: '' // not available from CMECS site yet
   },
-  '2.6': {
+  2.6: {
     label: 'Emergent Wetland',
     description:
       'Areas in this class are characterized by erect, rooted, herbaceous hydrophytes—excluding emergent mosses and lichens. This vegetation is present for most of the growing season in most years. These wetlands are usually dominated by perennial plants. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
@@ -234,7 +239,7 @@ export const bioticInfo = {
     color: '#000F5A',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/568.html',
   },
-  '2.7': {
+  2.7: {
     label: 'Scrub-Shrub Wetland',
     description:
       'Areas in this class are dominated by woody vegetation that is generally less than 6 meters tall. Characteristic species include true shrubs, young trees, and trees or shrubs that are small or stunted due to environmental conditions. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
@@ -255,7 +260,7 @@ export const bioticInfo = {
     color: '#737300',
     link: 'https://www.cmecscatalog.org/cmecs/classification/unit/574.html',
   },
-  '2.8': {
+  2.8: {
     label: 'Forested Wetland',
     description:
       'Areas in this class are characterized by woody vegetation that is generally 6 meters or taller. These areas may be diked or disconnected from tidal influence, but are within the historical extent of the estuary.',
