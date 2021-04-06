@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
+import { Box, Flex } from 'theme-ui'
 import { Map } from 'immutable'
 import { FixedSizeList as List } from 'react-window'
 import useDimensions from 'react-use-dimensions'
@@ -8,8 +9,6 @@ import {
   Context as CrossfilterContext,
   SET_FILTER,
 } from 'components/Crossfilter'
-import { Box, Flex, Columns, Column } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
 import SearchBar from './SearchBar'
 import SortBar from './SortBar'
 import ListItem from './ListItem'
@@ -23,27 +22,6 @@ const sortOptions = [
   { label: 'north to south', sortFunc: (a, b) => b.get('lat') - a.get('lat') },
 ]
 
-export const Wrapper = styled(Flex).attrs({
-  flex: '1 1 auto',
-  flexDirection: 'column',
-})``
-
-export const Count = styled.span`
-  color: ${themeGet('colors.grey.600')};
-  font-size: 0.8em;
-  line-height: 1.2;
-`
-
-export const ListWrapper = styled.div`
-  flex: 1 1 auto;
-`
-
-export const NoResults = styled(Box)`
-  color: ${themeGet('colors.grey.600')};
-  margin-top: 2rem;
-  text-align: center;
-`
-
 const EstuariesList = ({ onSelect }) => {
   const { state, dispatch: filterDispatch } = useContext(CrossfilterContext)
 
@@ -51,7 +29,7 @@ const EstuariesList = ({ onSelect }) => {
   const [listWrapperRef, { height: listHeight }] = useDimensions()
   const [sortIdx, setSortIdx] = useState(2) // default: north to south
 
-  const handleQueryChange = value => {
+  const handleQueryChange = (value) => {
     filterDispatch({
       type: SET_FILTER,
       payload: {
@@ -61,7 +39,7 @@ const EstuariesList = ({ onSelect }) => {
     })
   }
 
-  const handleSortChange = idx => {
+  const handleSortChange = (idx) => {
     if (idx === sortIdx) return
 
     setSortIdx(idx)
@@ -76,19 +54,23 @@ const EstuariesList = ({ onSelect }) => {
   const sortedData = data.sort(sortOptions[sortIdx].sortFunc)
 
   return (
-    <Wrapper>
-      <Columns px="1rem" alignItems="baseline">
-        <Column>
-          <Count>{data.size} currently visible</Count>
-        </Column>
-        <Column>
-          <SortBar
-            index={sortIdx}
-            options={sortOptions}
-            onChange={handleSortChange}
-          />
-        </Column>
-      </Columns>
+    <Flex sx={{ flex: '1 1 auto', flexDirection: 'column', mt: '2rem' }}>
+      <Flex
+        sx={{
+          px: '1rem',
+          alignItems: 'baseline',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ color: 'grey.600', fontSize: '0.8rem', lineHeight: 1.2 }}>
+          {data.size} currently visible
+        </Box>
+        <SortBar
+          index={sortIdx}
+          options={sortOptions}
+          onChange={handleSortChange}
+        />
+      </Flex>
 
       <SearchBar
         value={state.get('filters', Map()).get('name', '')}
@@ -97,7 +79,16 @@ const EstuariesList = ({ onSelect }) => {
       />
 
       {data.size > 0 ? (
-        <ListWrapper ref={listWrapperRef}>
+        <Flex
+          ref={listWrapperRef}
+          sx={{
+            flex: '1 1 auto',
+            width: '100%',
+            '&>div': {
+              width: '100%',
+            },
+          }}
+        >
           {listHeight ? (
             <List
               ref={listRef}
@@ -119,11 +110,13 @@ const EstuariesList = ({ onSelect }) => {
               }}
             </List>
           ) : null}
-        </ListWrapper>
+        </Flex>
       ) : (
-        <NoResults>No visible estuaries...</NoResults>
+        <Box sx={{ color: 'grey.600', mt: '2rem', textAlign: 'center' }}>
+          No visible estuaries...
+        </Box>
       )}
-    </Wrapper>
+    </Flex>
   )
 }
 

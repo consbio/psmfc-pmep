@@ -1,52 +1,40 @@
 import React from 'react'
+import { Flex, Box } from 'theme-ui'
 
-import styled, { themeGet } from 'util/style'
-
-import { Flex } from 'components/Grid'
 import { OutboundLink } from 'components/Link'
 
-const Wrapper = styled(Flex).attrs({
-  alignItems: 'center',
-  justifyContent: 'space-between',
-})`
-  flex: 0;
-  background-color: ${themeGet('colors.primary.900')};
-  padding: 0.25em 1em;
-  font-size: 0.7rem;
-  color: #fff;
-
-  a {
-    color: #fff;
-  }
-`
-
 const Footer = () => (
-  <Wrapper as="footer">
-    <div>
+  <Flex
+    as="footer"
+    sx={{
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flex: '0 0 auto',
+      bg: 'primary.900',
+      py: '0.25em',
+      px: '1em',
+      fontSize: '0.7rem',
+      color: '#FFF',
+      a: {
+        color: '#FFF',
+      },
+    }}
+  >
+    <Box>
       Partners: NPLCC and{' '}
-      <OutboundLink
-        from="/"
-        to="http://www.pacificfishhabitat.org/"
-        target="_blank"
-      >
-        PMEP
-      </OutboundLink>
+      <OutboundLink to="http://www.pacificfishhabitat.org/">PMEP</OutboundLink>
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <OutboundLink
-        from="/"
-        to="http://www.pacificfishhabitat.org/data/"
-        target="_blank"
-      >
+      <OutboundLink to="http://www.pacificfishhabitat.org/data/">
         Access data
       </OutboundLink>
-    </div>
-    <div>
+    </Box>
+    <Box>
       Created by the{' '}
-      <OutboundLink from="/" to="https://consbio.org" target="_blank">
+      <OutboundLink to="https://consbio.org">
         Conservation Biology Institute
       </OutboundLink>
-    </div>
-  </Wrapper>
+    </Box>
+  </Flex>
 )
 
 export default Footer

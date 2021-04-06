@@ -1,57 +1,51 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
+import { Box, Text, Flex } from 'theme-ui'
+import { darken } from '@theme-ui/color'
 
-import { Columns, Column } from 'components/Grid'
-import styled, { themeGet, theme } from 'util/style'
 import { formatNumber } from 'util/format'
 import { stateNames, estuaryTypes } from '../../../config/constants'
 
-const Wrapper = styled(Text).attrs({
-  fontSize: ['0.9rem', '0.8rem', '0.9rem'],
-})`
-  line-height: 1.2;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-
-  color: ${themeGet('colors.grey.600')};
-  font-weight: 100;
-
-  &:hover {
-    background-color: ${theme.colors.primary[100]}50;
-  }
-
-  &:not(:first-child) {
-    border-top: 1px solid ${themeGet('colors.grey.100')};
-    padding-top: 0.5rem;
-  }
-`
-
-const Name = styled.div`
-  color: ${themeGet('colors.primary.500')};
-  font-size: 1rem;
-  font-weight: normal;
-`
-
 const ListItem = ({ name, type, state, acres, ...props }) => (
-  <Wrapper {...props}>
-    <Columns>
-      <Column>
-        <Name>{name}</Name>
+  <Box
+    sx={{
+      fontSize: ['0.9rem', '0.8rem', '0.9rem'],
+      lineHeight: 1.2,
+      py: '0.5rem',
+      px: '1rem',
+      cursor: 'pointer',
+      color: 'grey.600',
+      '&:not(:first-of-type)': {
+        pt: '0.5rem',
+        borderTop: '1px solid',
+        borderTopColor: 'grey.100',
+      },
+      '&:hover': {
+        bg: darken('grey.100', 0.005),
+      },
+    }}
+    {...props}
+  >
+    <Flex
+      sx={{
+        alignItems: 'flex-start',
+        flexWrap: 'nowrap',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Box>
+        <Text sx={{ color: 'link', fontSize: '1rem' }}>{name}</Text>
         {stateNames[state] || ''}
-      </Column>
-      <Column>
-        <Text textAlign="right" fontSize='smaller'>
-          {estuaryTypes[type].label}
-          <br />({formatNumber(acres, 0)} acres)
-        </Text>
-      </Column>
-    </Columns>
-  </Wrapper>
+      </Box>
+      <Box sx={{ textAlign: 'right', fontSize: 'smaller' }}>
+        {estuaryTypes[type].label}
+        <br />({formatNumber(acres, 0)} acres)
+      </Box>
+    </Flex>
+  </Box>
 )
 
 ListItem.propTypes = {
-  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.number.isRequired,
   state: PropTypes.string.isRequired,

@@ -1,6 +1,6 @@
 {
-  "extends": ["airbnb", "prettier", "prettier/react"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["@emotion", "prettier", "react-hooks"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2017,
@@ -37,6 +37,7 @@
         "extensions": [".js", ".jsx"]
       }
     ],
+    "react/jsx-props-no-spreading": 0,
     "quotes": [
       2,
       "single",

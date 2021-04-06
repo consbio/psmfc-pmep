@@ -1,13 +1,10 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
+import { Container, Box, Heading } from 'theme-ui'
 
 import { BackgroundImage } from 'components/Image'
 import { OutboundLink } from 'components/Link'
-import {
-  DarkSection as Section,
-  InverseTitle as Title,
-  Subtitle,
-} from './styles'
+import List from 'components/elements/List'
 
 const Threats = () => {
   const data = useStaticQuery(graphql`
@@ -16,25 +13,27 @@ const Threats = () => {
         relativePath: { eq: "Humboldt_Bay_and_Eureka_aerial_view.jpg" }
       ) {
         childImageSharp {
-          fluid(maxWidth: 3200) {
-            ...GatsbyImageSharpFluid_withWebp
-          }
+          gatsbyImageData(
+            layout: FULL_WIDTH
+            formats: [AUTO, WEBP]
+            placeholder: BLURRED
+          )
         }
       }
     }
   `)
   return (
     <BackgroundImage
-      fluid={data.image.childImageSharp.fluid}
+      image={data.image.childImageSharp.gatsbyImageData}
       credits={{
         author: 'Humboldt Bay by U.S. Army Corps of Engineers',
         url:
           'https://commons.wikimedia.org/wiki/File:Humboldt_Bay_and_Eureka_aerial_view.jpg',
       }}
     >
-      <Section>
-        <Title>Estuaries are under threat</Title>
-        <p>
+      <Container variant="section-dark">
+        <Heading as="h2">Estuaries are under threat</Heading>
+        <Box as="p">
           Estuaries and nearshore marine environments have been significantly
           altered due to human development activities. Projected increases in
           human population and activities in and around estuaries and nearshore
@@ -44,15 +43,17 @@ const Threats = () => {
           temperatures, increased storm intensities and extreme wave heights,
           rising sea levels, expanded hypoxic zones, and changes in sediment
           transport.
-        </p>
+        </Box>
 
-        <Subtitle>Vegetated tidal wetland loss:</Subtitle>
-        <p>
+        <Heading as="h3" sx={{ mt: '2rem' }}>
+          Vegetated tidal wetland loss:
+        </Heading>
+        <Box as="p">
           Many areas of vegetated tidal wetlands have been lost to agriculture,
           development, and other land use changes. PMEP recently assessed
           vegetated tidal wetland loss by comparing the current extent of tidal
           wetlands in the{' '}
-          <OutboundLink from="/" to="https://www.fws.gov/wetlands/">
+          <OutboundLink to="https://www.fws.gov/wetlands/">
             National Wetland Inventory
           </OutboundLink>{' '}
           (NWI) to the historical estuary extent shown in this tool. Open water
@@ -65,29 +66,25 @@ const Threats = () => {
           <br />
           Where information is available, this assessment includes details about
           vegetated tidal wetlands that have been restored.
-        </p>
-
-        <p>
+          <br />
+          <br />
           For more information about tidal loss and restoration, please see the{' '}
-          <OutboundLink
-            from="/"
-            to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment"
-          >
+          <OutboundLink to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment">
             assessment overview page.
           </OutboundLink>
-          <br />
-          <br />
-        </p>
+        </Box>
 
-        <Subtitle>Risk of fish habitat degradation:</Subtitle>
-        <p>
+        <Heading as="h3" sx={{ mt: '2rem' }}>
+          Risk of fish habitat degradation:
+        </Heading>
+        <Box as="p">
           In 2015 the National Fish Habitat Partnership assessed the status of
           fish habitats across the United States. This assessment analyzed
           disturbance factors that impact the quality of fish habitat,
           including:
-        </p>
+        </Box>
 
-        <ul>
+        <List>
           <li>
             River discharge: flow magnitude, duration of pulses, and density of
             dams
@@ -105,27 +102,21 @@ const Threats = () => {
             Land cover: percent cover and trends of urban, agriculture, and
             wetland land cover
           </li>
-        </ul>
+        </List>
 
-        <p>
+        <Box as="p" sx={{ mt: '1rem' }}>
           These factors were combined to create an overall index that shows risk
           to fish habitat degradation. Not all factors could be assessed for all
           estuaries; in this case at least three of the four factors were used.
-        </p>
-
-        <p>
+          <br />
+          <br />
           For more information about this assessment, please see the{' '}
-          <OutboundLink
-            from="/"
-            to="http://assessment.fishhabitat.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <OutboundLink to="http://assessment.fishhabitat.org/">
             2015 Report
           </OutboundLink>
           .
-        </p>
-      </Section>
+        </Box>
+      </Container>
     </BackgroundImage>
   )
 }

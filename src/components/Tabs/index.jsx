@@ -1,32 +1,26 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-
-import { Flex } from 'components/Grid'
-import styled from 'util/style'
+import { Flex } from 'theme-ui'
 
 import TabBar from './TabBar'
 import TabContainer from './TabContainer'
 import Tab from './Tab'
 
-const Wrapper = styled(Flex).attrs({
-  flexDirection: 'column',
-})``
-
-const Tabs = ({ children, ...props }) => {
+const Tabs = ({ children }) => {
   const tabs = children.map(({ props: { id, label } }) => ({ id, label }))
   const firstTab = tabs[0].id
 
   const [tab, setTab] = useState(firstTab)
 
-  const handleTabChange = id => {
+  const handleTabChange = (id) => {
     setTab(id)
   }
 
   return (
-    <Wrapper {...props}>
+    <Flex sx={{ flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <TabBar tabs={tabs} activeTab={tab} onChange={handleTabChange} />
       <TabContainer activeTab={tab}>{children}</TabContainer>
-    </Wrapper>
+    </Flex>
   )
 }
 

@@ -1,45 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
+import { Box, Heading, Flex } from 'theme-ui'
+import { SlidersH, Binoculars } from '@emotion-icons/fa-solid'
 
-import { Flex } from 'components/Grid'
-import FaIcon from 'components/elements/FaIcon'
-import styled, { themeGet } from 'util/style'
-
-const Wrapper = styled(Flex).attrs({
-  alignItems: 'center',
-  flexWrap: 'nowrap',
-})`
-  line-height: 1;
-  padding: 1rem 1rem 0.25rem;
-`
-
-const Icon = styled(FaIcon).attrs({})`
-  margin-right: 0.25em;
-  color: ${themeGet('colors.grey.900')};
-  opacity: 0.6;
-`
-
-const Title = styled(Text).attrs({
-  fontSize: ['1.5rem', '1.75rem'],
-  as: 'h2',
-})`
-  margin: 0;
-  font-weight: normal;
-  color: ${themeGet('colors.grey.900')};
-`
-
-const Header = ({ icon, title }) => (
-  <Wrapper>
-    <Text fontSize={['1.5rem', '1.75rem']}>
-      <Icon name={icon} />
-    </Text>
-    <Title>{title}</Title>
-  </Wrapper>
-)
+const Header = ({ icon, title }) => {
+  const Icon = icon === 'compare' ? SlidersH : Binoculars
+  return (
+    <Flex
+      sx={{
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        lineHeight: 1,
+        pt: '1rem',
+        pb: '0.25rem',
+        px: '1rem',
+      }}
+    >
+      <Box
+        sx={{
+          color: 'grey.600',
+          fontSize: ['1.5rem', '1.75rem'],
+          mr: '0.5rem',
+        }}
+      >
+        <Icon size="1em" />
+      </Box>
+      <Heading
+        as="h2"
+        sx={{
+          fontSize: ['1.5rem', '1.75rem'],
+          fontWeight: 'normal',
+          color: 'grey.900',
+          mb: 0,
+        }}
+      >
+        {title}
+      </Heading>
+    </Flex>
+  )
+}
 
 Header.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired, // 'compare' or 'explore'
   title: PropTypes.string.isRequired,
 }
 

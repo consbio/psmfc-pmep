@@ -1,13 +1,14 @@
 const config = require('./config/meta')
+const theme = require('./src/theme')
 
 module.exports = {
   siteMetadata: {
     siteUrl: config.siteUrl,
-    googleAnalyticsId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
     sentryDSN: process.env.GATSBY_SENTRY_DSN,
     mapboxToken: process.env.GATSBY_MAPBOX_API_TOKEN,
   },
-  flags : { DEV_SSR: true },
+  // FIXME: update flags
+  flags: { DEV_SSR: false, FAST_DEV: false },
   plugins: [
     `gatsby-plugin-react-helmet`,
     {
@@ -26,27 +27,29 @@ module.exports = {
     },
     `gatsby-transformer-json`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
     {
-      resolve: `gatsby-plugin-styled-components`,
+      resolve: `gatsby-plugin-theme-ui`,
       options: {
-        displayName: process.env.NODE_ENV !== `production`,
-        fileName: false,
+        preset: theme,
+        injectColorFlashScript: false,
       },
     },
-    {
-      resolve: `gatsby-plugin-typography`,
-      options: {
-        pathToConfigModule: `./config/typography.js`,
-      },
-    },
+
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-sitemap`,
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-plugin-google-gtag`,
       options: {
-        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_ID,
-        anonymize: true,
+        trackingIds: [process.env.GATSBY_GOOGLE_ANALYTICS_ID],
+        gtagConfig: {
+          anonymize_ip: true,
+        },
+        pluginConfig: {
+          head: true,
+          respectDNT: true,
+        },
       },
     },
     {

@@ -1,4 +1,4 @@
-import SingleValueDonut from './SingleValue'
 import MultiValueDonut from './MultiValue'
+import Legend from './Legend'
 
-export { SingleValueDonut, MultiValueDonut }
+export { MultiValueDonut, Legend }

@@ -1,39 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Box, Text } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import HelpText from 'components/elements/HelpText'
-import styled, { themeGet } from 'util/style'
+import List from 'components/elements/List'
 import { splitWords } from 'util/format'
 import { sppEOLIDs } from '../../../config/constants'
-
-const Header = styled(HelpText)`
-  margin-bottom: 2rem;
-`
-
-const List = styled.ul`
-  line-height: 1.2;
-  li {
-    margin: 0;
-
-    & + li {
-      margin-top: 0.5rem;
-    }
-  }
-`
-
-const Stage = styled.span`
-  margin-left: 0.5em;
-  font-size: 0.9rem;
-  font-style: italic;
-  color: ${themeGet('colors.grey.700')};
-`
-
-const Section = styled.section`
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid ${themeGet('colors.grey.200')};
-`
 
 const SoKLink = () => (
   <OutboundLink
@@ -50,9 +22,9 @@ const SpeciesList = ({ species: data, status }) => {
   // not inventoried
   if (status === 3) {
     return (
-      <HelpText>
+      <Text variant="help">
         This estuary was not inventoried for species in the <SoKLink />
-      </HelpText>
+      </Text>
     )
   }
 
@@ -70,16 +42,16 @@ const SpeciesList = ({ species: data, status }) => {
 
   if (status === 1) {
     statusNote = (
-      <HelpText>
+      <Text variant="help">
         This estuary was inventoried for species in the <SoKLink />
-      </HelpText>
+      </Text>
     )
   } else {
     statusNote = (
-      <HelpText>
+      <Text variant="help">
         This estuary was inventoried as part of a larger estuary system or
         sub-basin containing this particular estuary for the <SoKLink />
-      </HelpText>
+      </Text>
     )
   }
 
@@ -87,12 +59,20 @@ const SpeciesList = ({ species: data, status }) => {
     <>
       {entries.length > 0 ? (
         <>
-          <Header>
+          <Text sx={{ color: 'grey.900' }}>
             There are <b>{entries.length}</b> focal species that have been
             inventoried in this estuary. <b>{juvenileCount}</b> use the estuary
             mostly in their juvenile stage.
-          </Header>
-          <List>
+          </Text>
+          <List
+            sx={{
+              mt: '0.5rem',
+              mb: '1rem',
+              '& li + li': {
+                mt: '0.25rem',
+              },
+            }}
+          >
             {entries.map(({ species, stage }) => (
               <li key={species}>
                 <OutboundLink
@@ -102,17 +82,30 @@ const SpeciesList = ({ species: data, status }) => {
                   rel="noopener noreferrer"
                 >
                   {splitWords(species)}
-                  {stage === 'JP' && <Stage>(juvenile)</Stage>}
+                  {stage === 'JP' && (
+                    <Text
+                      as="span"
+                      sx={{
+                        display: 'inline-block',
+                        ml: '0.5rem',
+                        fontSize: '0.9rem',
+                        fontStyle: 'italic',
+                        color: 'grey.700',
+                      }}
+                    >
+                      (juvenile)
+                    </Text>
+                  )}
                 </OutboundLink>
               </li>
             ))}
           </List>
         </>
       ) : (
-        <HelpText>No focal species present</HelpText>
+        <Text variant="help">No focal species present</Text>
       )}
 
-      <Section>{statusNote}</Section>
+      <Box variant="layout.block">{statusNote}</Box>
     </>
   )
 }

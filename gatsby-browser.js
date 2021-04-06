@@ -1,16 +1,27 @@
-import GoogleAnalytics from 'react-ga'
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/react'
+
+/* eslint-disable-next-line */
+import * as TypefaceOswald from 'typeface-oswald'
+/* eslint-disable-next-line */
+import * as TypefaceOpenSans from 'typeface-open-sans'
+
 import { siteMetadata } from './gatsby-config'
 
-/**
- * Initialize Google Analytics and Sentry
- */
-export const onClientEntry = () => {
-  if (process.env.NODE_ENV === 'production') {
-    GoogleAnalytics.initialize(siteMetadata.googleAnalyticsId)
+const { sentryDSN } = siteMetadata
 
+export const onClientEntry = () => {
+  if (sentryDSN) {
     Sentry.init({
-      dsn: siteMetadata.sentryDSN,
+      dsn: sentryDSN,
+      beforeSend(event, { originalException: error }) {
+        if (error && error.message) {
+          // this error happens when ResizeObserver not able to deliver all observations within a single animation frame
+          if (error.message.match(/ResizeObserver loop limit exceeded/i)) {
+            return null
+          }
+        }
+        return event
+      },
     })
     window.Sentry = Sentry
   }

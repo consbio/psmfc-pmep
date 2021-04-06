@@ -1,34 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Box, Flex, Text } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import { Flex } from 'components/Grid'
-import HelpText from 'components/elements/HelpText'
-import { MultiValueDonut } from 'components/Donut'
+import { MultiValueDonut, Legend } from 'components/Donut'
 import { formatNumber } from 'util/format'
-import styled from 'util/style'
 import { twInfo } from '../../../config/constants'
-
-const Section = styled(Flex).attrs({ alignItems: 'center', mt: '1rem' })``
-const StyledDonut = styled(MultiValueDonut)`
-  flex: 0 0 auto;
-  margin-right: 1rem;
-`
-
-const Note = styled(HelpText).attrs({ fontSize: '0.8rem' })``
-
-const Patch = styled.div`
-  width: 1rem;
-  height: 1rem;
-  background: ${({ color }) => color};
-  margin-right: 0.5rem;
-`
-
-const Legend = styled(Flex).attrs({ alignItems: 'center' })`
-  &:not(:first-child) {
-    margin-top: 0.25rem;
-  }
-`
 
 // add a bit of transparency to mute colors, and transform to a simpler object
 const colors = Object.assign(
@@ -39,7 +16,9 @@ const colors = Object.assign(
 const TidalWetlandLoss = ({ area, lost, restored }) => {
   if (!area) {
     return (
-      <HelpText>Tidal wetland loss was not assessed for this estuary.</HelpText>
+      <Text variant="help">
+        Tidal wetland loss was not assessed for this estuary.
+      </Text>
     )
   }
 
@@ -48,65 +27,69 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
   const percentRestored = Math.min(100, (100 * restored) / area)
   const percentRetained = Math.max(0, (100 * retained) / area)
 
-  const donutEntries = [
-    {
+  // TODO: build this up based on which ones are > 0
+  const donutEntries = []
+
+  if (percentLost > 0) {
+    donutEntries.push({
+      id: 'lost',
       percent: percentLost,
       color: colors.lost,
-    },
-    {
+      label: (
+        <>
+          <b>{formatNumber(lost, 0)}</b> acres ({formatNumber(percentLost, 0)}%)
+          lost
+        </>
+      ),
+    })
+  }
+  if (percentRestored) {
+    donutEntries.push({
+      id: 'restored',
       percent: percentRestored,
       color: colors.restored,
-    },
-    {
+      label: (
+        <>
+          <b>{formatNumber(restored, 0)}</b> acres (
+          {formatNumber(percentRestored, 0)}%) restored
+        </>
+      ),
+    })
+  }
+  if (percentRetained) {
+    donutEntries.push({
+      id: 'retained',
       percent: percentRetained,
       color: colors.retained,
-    },
-  ]
+      label: (
+        <>
+          <b>{formatNumber(retained, 0)}</b> acres (
+          {formatNumber(percentRetained, 0)}%) retained
+        </>
+      ),
+    })
+  }
 
   return (
     <>
-      <HelpText>
+      <Text sx={{ color: 'grey.900' }}>
         Vegetated tidal wetlands historically occupied approximately{' '}
-        {formatNumber(area, 0)} acres.
-      </HelpText>
+        <b>{formatNumber(area, 0)}</b> acres.
+      </Text>
 
-      {/* Experimental, pending review */}
-      <Section>
-        <StyledDonut entries={donutEntries} size={100} donutWidth={20} />
+      <Flex sx={{ alignItems: 'center', mt: '1rem' }}>
+        <Box sx={{ mr: '1rem', flex: '0 0 auto' }}>
+          <MultiValueDonut entries={donutEntries} size={100} donutWidth={20} />
+        </Box>
+        <Box sx={{ flex: '1 1 auto' }}>
+          <Legend entries={donutEntries} />
+        </Box>
+      </Flex>
 
-        <div>
-          <Legend>
-            <Patch color={colors.lost} />
-            <HelpText>
-              <b>{formatNumber(lost, 0)}</b> acres (
-              {formatNumber(percentLost, 0)}%) lost
-            </HelpText>
-          </Legend>
-
-          {percentRestored > 0 ? (
-            <Legend>
-              <Patch color={colors.restored} />
-              <HelpText>
-                <b>{formatNumber(restored, 0)}</b> acres (
-                {formatNumber(percentRestored, 0)}%) restored
-              </HelpText>
-            </Legend>
-          ) : null}
-
-          <Legend>
-            <Patch color={colors.retained} />
-            <HelpText>
-              <b>{formatNumber(retained, 0)}</b> acres (
-              {formatNumber(percentRetained, 0)}%) retained
-            </HelpText>
-          </Legend>
-        </div>
-      </Section>
-
-      <Note my="1rem">
+      <Text variant="help" sx={{ my: '1rem' }}>
         Vegetated tidal wetland loss was assessed by comparing the current
         extent of tidal wetlands in the{' '}
-        <OutboundLink from="/" to="https://www.fws.gov/wetlands/">
+        <OutboundLink to="https://www.fws.gov/wetlands/">
           National Wetland Inventory
         </OutboundLink>{' '}
         (NWI) to the historical estuary extent shown in this tool (open water
@@ -115,13 +98,10 @@ const TidalWetlandLoss = ({ area, lost, restored }) => {
         due to fill, outdated information from the NWI, and incomplete
         information on restored tidal wetlands may result in errors in these
         estimates of tidal wetland loss.{' '}
-        <OutboundLink
-          from="/"
-          to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment"
-        >
+        <OutboundLink to="http://www.pacificfishhabitat.org/data/tidal-wetlands-loss-assessment">
           Read more...
         </OutboundLink>
-      </Note>
+      </Text>
     </>
   )
 }

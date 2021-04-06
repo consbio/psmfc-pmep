@@ -1,106 +1,111 @@
-import React, {memo} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, Image } from 'rebass'
-import { FaSlidersH, FaBinoculars } from 'react-icons/fa'
+import { Text, Image, Flex, Box, Heading } from 'theme-ui'
+import { SlidersH, Binoculars } from '@emotion-icons/fa-solid'
 
 import { Link } from 'components/Link'
-
-import { Flex } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
-import {hasWindow} from 'util/dom'
+import { hasWindow } from 'util/dom'
 
 import SiteLogo from 'images/pmep_logo_color.svg'
-
-const Wrapper = styled(Flex).attrs({
-  alignItems: 'center',
-  justifyContent: 'space-between',
-})`
-  padding: 0.75rem 0.5rem;
-  flex: 0 0 auto;
-  border-bottom: 1px solid ${themeGet('colors.grey.900')};
-`
-
-const Title = styled.h1`
-  margin: 0;
-  font-weight: normal;
-  flex-grow: 1;
-  line-height: 1;
-
-  & * {
-    text-decoration: none;
-  }
-`
-
-const Logo = styled(Image).attrs({
-  src: SiteLogo,
-  as: 'img',
-  width: '3rem',
-  height: '3rem',
-  my: '-0.5rem',
-  mr: '0.25rem',
-})``
-
-const NavLink = styled(Link)`
-  text-decoration: none;
-  font-weight: 100;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-const NavItem = styled(Flex).attrs({
-  alignItems: 'center',
-  px: ['0.5em', '0.5rem', '1rem'],
-})`
-  text-decoration: ${({active}) => active ? 'underline' : 'inherit'};
-`
-
-const CompareIcon = styled(FaSlidersH)`
-  width: 1em;
-  height: 1em;
-  margin-right: 0.25em;
-  opacity: 0.6;
-`
-
-const ExploreIcon = styled(FaBinoculars)`
-  width: 1em;
-  height: 1em;
-  margin-right: 0.25em;
-  opacity: 0.6;
-`
 
 const Header = ({ siteTitle }) => {
   const path = hasWindow && window.location ? window.location.pathname : null
 
   return (
-  <Wrapper as="header">
-    <Title>
-      <Link to="/">
-        <Flex alignItems="center" flexWrap="wrap">
-          <Logo />
-          <Text fontSize={['1.5rem', '1.5rem', '1.75rem']}>{siteTitle}</Text>
+    <Flex
+      as="header"
+      sx={{
+        lineHeight: 1,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: '0 0 auto',
+        py: '0.75rem',
+        px: '0.5rem',
+        borderBottom: '1px solid',
+        borderBottomColor: 'colors.grey.900',
+        'a, a:visited': {
+          color: 'primary.500',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          flex: '1 0 auto',
+        }}
+      >
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Flex alignItems="center" flexWrap="wrap">
+            <Image
+              src={SiteLogo}
+              sx={{
+                width: '3rem',
+                height: '3rem',
+                my: '-0.5rem',
+                mr: '0.25rem',
+              }}
+            />
+            <Heading
+              as="h1"
+              sx={{
+                fontSize: ['1.5rem', '1.5rem', '1.75rem'],
+                fontWeight: 'normal',
+                color: 'primary.500',
+                mb: 0,
+                lineHeight: 1,
+              }}
+            >
+              {siteTitle}
+            </Heading>
+          </Flex>
+        </Link>
+      </Box>
+
+      <Heading
+        as="h2"
+        sx={{
+          fontSize: ['1.25rem'],
+          fontWeight: 'normal',
+          lineHeight: 1,
+          mb: 0,
+        }}
+      >
+        <Flex sx={{ alignItems: 'center' }}>
+          <Link to="/compare">
+            <Flex
+              sx={{
+                alignItems: 'center',
+                px: ['0.5em', '0.5rem', '1rem'],
+                textDecoration: path === '/compare' ? 'underline' : 'inherit',
+              }}
+            >
+              <SlidersH
+                size="1.25rem"
+                style={{ marginRight: '0.5rem', opacity: 0.6 }}
+              />
+
+              <Text>Compare</Text>
+            </Flex>
+          </Link>
+          <Link to="/explore">
+            <Flex
+              sx={{
+                alignItems: 'center',
+                px: ['0.5em', '0.5rem', '1rem'],
+                textDecoration: path === '/explore' ? 'underline' : 'inherit',
+              }}
+            >
+              <Binoculars
+                size="1.25rem"
+                style={{ marginRight: '0.5rem', opacity: 0.6 }}
+              />
+              <Text>Explore</Text>
+            </Flex>
+          </Link>
         </Flex>
-      </Link>
-    </Title>
-    <Text as="h2" fontSize={['1.25rem']} m={0}>
-      <Flex>
-        <NavLink to="/compare">
-          <NavItem active={path === '/compare'}>
-            <CompareIcon />
-            <div>Compare</div>
-          </NavItem>
-        </NavLink>
-        <NavLink to="/explore">
-          <NavItem active={path=== '/explore'}>
-            <ExploreIcon />
-            Explore
-          </NavItem>
-        </NavLink>
-      </Flex>
-    </Text>
-  </Wrapper>
-)}
+      </Heading>
+    </Flex>
+  )
+}
 
 Header.propTypes = {
   siteTitle: PropTypes.string.isRequired,

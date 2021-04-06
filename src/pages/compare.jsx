@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { List } from 'immutable'
+import { Box, Flex } from 'theme-ui'
 
 import { useData } from 'components/Data'
 import {
@@ -8,32 +9,18 @@ import {
 } from 'components/Crossfilter'
 import Layout from 'components/Layout'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
-import SEO from 'components/SEO'
 import Sidebar, { SidebarHeader } from 'components/Sidebar'
 import EstuaryDetails from 'components/EstuaryDetails'
-import { Box, Flex } from 'components/Grid'
 import FiltersList from 'components/FiltersList'
-import styled, { themeGet } from 'util/style'
 import { PNWBounds } from '../../config/constants'
 import { filters } from '../../config/filters'
-
-const Wrapper = styled(Flex)`
-  height: 100%;
-`
-
-
-const Help = styled(ExpandableParagraph)`
-  font-size: 0.8rem;
-  margin: 0 1rem 1rem;
-  color: ${themeGet('colors.grey.700')};
-`
 
 const Compare = () => {
   const [data, index] = useData()
   const [selectedId, setSelectedId] = useState(null)
   const [bounds, setBounds] = useState(List(PNWBounds))
 
-  const handleSelect = id => {
+  const handleSelect = (id) => {
     console.log('onSelect', id)
     setSelectedId(id)
   }
@@ -48,9 +35,8 @@ const Compare = () => {
 
   return (
     <CrossfilterProvider data={data} filters={filters}>
-      <Layout>
-        <SEO title="Compare" />
-        <Wrapper>
+      <Layout title="Compare">
+        <Flex sx={{ height: '100%' }}>
           <Sidebar allowScroll={false}>
             {selectedId !== null ? (
               <EstuaryDetails
@@ -61,8 +47,15 @@ const Compare = () => {
             ) : (
               <>
                 <Box flex={0}>
-                  <SidebarHeader icon="slidersH" title="Compare Estuaries" />
-                  <Help snippet="Use the filters below to select estuaries that meet your criteria within the map...">
+                  <SidebarHeader icon="compare" title="Compare Estuaries" />
+                  <ExpandableParagraph
+                    snippet="Use the filters below to select estuaries that meet your criteria within the map..."
+                    sx={{
+                      fontSize: '0.8rem',
+                      m: '0 1rem 1rem',
+                      color: 'grey.700',
+                    }}
+                  >
                     Use the filters below to select estuaries that meet your
                     criteria within the map. The filter bars show you how many
                     estuaries visible in the map meet each criterion. You can
@@ -79,7 +72,7 @@ const Compare = () => {
                     <br />
                     Click on an estuary in the map for more detailed information
                     about it.
-                  </Help>
+                  </ExpandableParagraph>
                 </Box>
                 <FiltersList />
               </>
@@ -91,7 +84,7 @@ const Compare = () => {
             selectedFeature={selectedId}
             onSelectFeature={handleSelect}
           />
-        </Wrapper>
+        </Flex>
       </Layout>
     </CrossfilterProvider>
   )

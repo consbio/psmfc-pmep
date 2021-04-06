@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { ThemeProvider, theme } from 'util/style'
+import { Box, Flex } from 'theme-ui'
 
-import { Flex } from 'components/Grid'
+import SEO from 'components/SEO'
 import { isUnsupported } from 'util/dom'
 import UnsupportedBrowser from './UnsupportedBrowser'
 
@@ -11,27 +11,30 @@ import Footer from './Footer'
 
 import config from '../../../config/meta'
 
-const Wrapper = styled(Flex).attrs({ flexDirection: 'column' })`
-  height: 100%;
-`
+const Layout = ({ title, children }) => (
+  <Flex sx={{ height: '100%', flexDirection: 'column' }}>
+    <SEO title={title} />
 
-const Content = styled.div`
-  flex: 1 1 auto;
-  overflow-y: auto;
-`
+    <Header siteTitle={config.siteTitle} />
 
-const Layout = ({ children }) => (
-  <ThemeProvider theme={theme}>
-    <Wrapper>
-      <Header siteTitle={config.siteTitle} />
-      {isUnsupported ? <UnsupportedBrowser /> : <Content>{children}</Content>}
-      <Footer />
-    </Wrapper>
-  </ThemeProvider>
+    {isUnsupported ? (
+      <UnsupportedBrowser />
+    ) : (
+      <Box sx={{ height: '100%', flex: '1 1 auto', overflowY: 'auto' }}>
+        {children}
+      </Box>
+    )}
+    <Footer />
+  </Flex>
 )
 
 Layout.propTypes = {
+  title: PropTypes.string,
   children: PropTypes.node.isRequired,
+}
+
+Layout.defaultProps = {
+  title: config.siteTitle,
 }
 
 export default Layout

@@ -1,87 +1,68 @@
 import React from 'react'
+import { Box, Grid, Container, Heading, Image } from 'theme-ui'
 
-import { Box, Flex } from 'components/Grid'
-import { Link } from 'components/Link'
-import styled, { themeGet } from 'util/style'
+import { Link, OutboundLink } from 'components/Link'
 import CompareImg from 'images/compare.jpg'
 import ExploreImg from 'images/explore.jpg'
-import { Section, Title } from './styles'
-
-const Columns = styled(Flex).attrs({
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-})``
-
-const Column = styled(Box).attrs({
-  width: ['100%', '100%', '48%'],
-})``
-
-const Screenshot = styled.img`
-  border: 1px solid ${themeGet('colors.grey.200')};
-  box-shadow: 1px 1px 3px ${themeGet('colors.grey.500')};
-  margin: 1rem;
-`
 
 const About = () => (
-  <Section>
-    <Title>The West Coast Estuaries Explorer</Title>
-    <Columns>
-      <Column>
-        <p>
-          This application enables you to&nbsp;
-          <Link to="/compare">compare</Link>&nbsp; estuaries to each other along
-          the coastlines of Washington, Oregon, and California. You can combine
-          dynamic filters and an interactive map to find specific estuary types
-          you are interested in, such as large river delta estuaries which often
-          have extensive diking; small, riverine estuaries that are at the
-          lowest risk to fish habitat degradation; or estuaries contain species
-          that interest you. Only want to compare estuaries in a specific area?
-          Simply zoom the map in to that area, and the filters automatically
-          update to show you the number of estuaries in that area that meet
-          different conditions.
-        </p>
-      </Column>
-      <Column>
-        <Screenshot src={CompareImg} alt="Compare screenshot" />
-      </Column>
-    </Columns>
+  <Container
+    sx={{
+      py: '3rem',
+      px: '1.5rem',
+    }}
+  >
+    <Heading as="h2" sx={{}}>
+      The West Coast Estuaries Explorer
+    </Heading>
 
-    <Columns>
-      <Column>
-        <p>
-          You can also&nbsp;
-          <Link to="/explore">explore</Link>
-          &nbsp;estuaries in more detail to find a specific estuary by name or
-          location.
-          <br />
-          <br />
-          Click on an estuary in the map for more detailed information.
-          <br />
-          <br />
-          Estuary data were provided by the&nbsp;
-          <a
-            href="http://www.pacificfishhabitat.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Pacific Marine & Estuarine Fish Habitat Partnership
-          </a>
-          &nbsp;and the&nbsp;
-          <a
-            href="http://assessment.fishhabitat.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            National Fish Habitat Partnership
-          </a>
-          .
-        </p>
-      </Column>
-      <Column>
-        <Screenshot src={ExploreImg} alt="Explore screenshot" />
-      </Column>
-    </Columns>
-  </Section>
+    <Grid gap={4} columns={[1, 1, 2]}>
+      <Box as="p">
+        This application enables you to&nbsp;
+        <Link to="/compare">compare</Link>&nbsp; estuaries to each other along
+        the coastlines of Washington, Oregon, and California. You can combine
+        dynamic filters and an interactive map to find specific estuary types
+        you are interested in, such as large river delta estuaries which often
+        have extensive diking; small, riverine estuaries that are at the lowest
+        risk to fish habitat degradation; or estuaries contain species that
+        interest you. Only want to compare estuaries in a specific area? Simply
+        zoom the map in to that area, and the filters automatically update to
+        show you the number of estuaries in that area that meet different
+        conditions.
+      </Box>
+      <Image
+        src={CompareImg}
+        alt="Compare screenshot"
+        variant="images.screenshot"
+      />
+
+      <Box as="p">
+        You can also&nbsp;
+        <Link to="/explore">explore</Link>
+        &nbsp;estuaries in more detail to find a specific estuary by name or
+        location.
+        <br />
+        <br />
+        Click on an estuary in the map for more detailed information.
+        <br />
+        <br />
+        Estuary data were provided by the&nbsp;
+        <OutboundLink to="http://www.pacificfishhabitat.org/">
+          Pacific Marine & Estuarine Fish Habitat Partnership
+        </OutboundLink>
+        &nbsp;and the&nbsp;
+        <OutboundLink to="http://assessment.fishhabitat.org/">
+          National Fish Habitat Partnership
+        </OutboundLink>
+        .
+      </Box>
+      <Image
+        src={ExploreImg}
+        alt="Explore screenshot"
+        variant="images.screenshot"
+      />
+    </Grid>
+  </Container>
 )
 
 export default About

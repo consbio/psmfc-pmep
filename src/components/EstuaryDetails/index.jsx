@@ -1,14 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
-import { FaRegTimesCircle } from 'react-icons/fa'
+import { Box, Flex, Heading, Image, Text, Button } from 'theme-ui'
+import { TimesCircle } from '@emotion-icons/fa-regular'
 
-import { Button } from 'components/Button'
-import { Columns, Column } from 'components/Grid'
+// import { Button } from 'components/Button'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
-import Tabs, { Tab as BaseTab } from 'components/Tabs'
+import Tabs, { Tab } from 'components/Tabs'
 import { OutboundLink } from 'components/Link'
-import styled, { themeGet } from 'util/style'
 import { formatNumber } from 'util/format'
 
 import SpeciesList from './SpeciesList'
@@ -18,80 +16,9 @@ import NFHP from './NFHP'
 import EstuaryType from './EstuaryType'
 import { stateNames, estuaryTypes } from '../../../config/constants'
 
-const Header = styled.div`
-  padding: 0.5rem 1rem;
-  background-color: ${themeGet('colors.primary.100')};
-  border-bottom: 1px solid ${themeGet('colors.grey.200')};
-  line-height: 1.2;
-`
-
-const Title = styled(Text).attrs({
-  fontSize: ['1rem', '1rem', '1.5rem'],
-})``
-
-const Subtitle = styled(Text).attrs({
-  fontSize: ['0.8rem', '0.8rem', '1rem'],
-})``
-
-const BackIcon = styled(FaRegTimesCircle).attrs({ size: '1.5rem' })`
-  height: 1.5rem;
-  width: 1.5rem;
-  cursor: pointer;
-  color: ${themeGet('colors.grey.600')};
-  &:hover {
-    color: ${themeGet('colors.grey.900')};
-  }
-`
-
-const Image = styled.img`
-  margin: 0;
-`
-
-const ImageCredits = styled.div`
-  font-size: 0.7rem;
-  color: ${themeGet('colors.grey.500')};
-`
-
-const Acres = styled(Text).attrs({ textAlign: 'right' })`
-  color: ${themeGet('colors.grey.700')};
-  font-size: 0.8rem;
-`
-
-const ZoomButton = styled(Button)`
-  font-size: 0.8rem;
-  margin-bottom: 1rem;
-  padding: 0.1rem 0.5rem;
-`
-
-const TabHeader = styled.div`
-  font-size: 1.25rem;
-`
-const Value = styled.div`
-  padding-left: 1rem;
-  color: ${themeGet('colors.grey.900')};
-`
-
-const Section = styled.section`
-  &:not(:first-child) {
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
-    border-top: 1px solid ${themeGet('colors.grey.200')};
-  }
-`
-
-const TabContainer = styled(Tabs)`
-  height: 100%;
-`
-
-const Tab = styled(BaseTab)`
-  padding: 1rem;
-  overflow-y: auto;
-  flex: 1 1 auto;
-`
-
-const getImage = id =>
+const getImage = (id) =>
   /* eslint-disable-next-line */
-  require(`images/aerial/${id}.jpg`)
+  require(`images/aerial/${id}.jpg`).default
 
 const EstuaryDetails = ({
   id,
@@ -124,42 +51,74 @@ const EstuaryDetails = ({
 
   return (
     <>
-      <Header>
-        <Columns>
-          <Column flex={1}>
-            <Title>{name}</Title>
-          </Column>
-          <Column flex={0}>
-            <BackIcon onClick={onBack} />
-          </Column>
-        </Columns>
-        <Subtitle width="100%">
-          <Columns>
-            <Column>{stateNames[state]}</Column>
-            <Column>
-              <Acres>{formatNumber(acres, 0)} acres</Acres>
-            </Column>
-          </Columns>
-        </Subtitle>
-      </Header>
+      <Box
+        sx={{
+          py: '0.5rem',
+          px: '1rem',
+          bg: 'primary.100',
+          borderBottom: '1px solid',
+          borderBottomColor: 'grey.200',
+          lineHeight: 1.2,
+        }}
+      >
+        <Flex
+          sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}
+        >
+          <Box sx={{ flex: '1 1 auto', fontSize: ['1rem', '1rem', '1.5rem'] }}>
+            {name}
+          </Box>
 
-      <TabContainer>
+          <Box
+            onClick={onBack}
+            sx={{
+              flex: '0 0 auto',
+              cursor: 'pointer',
+              color: 'grey.600',
+              '&:hover': {
+                color: 'grey.900',
+              },
+            }}
+          >
+            <TimesCircle size="1.5rem" />
+          </Box>
+        </Flex>
+        <Flex
+          sx={{
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            fontSize: ['0.8rem', '0.8rem', '1rem'],
+          }}
+        >
+          <Box>{stateNames[state]}</Box>
+          <Box
+            sx={{ textAlign: 'right', color: 'grey.700', fontSize: '0.8rem' }}
+          >
+            {formatNumber(acres, 0)} acres
+          </Box>
+        </Flex>
+      </Box>
+
+      <Tabs>
         <Tab id="overview" label="Overview">
           {showZoom && (
-            <Text textAlign="center">
-              <ZoomButton primary onClick={handleZoom}>
+            <Flex sx={{ justifyContent: 'center', mb: '1rem' }}>
+              <Button
+                variant="primary"
+                onClick={handleZoom}
+                sx={{ fontSize: '0.8rem', py: '0.1rem', px: '0.5rem' }}
+              >
                 Zoom To Estuary
-              </ZoomButton>
-            </Text>
+              </Button>
+            </Flex>
           )}
 
           {imageURL !== null && (
-            <Section>
+            <Box variant="layout.block">
               <OutboundLink from="/" to={imageURL}>
                 <Image src={getImage(id)} />
               </OutboundLink>
               {imageCredits && (
-                <ImageCredits>
+                <Box sx={{ fontSize: '0.7rem', color: 'grey.700' }}>
                   Photo:{' '}
                   {imageCredits.url ? (
                     <OutboundLink from="/" to={imageCredits.url}>
@@ -168,65 +127,73 @@ const EstuaryDetails = ({
                   ) : (
                     imageCredits.credits
                   )}
-                </ImageCredits>
+                </Box>
               )}
-            </Section>
+            </Box>
           )}
 
-          <Section>
-            <TabHeader>Estuary Type:</TabHeader>
-            <Value>
+          <Box variant="layout.block">
+            <Heading as="h4">Estuary Type:</Heading>
+            <Box sx={{ ml: '1rem', color: 'grey.900' }}>
               {estuaryTypes[type].label}
               <br />
               <br />
-              <ExpandableParagraph snippet={estuaryTypes[type].snippet}>
-                <EstuaryType type={type} />
-              </ExpandableParagraph>
-            </Value>
-          </Section>
+              <Text variant="help">
+                <ExpandableParagraph snippet={estuaryTypes[type].snippet}>
+                  <EstuaryType type={type} />
+                </ExpandableParagraph>
+              </Text>
+            </Box>
+          </Box>
 
-          <Section>
-            <TabHeader>Region:</TabHeader>
-            <Value>{region}</Value>
-          </Section>
+          <Box variant="layout.block">
+            <Heading as="h4">Region:</Heading>
+            <Box sx={{ ml: '1rem', color: 'grey.900' }}>{region}</Box>
+          </Box>
 
-          <Section>
-            <TabHeader>Focal species:</TabHeader>
-            <Value>
+          <Box variant="layout.block">
+            <Heading as="h4">Focal species:</Heading>
+            <Box sx={{ ml: '1rem', color: 'grey.900' }}>
               {countSpecies || 'No'} focal species are found in this estuary.
-            </Value>
-          </Section>
+            </Box>
+          </Box>
 
-          <Section>
-            <TabHeader>Biotic habitats:</TabHeader>
-            <Value>
+          <Box variant="layout.block">
+            <Heading as="h4">Biotic habitats:</Heading>
+            <Box sx={{ ml: '1rem', color: 'grey.900' }}>
               {countBiotic || 'No'} biotic habitats{' '}
               {countBiotic && `(${formatNumber(areaBiotic)} acres)`} have been
               mapped in this estuary.
-            </Value>
-          </Section>
-          <br />
+            </Box>
+          </Box>
         </Tab>
+
         <Tab id="species" label="Species">
-          <TabHeader>Focal species present:</TabHeader>
+          <Heading as="h4">Focal species present:</Heading>
           <SpeciesList species={species} status={SoKJoin} />
         </Tab>
+
         <Tab id="habitats" label="Habitats">
-          <TabHeader>Biotic habitats:</TabHeader>
+          <Heading as="h4">Biotic habitats:</Heading>
           <BioticList biotic={biotic} />
         </Tab>
-        <Tab id="threats" label="Threats">
-          <Section>
-            <TabHeader>Tidal wetland loss:</TabHeader>
-            <TidalWetlandLoss area={twAcres} lost={twlAcres} restored={twrAcres} />
-          </Section>
 
-          <Section>
-            <TabHeader>Risk of fish habitat degradation:</TabHeader>
+        <Tab id="threats" label="Threats">
+          <Box variant="layout.block">
+            <Heading as="h4">Tidal wetland loss:</Heading>
+            <TidalWetlandLoss
+              area={twAcres}
+              lost={twlAcres}
+              restored={twrAcres}
+            />
+          </Box>
+
+          <Box variant="layout.block">
+            <Heading as="h4">Risk of fish habitat degradation:</Heading>
             <NFHP level={nfhp2015} status={NFHPJoin} />
-          </Section>
+          </Box>
         </Tab>
-      </TabContainer>
+      </Tabs>
     </>
   )
 }

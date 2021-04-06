@@ -1,28 +1,25 @@
-import React, { useState, memo } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
+import { Flex } from 'theme-ui'
 
-import { Flex } from 'components/Grid'
-import styled, { themeGet } from 'util/style'
 import Button from './Button'
 
-const Wrapper = styled(Flex).attrs({
-  alignItem: 'center',
-  justifyContent: 'space-between',
-  flex: 0,
-})`
-  /* border-top: 1px solid ${themeGet('colors.grey.200')}; */
-  background-color: ${themeGet('colors.grey.100')};
-`
-
 const TabBar = ({ tabs, activeTab, onChange }) => {
-  const handleClick = id => {
+  const handleClick = (id) => {
     if (id !== activeTab) {
       onChange(id)
     }
   }
   return (
-    <Wrapper>
-      {tabs.map(tab => (
+    <Flex
+      sx={{
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flex: '0 0 auto',
+        bg: 'grey.100',
+      }}
+    >
+      {tabs.map((tab) => (
         <Button
           key={tab.id}
           active={activeTab === tab.id}
@@ -30,7 +27,7 @@ const TabBar = ({ tabs, activeTab, onChange }) => {
           {...tab}
         />
       ))}
-    </Wrapper>
+    </Flex>
   )
 }
 

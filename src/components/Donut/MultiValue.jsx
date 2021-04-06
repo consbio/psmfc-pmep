@@ -3,17 +3,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import styled, { theme } from 'util/style'
-
-const Circle = styled.circle`
-  fill: transparent;
-  transition: stroke-dasharray 0.5s;
-`
+import theme from 'theme'
 
 const calculateRotation = (halfsize, offset) =>
   `rotate(${(offset / 100) * 360 - 90} ${halfsize},${halfsize})`
 
-const Donut = ({ entries, backgroundColor, size, donutWidth, ...props }) => {
+const Donut = ({ entries, backgroundColor, size, donutWidth }) => {
   const halfsize = size * 0.5
   const radius = halfsize - donutWidth * 0.5
   const circumference = 2 * Math.PI * radius
@@ -24,17 +19,21 @@ const Donut = ({ entries, backgroundColor, size, donutWidth, ...props }) => {
   )
 
   return (
-    <svg width={`${size}px`} height={`${size}px`} {...props}>
-      <Circle
+    <svg width={`${size}px`} height={`${size}px`}>
+      <circle
         r={radius}
         cx={halfsize}
         cy={halfsize}
         stroke={backgroundColor}
         strokeWidth={donutWidth}
+        style={{
+          fill: 'transparent',
+          transition: 'stroke-dasharray 0.5s',
+        }}
       />
 
       {entries.map(({ percent, color }, i) => (
-        <Circle
+        <circle
           key={`${color}-${offsets[i]}`}
           r={radius}
           cx={halfsize}
@@ -42,8 +41,13 @@ const Donut = ({ entries, backgroundColor, size, donutWidth, ...props }) => {
           transform={calculateRotation(halfsize, offsets[i])}
           stroke={color}
           strokeWidth={donutWidth}
-          strokeDasharray={`${(percent * circumference) /
-            100} ${circumference}`}
+          strokeDasharray={`${
+            (percent * circumference) / 100
+          } ${circumference}`}
+          style={{
+            fill: 'transparent',
+            transition: 'stroke-dasharray 0.5s',
+          }}
         />
       ))}
     </svg>

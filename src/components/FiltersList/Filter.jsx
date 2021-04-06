@@ -1,67 +1,14 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Map, Set } from 'immutable'
-import { FaRegTimesCircle, FaCaretDown, FaCaretRight } from 'react-icons/fa'
+import { Flex, Box, Text } from 'theme-ui'
+import { TimesCircle } from '@emotion-icons/fa-regular'
+import { CaretDown, CaretRight } from '@emotion-icons/fa-solid'
 
-import HelpText from 'components/elements/HelpText'
 import { OutboundLink } from 'components/Link'
 import { Context as Crossfilter, SET_FILTER } from 'components/Crossfilter'
-import { Flex } from 'components/Grid'
 
-import styled, { theme, themeGet } from 'util/style'
 import Bar from './Bar'
-
-const Wrapper = styled.div`
-  padding-top: 0.25rem;
-
-  &:not(:first-child) {
-    border-top: 1px solid ${themeGet('colors.grey.200')};
-  }
-`
-
-const Header = styled(Flex).attrs({
-  justifyContent: 'space-between',
-})``
-
-const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
-  cursor: pointer;
-`
-
-const ResetIcon = styled(FaRegTimesCircle).attrs({
-  size: '1rem',
-})`
-  width: 1rem;
-  height: 1rem;
-  margin-left: 1rem;
-  visibility: ${({ visible }) => visible};
-  cursor: pointer;
-  color: ${themeGet('colors.highlight.500')};
-`
-
-const expandoColor = theme.colors.grey[800]
-const expandoSize = '1.5rem'
-
-const CaretDown = styled(FaCaretDown).attrs({
-  color: expandoColor,
-  size: expandoSize,
-})`
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.25rem;
-`
-
-const CaretRight = styled(FaCaretRight).attrs({
-  color: expandoColor,
-  size: expandoSize,
-})`
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.25rem;
-`
-
-const Bars = styled.div`
-  padding: 0.5rem 0 0 1rem;
-`
 
 const Filter = ({
   field,
@@ -80,10 +27,10 @@ const Filter = ({
   const total = state.get('total')
 
   const toggle = () => {
-    setIsOpen(prev => !prev)
+    setIsOpen((prev) => !prev)
   }
 
-  const handleFilterClick = value => {
+  const handleFilterClick = (value) => {
     dispatch({
       type: SET_FILTER,
       payload: {
@@ -105,23 +52,44 @@ const Filter = ({
     })
   }
 
+  const Caret = isOpen ? CaretDown : CaretRight
+
   return (
-    <Wrapper>
-      <Header>
-        <Title onClick={toggle}>
-          {isOpen ? <CaretDown /> : <CaretRight />}
-          <div>{title}</div>
-        </Title>
-        {
-          <ResetIcon
-            onClick={handleReset}
-            visible={filterValues.size > 0 ? 'visible' : 'hidden'}
-          />
-        }
-      </Header>
+    <Box
+      sx={{
+        pt: '0.5rem',
+        '&:not(:first-of-type)': {
+          mt: '0.5rem',
+          borderTop: '1px solid',
+          borderTopColor: 'grey.200',
+        },
+      }}
+    >
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        <Flex
+          onClick={toggle}
+          sx={{ cursor: 'pointer', flex: '1 1 auto', alignItems: 'center' }}
+        >
+          <Box sx={{ color: 'grey.800', mr: '0.25rem' }}>
+            <Caret size="1em" />
+          </Box>
+          <Text>{title}</Text>
+        </Flex>
+        <Box
+          sx={{
+            color: 'highlight.500',
+            cursor: 'pointer',
+          }}
+          style={{ visibility: filterValues.size > 0 ? 'visible' : 'hidden' }}
+          onClick={handleReset}
+          title="reset filter"
+        >
+          <TimesCircle size="1em" />
+        </Box>
+      </Flex>
 
       {isOpen && (
-        <Bars>
+        <Box sx={{ m: '0.5rem 0 0 1rem' }}>
           {values.map((value, idx) => (
             <Bar
               key={value}
@@ -135,7 +103,7 @@ const Filter = ({
           ))}
 
           {description && (
-            <HelpText fontSize="smaller" mb="1rem">
+            <Text variant="help" sx={{ mb: '1rem' }}>
               {description}
               {moreInfoURL && (
                 <>
@@ -145,11 +113,11 @@ const Filter = ({
                   </OutboundLink>
                 </>
               )}
-            </HelpText>
+            </Text>
           )}
-        </Bars>
+        </Box>
       )}
-    </Wrapper>
+    </Box>
   )
 }
 

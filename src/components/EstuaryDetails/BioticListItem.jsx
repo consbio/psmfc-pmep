@@ -1,92 +1,69 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FaCaretDown, FaCaretRight } from 'react-icons/fa'
+import { Box, Flex, Text } from 'theme-ui'
+import { CaretDown, CaretRight } from '@emotion-icons/fa-solid'
 
 import { OutboundLink } from 'components/Link'
-import { Flex } from 'components/Grid'
-import HelpText from 'components/elements/HelpText'
-import styled, { themeGet, theme } from 'util/style'
 import { formatNumber } from 'util/format'
 import { bioticInfo } from '../../../config/constants'
 
-const Wrapper = styled.div`
-  margin-bottom: 1rem;
-`
-
-const Header = styled(Flex).attrs({
-  justifyContent: 'space-between',
-})`
-  cursor: pointer;
-`
-
-const Title = styled(Flex).attrs({ alignItems: 'center', flex: 1 })`
-  cursor: pointer;
-`
-
-const Bar = styled.div`
-  background-color: ${({ color }) => color};
-  width: ${({ width }) => width * 100}%;
-  height: 1.25rem;
-  line-height: 1;
-  border-radius: 0 0.5rem 0.5rem 0;
-  padding: 0.25rem 1rem 0;
-  margin-bottom: 0.5rem;
-  box-sizing: border-box;
-  cursor: pointer;
-`
-
-const Acres = styled.div`
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-  color: ${themeGet('colors.grey.700')};
-  text-align: right;
-`
-
-const Content = styled.div`
-  margin-left: 1.5rem;
-`
-
-const expandoColor = theme.colors.grey[800]
-const expandoSize = '1.5rem'
-
-const CaretDown = styled(FaCaretDown).attrs({
-  color: expandoColor,
-  size: expandoSize,
-})`
-  width: ${expandoSize};
-  height: ${expandoSize};
-`
-
-const CaretRight = styled(FaCaretRight).attrs({
-  color: expandoColor,
-  size: expandoSize,
-})`
-  width: ${expandoSize};
-  height: ${expandoSize};
-`
-
 const BioticListItem = ({ type, acres, maxAcres }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const toggle = () => setIsOpen(prevIsOpen => !prevIsOpen)
+  const toggle = () => setIsOpen((prevIsOpen) => !prevIsOpen)
 
   const { label, color, description, link } = bioticInfo[type]
-  const position = acres / maxAcres
+  const position = (100 * acres) / maxAcres
+
+  const Caret = isOpen ? CaretDown : CaretRight
 
   return (
-    <Wrapper>
-      <Header onClick={toggle}>
-        <Title>
-          {isOpen ? <CaretDown /> : <CaretRight />}
-          <div>{label}</div>
-        </Title>
-        <Acres>{formatNumber(acres)} acres</Acres>
-      </Header>
-      <Content>
+    <Box
+      sx={{
+        '&:not(:first-of-type)': {
+          mt: '1rem',
+        },
+      }}
+    >
+      <Flex
+        onClick={toggle}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'baseline',
+          cursor: 'pointer',
+        }}
+      >
+        <Flex sx={{ alignItems: 'center', mr: '0.5rem' }}>
+          <Box sx={{ color: 'grey.800', flex: '0 0 auto' }}>
+            <Caret size="1.5rem" />
+          </Box>
+          <Text sx={{ flex: '1 1 auto' }}>{label}</Text>
+        </Flex>
+        <Text
+          sx={{ fontSize: '0.8rem', color: 'grey.700', textAlign: 'right' }}
+        >
+          {formatNumber(acres)} acres
+        </Text>
+      </Flex>
+
+      <Box sx={{ ml: '1.5rem' }}>
         {position > 0 && (
-          <Bar color={color} width={position} onClick={toggle} />
+          <Box
+            onClick={toggle}
+            sx={{
+              bg: color,
+              width: `${position}%`,
+              height: '0.75rem',
+              lineHeight: 1,
+              borderRadius: '0 0.5rem 0.5rem 0',
+              pt: '0.25rem',
+              px: '1rem',
+              mb: '0.5rem',
+              cursor: 'pointer',
+            }}
+          />
         )}
         {isOpen && (
-          <HelpText>
+          <Text variant="help">
             {description}
 
             {link && (
@@ -97,10 +74,10 @@ const BioticListItem = ({ type, acres, maxAcres }) => {
                 </OutboundLink>
               </>
             )}
-          </HelpText>
+          </Text>
         )}
-      </Content>
-    </Wrapper>
+      </Box>
+    </Box>
   )
 }
 

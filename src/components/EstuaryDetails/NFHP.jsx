@@ -1,14 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Text } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import BaseHelpText from 'components/elements/HelpText'
-import styled from 'util/style'
 import ThreatChart from './ThreatChart'
-
-const HelpText = styled(BaseHelpText)`
-  font-size: 0.8rem;
-`
 
 const NFHPLink = () => (
   <OutboundLink
@@ -30,31 +25,31 @@ const NFHP = ({ level, status }) => {
   switch (status) {
     case 1: {
       StatusNote = (
-        <HelpText>
+        <Text variant="help">
           This estuary was assessed as part of the <NFHPLink />. {NFHAPAbout}
-        </HelpText>
+        </Text>
       )
       break
     }
     case 2: {
       StatusNote = (
-        <HelpText>
+        <Text variant="help">
           This estuary was assessed as part of a larger estuary system or
           sub-basin within the <NFHPLink />. {NFHAPAbout}
           <br />
           <br />
           Note: this assessment may not accurately represent this specific
           estuary.
-        </HelpText>
+        </Text>
       )
       break
     }
     default: // status === 3 or status === 999
     {
       StatusNote = (
-        <HelpText>
+        <Text variant="help">
           This estuary was not assessed as part of the <NFHPLink />.
-        </HelpText>
+        </Text>
       )
       break
     }
@@ -62,9 +57,9 @@ const NFHP = ({ level, status }) => {
 
   if (level === 5) {
     StatusNote = (
-      <HelpText>
+      <Text variant="help">
         This estuary was not assessed as part of the <NFHPLink />.
-      </HelpText>
+      </Text>
     )
   }
 

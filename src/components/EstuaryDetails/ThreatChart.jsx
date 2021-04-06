@@ -1,122 +1,108 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { css } from 'styled-components'
+import { Flex, Box } from 'theme-ui'
 
-import { Box, Flex } from 'components/Grid'
-import styled, { theme, themeGet } from 'util/style'
 import { nfhpCodes, nfhpLabels, nfhpColors } from '../../../config/constants'
 
-const Wrapper = styled(Box).attrs({ mx: [0, 0, '1rem'], my: '1rem' })``
-
-const Header = styled.div`
-  padding: 0.5em 1em;
-  border-radius: 0.5em;
-  margin-bottom: 1em;
-
-  text-align: center;
-  letter-spacing: 0.05em;
-  font-weight: bold;
-  color: ${({ level }) => (level < 3 ? '#FFF' : themeGet('colors.black'))};
-  background-color: ${({ level }) => nfhpColors[level]};
-`
-
-const Labels = styled(Flex)`
-  margin-top: 0.25em;
-  font-size: 0.7em;
-  color: ${themeGet('colors.grey.700')};
-`
-
-const ItemContainer = styled(Flex)`
-  margin: 0 0.5em;
-`
-
-const borderColor = theme.colors.primary[900]
-
-const borderRadius = (isLower, isUpper) => {
-  if (!(isLower || isUpper)) return '0'
-
-  if (isLower && isUpper) {
-    return '0.5em'
-  }
-  return isLower ? '0.5em 0 0 0.5em' : '0 0.5em 0.5em 0'
+const lowerBoundCSS = {
+  borderLeft: '4px solid',
+  borderLeftColor: 'primary.900',
+  ml: '-4px',
+  zIndex: 10,
 }
 
-const Level = styled.div`
-    flex: 1 0 auto;
-    height: ${({ isActive }) => (isActive ? '2rem' : '1.5em')};
-    background-color: ${({ color }) => color};
-    border-radius: ${({ isLower, isUpper }) => borderRadius(isLower, isUpper)};
-    z-index: ${({ isLower, isUpper }) => (isLower || isUpper ? 10 : 0)};
+const upperBoundCSS = {
+  borderRight: '4px solid',
+  borderRightColor: 'primary.900',
+  mr: '-4px',
+  position: 'relative',
+  zIndex: 10,
+  '&:after, &:before': {
+    content: '" "',
+    position: 'absolute',
+    bottom: '100%',
+    left: '50%',
+    border: '16px solid transparent',
+    borderBottomColor: 'primary.900',
+    height: 0,
+    width: 0,
+    ml: '-16px',
+    pointerEvents: 'none',
+  },
+}
 
-    ${({ isLower }) =>
-      isLower &&
-      css`
-        border-left: 4px solid ${borderColor}};
-        margin-left: -4px;
-      `}
-
-    ${({ isUpper }) =>
-      isUpper &&
-      css`
-        border-right: 4px solid ${borderColor}};
-        margin-right: -4px;
-        position: relative;
-
-        &:after,
-        &:before {
-          bottom: 100%;
-          left: 50%;
-          border: solid transparent;
-          content: ' ';
-          height: 0;
-          width: 0;
-          position: absolute;
-          pointer-events: none;
-        }
-
-        &:after {
-          border-color: transparent;
-          border-bottom-color: ${borderColor};
-          border-width: 16px;
-          margin-left: -16px;
-        }
-        &:before {
-          border-color: transparent;
-          border-bottom-color: ${borderColor};
-          border-width: 16px;
-          margin-left: -16px;
-        }
-      `}
-
-    ${({ isActive }) =>
-      isActive &&
-      css`
-        border-top: 4px solid ${borderColor};
-        border-bottom: 4px solid ${borderColor};
-      `}
-`
+const activeCSS = {
+  borderTop: '4px solid',
+  borderTopColor: 'primary.900',
+  borderBottom: '4px solid',
+  borderBottomColor: 'primary.900',
+  borderRadius: '0.5rem',
+  height: '2rem',
+}
 
 const levels = nfhpCodes.slice(0, nfhpCodes.length - 1).reverse()
 
+const getTextColor = (level) => {
+  switch (level) {
+    case 0:
+    case 1:
+    case 4: {
+      return '#FFF'
+    }
+    default: {
+      return 'text'
+    }
+  }
+}
+
 const ThreatChart = ({ level }) => (
-  <Wrapper>
-    <Header level={level}>{nfhpLabels[level]}</Header>
-    <ItemContainer alignItems="center">
-      {levels.map(l => (
-        <Level
+  <Box sx={{ mx: [0, 0, '1rem'], my: '1rem' }}>
+    <Box
+      level={level}
+      sx={{
+        py: '0.5rem',
+        px: '1rem',
+        borderRadius: '0.5rem',
+        mb: '1rem',
+        textAlign: 'center',
+        letterSpacing: '0.05em',
+        fontWeight: 'bold',
+        color: getTextColor(level),
+        bg: nfhpColors[level],
+      }}
+    >
+      {nfhpLabels[level]}
+    </Box>
+
+    <Flex sx={{ alignItems: 'center', mx: '0.5rem' }}>
+      {levels.map((l) => (
+        <Box
           key={l}
-          color={nfhpColors[l]}
-          isActive={l >= level && l <= level}
-          isLower={l === level}
-          isUpper={l === level}
+          sx={{
+            flex: '1 0 auto',
+            height: '1.5rem',
+            bg: nfhpColors[l],
+            ...(l === level ? lowerBoundCSS : {}),
+            ...(l === level ? upperBoundCSS : {}),
+            ...(l >= level && l <= level ? activeCSS : {}),
+          }}
         />
       ))}
-    </ItemContainer>
-    <Labels justifyContent="space-between" alignItems="center">
+    </Flex>
+    <Flex
+      sx={{
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        color: 'grey.700',
+        fontSize: '0.7rem',
+        mt: '0.25rem',
+        mx: '0.5rem',
+      }}
+    >
       <div>lower threat</div>
       <div>higher threat</div>
-    </Labels>
-  </Wrapper>
+    </Flex>
+  </Box>
 )
 
 ThreatChart.propTypes = {

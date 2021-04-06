@@ -1,36 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Flex, Text } from 'theme-ui'
 
-import { Flex } from 'components/Grid'
 import { ToggleButton } from 'components/Button'
 
-import styled from 'util/style'
-
-const Wrapper = styled(Flex).attrs({ alignItems: 'center', p: '0.5rem' })`
-  position: absolute;
-  top: 0;
-  left: 10px;
-  z-index: 1000;
-  background: #fff;
-  border-radius: 0 0 0.25rem 0.25rem;
-  box-shadow: 1px 1px 8px #333;
-`
-
-const TopBarToggle = styled(ToggleButton)`
-  margin: 0 1rem;
-
-  button {
-    text-transform: lowercase;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
-  }
-`
-
 const LayerToggle = ({ value, options, onChange }) => (
-  <Wrapper>
-    Show:
-    <TopBarToggle value={value} options={options} onChange={onChange} />
-  </Wrapper>
+  <Flex
+    sx={{
+      alignItems: 'center',
+      p: '0.5rem',
+      position: 'absolute',
+      top: 0,
+      left: '10px',
+      zIndex: 1000,
+      bg: '#FFF',
+      borderRadius: '0 0 0.25rem 0.25rem',
+      boxShadow: '1px 1px 8px #333',
+    }}
+  >
+    <Text sx={{ mr: '0.5rem' }}>Show:</Text>
+    <ToggleButton
+      value={value}
+      options={options}
+      onChange={onChange}
+      sx={{
+        fontSize: '0.9rem',
+      }}
+    />
+  </Flex>
 )
 
 LayerToggle.propTypes = {
