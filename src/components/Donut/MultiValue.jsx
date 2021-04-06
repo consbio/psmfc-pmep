@@ -66,14 +66,12 @@ Donut.propTypes = {
 
   backgroundColor: PropTypes.string,
   size: PropTypes.number, // width of the chart
-  offset: PropTypes.number, // additional percentage to rotate the indicator (e.g., sum of percents of preceding charts in a series)
 }
 
 Donut.defaultProps = {
   donutWidth: 26,
   backgroundColor: theme.colors.grey[200],
   size: 200,
-  offset: 0,
 }
 
 export default Donut
