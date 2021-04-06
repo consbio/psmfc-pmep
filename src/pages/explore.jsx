@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { List } from 'immutable'
+import { Flex } from 'theme-ui'
 
 import { useData } from 'components/Data'
 import {
@@ -7,25 +8,13 @@ import {
   FilteredMap,
 } from 'components/Crossfilter'
 import Layout from 'components/Layout'
-import SEO from 'components/SEO'
-import { Flex } from 'components/Grid'
+
 import Sidebar, { SidebarHeader } from 'components/Sidebar'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
 import EstuariesList from 'components/EstuariesList'
 import EstuaryDetails from 'components/EstuaryDetails'
-import styled, { themeGet } from 'util/style'
 import { PNWBounds } from '../../config/constants'
 import { filters } from '../../config/filters'
-
-const Wrapper = styled(Flex)`
-  height: 100%;
-`
-
-const Help = styled(ExpandableParagraph)`
-  font-size: 0.8rem;
-  margin: 0 1rem 1rem;
-  color: ${themeGet('colors.grey.700')};
-`
 
 const Explore = () => {
   const [data, index] = useData()
@@ -54,9 +43,8 @@ const Explore = () => {
 
   return (
     <CrossfilterProvider data={data} filters={filters}>
-      <Layout>
-        <SEO title="Explore" />
-        <Wrapper>
+      <Layout title="Explore">
+        <Flex sx={{ height: '100%' }}>
           <Sidebar allowScroll={false}>
             {selectedId !== null ? (
               <EstuaryDetails
@@ -67,15 +55,20 @@ const Explore = () => {
             ) : (
               <>
                 <SidebarHeader title="Explore Estuaries" icon="explore" />
-                <Help
+                <ExpandableParagraph
                   snippet="Click on an estuary in the list below or in the map for more
                   detailed information..."
+                  sx={{
+                    fontSize: '0.8rem',
+                    m: '0 1rem 1rem',
+                    color: 'grey.700',
+                  }}
                 >
                   Click on an estuary in the list below or in the map for more
                   detailed information. Estuary boundaries will show on the map
                   when you have zoomed far enough in. This list only shows
                   estuaries visible in the map.
-                </Help>
+                </ExpandableParagraph>
                 <EstuariesList onSelect={handleSelectFromList} />
               </>
             )}
@@ -86,7 +79,7 @@ const Explore = () => {
             selectedFeature={selectedId}
             onSelectFeature={handleSelect}
           />
-        </Wrapper>
+        </Flex>
       </Layout>
     </CrossfilterProvider>
   )

@@ -1,11 +1,13 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Button } from 'theme-ui'
+import { darken } from '@theme-ui/color'
 
 const buttonGroupCSS = {
   button: {
     py: '0.25rem',
     px: '0.5rem',
+    textTransform: 'lowercase',
     '&:first-of-type': {
       borderRadius: '6px 0 0 6px',
     },
@@ -34,6 +36,7 @@ const ToggleButton = ({ value, options, onChange, sx }) => {
         {options.map(({ value: v, label }) => (
           <Button
             key={v}
+            variant="default"
             sx={{
               flex: '1 1 auto',
               color: 'grey.900',
@@ -53,15 +56,20 @@ const ToggleButton = ({ value, options, onChange, sx }) => {
       {options.map(({ value: v, label }) =>
         v === value ? (
           <Button
+            variant="default"
             key={v}
-            variant="primary"
-            sx={{ flex: '1 1 auto', outline: 'none' }}
+            sx={{
+              flex: '1 1 auto',
+              outline: 'none',
+              bg: 'primary.500',
+            }}
           >
             {label}
           </Button>
         ) : (
           <Button
             key={v}
+            variant="default"
             sx={{
               flex: '1 1 auto',
               color: 'grey.900',

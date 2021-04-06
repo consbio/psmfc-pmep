@@ -25,7 +25,6 @@ const LayerToggle = ({ value, options, onChange }) => (
       onChange={onChange}
       sx={{
         fontSize: '0.9rem',
-        textTransform: 'lowercase',
       }}
     />
   </Flex>

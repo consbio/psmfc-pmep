@@ -1,41 +1,47 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
+import { Box } from 'theme-ui'
 
-import styled, { themeGet } from 'util/style'
+const buttonCSS = {
+  cursor: 'pointer',
+  textAlign: 'center',
+  flex: '1 1 auto',
+  py: '0.25rem',
+  px: '0.5rem',
+  color: 'grey.700',
+  borderBottom: '1px solid',
+  borderBottomColor: 'grey.200',
+  '&:hover': {
+    bg: 'grey.200',
+  },
+}
 
-const InactiveButton = styled.div`
-  text-align: center;
-  cursor: pointer;
-  flex-grow: 1;
-  padding: 0.25rem 0.5rem;
-  color: ${themeGet('colors.grey.700')};
-  border-bottom: 1px solid ${themeGet('colors.grey.200')};
-  &:hover {
-    background-color: ${themeGet('colors.grey.200')};
-  }
-`
-
-const ActiveButton = styled(InactiveButton)`
-  font-weight: bold;
-  color: ${themeGet('colors.grey.900')};
-  border-bottom-color: transparent;
-  background-color: #fff !important;
-  &:not(:first-child) {
-    border-left: 1px solid ${themeGet('colors.grey.200')};
-  }
-  &:not(:last-child) {
-    border-right: 1px solid ${themeGet('colors.grey.200')};
-  }
-`
+const activeButtonCSS = {
+  ...buttonCSS,
+  fontWeight: 'bold',
+  color: 'grey.900',
+  borderBottomColor: 'transparent',
+  bg: '#FFF',
+  '&:not(:first-of-type)': {
+    borderLeft: '1px solid',
+    borderLeftColor: 'grey.200',
+  },
+  '&:not(:last-of-type)': {
+    borderRight: '1px solid',
+    borderRightColor: 'grey.200',
+  },
+}
 
 const Button = ({ id, label, active, onClick }) => {
   const handleClick = () => {
     onClick(id)
   }
   return active ? (
-    <ActiveButton>{label}</ActiveButton>
+    <Box sx={activeButtonCSS}>{label}</Box>
   ) : (
-    <InactiveButton onClick={handleClick}>{label}</InactiveButton>
+    <Box sx={buttonCSS} onClick={handleClick}>
+      {label}
+    </Box>
   )
 }
 

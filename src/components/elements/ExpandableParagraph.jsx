@@ -4,7 +4,7 @@ import { Box, Text } from 'theme-ui'
 
 const linkCSS = {
   display: 'inline-block',
-  color: 'primary.500',
+  color: 'link',
   cursor: 'pointer',
   '&:hover': {
     TextDecoration: 'underline',

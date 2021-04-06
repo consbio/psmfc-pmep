@@ -12,6 +12,7 @@ const Sidebar = ({ children, allowScroll }) => (
       width: ['100%', '350px', '470px'],
       flex: '0 0 auto',
       height: '100%',
+      borderRight: '1px solid',
       borderRightColor: 'grey.800',
     }}
   >

@@ -1,15 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Box, Flex, Text } from 'theme-ui'
 
 import { OutboundLink } from 'components/Link'
-import HelpText from 'components/elements/HelpText'
 import styled, { themeGet } from 'util/style'
 import { splitWords } from 'util/format'
 import { sppEOLIDs } from '../../../config/constants'
-
-const Header = styled(HelpText)`
-  margin-bottom: 2rem;
-`
 
 const List = styled.ul`
   line-height: 1.2;
@@ -50,9 +46,9 @@ const SpeciesList = ({ species: data, status }) => {
   // not inventoried
   if (status === 3) {
     return (
-      <HelpText>
+      <Text variant="help">
         This estuary was not inventoried for species in the <SoKLink />
-      </HelpText>
+      </Text>
     )
   }
 
@@ -70,16 +66,16 @@ const SpeciesList = ({ species: data, status }) => {
 
   if (status === 1) {
     statusNote = (
-      <HelpText>
+      <Text variant="help">
         This estuary was inventoried for species in the <SoKLink />
-      </HelpText>
+      </Text>
     )
   } else {
     statusNote = (
-      <HelpText>
+      <Text variant="help">
         This estuary was inventoried as part of a larger estuary system or
         sub-basin containing this particular estuary for the <SoKLink />
-      </HelpText>
+      </Text>
     )
   }
 
@@ -87,11 +83,11 @@ const SpeciesList = ({ species: data, status }) => {
     <>
       {entries.length > 0 ? (
         <>
-          <Header>
+          <Text sx={{ color: 'grey.900' }}>
             There are <b>{entries.length}</b> focal species that have been
             inventoried in this estuary. <b>{juvenileCount}</b> use the estuary
             mostly in their juvenile stage.
-          </Header>
+          </Text>
           <List>
             {entries.map(({ species, stage }) => (
               <li key={species}>
@@ -109,10 +105,10 @@ const SpeciesList = ({ species: data, status }) => {
           </List>
         </>
       ) : (
-        <HelpText>No focal species present</HelpText>
+        <Text variant="help">No focal species present</Text>
       )}
 
-      <Section>{statusNote}</Section>
+      <Box variant="layout.block">{statusNote}</Box>
     </>
   )
 }

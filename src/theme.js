@@ -83,6 +83,14 @@ module.exports = {
         color: 'highlight.500',
       },
     },
+    block: {
+      '&:not(:first-of-type)': {
+        pt: '0.5rem',
+        mt: '0.5rem',
+        borderTop: '1px solid',
+        borderTopColor: 'grey.200',
+      },
+    },
   },
   text: {
     default: {
@@ -101,6 +109,9 @@ module.exports = {
     },
   },
   buttons: {
+    default: {
+      cursor: 'pointer',
+    },
     primary: {
       cursor: 'pointer',
       color: '#FFF',
@@ -111,7 +122,7 @@ module.exports = {
     },
     secondary: {
       cursor: 'pointer',
-      color: 'grey.9',
+      color: 'grey.900',
       bg: 'grey.1',
     },
     accent: {
@@ -142,6 +153,7 @@ module.exports = {
       body: {
         margin: 0,
         height: '100%',
+        color: 'hsla(0,0%,0%,0.8)',
       },
       '#___gatsby': {
         height: '100%',

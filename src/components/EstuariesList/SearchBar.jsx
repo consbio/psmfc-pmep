@@ -1,62 +1,8 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-
-import { FaSearch, FaRegTimesCircle } from 'react-icons/fa'
-import { Flex } from 'components/Grid'
-
-import styled, { themeGet } from 'util/style'
-
-export const Wrapper = styled.div`
-  background-color: ${themeGet('colors.grey.200')};
-  padding: 0.5rem 1rem;
-  margin-top: 0.25rem;
-`
-
-export const InnerWrapper = styled(Flex).attrs({
-  alignItems: 'center',
-  flexWrap: 'nowrap',
-})`
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  background: #fff;
-  border: none;
-  color: ${themeGet('colors.grey.600')};
-`
-
-export const SearchIcon = styled(FaSearch).attrs({
-  size: '1rem',
-})`
-  width: 1rem;
-  height: 1rem;
-`
-
-export const ClearIcon = styled(FaRegTimesCircle).attrs({
-  size: '1rem',
-})`
-  width: 1rem;
-  height: 1rem;
-  cursor: pointer;
-
-  visibility: ${({ visibility }) => visibility};
-
-  &:hover {
-    color: ${themeGet('colors.grey.800')};
-  }
-`
-
-export const Input = styled.input`
-  flex: 1 1 auto;
-  font-size: 0.8rem;
-  outline: none;
-  border: none;
-  padding: 0.1em 0.5em;
-  color: ${themeGet('colors.grey.600')};
-
-  &:active,
-  &:focus {
-    color: ${themeGet('colors.grey.800')};
-  }
-`
+import { Flex, Box, Input } from 'theme-ui'
+import { TimesCircle } from '@emotion-icons/fa-regular'
+import { Search } from '@emotion-icons/fa-solid'
 
 const SearchBar = ({ value, placeholder, onChange }) => {
   const handleChange = ({ target: { value: newValue } }) => {
@@ -68,20 +14,63 @@ const SearchBar = ({ value, placeholder, onChange }) => {
   }
 
   return (
-    <Wrapper>
-      <InnerWrapper>
-        <SearchIcon />
+    <Box
+      sx={{
+        flex: '0 0 auto',
+        bg: 'grey.200',
+        py: '0.5rem',
+        px: '1rem',
+        mt: '0.25rem',
+      }}
+    >
+      <Flex
+        sx={{
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          py: '0.25rem',
+          px: '0.5rem',
+          borderRadius: '0.25rem',
+          bg: '#FFF',
+          border: 'none',
+          color: 'grey.600',
+        }}
+      >
+        <Search size="1rem" />
         <Input
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
+          sx={{
+            flex: '1 1 auto',
+
+            fontSize: '0.8rem',
+            outline: 'none',
+            border: 'none',
+            py: '0.1em',
+            px: '0.5em',
+            color: value ? 'grey.800' : 'grey.600',
+            '&:active,&:focus': {
+              color: 'grey.800',
+            },
+            '&::placeholder': {
+              color: 'grey.600',
+            },
+          }}
         />
-        <ClearIcon
-          visibility={value ? 'visible' : 'hidden'}
+        <Box
           onClick={handleClear}
-        />
-      </InnerWrapper>
-    </Wrapper>
+          sx={{
+            cursor: 'pointer',
+            visibility: value ? 'visible' : 'hidden',
+            '&:hover': {
+              color: 'grey.800',
+            },
+          }}
+        >
+          <TimesCircle size="1rem" />
+        </Box>
+      </Flex>
+    </Box>
   )
 }
 

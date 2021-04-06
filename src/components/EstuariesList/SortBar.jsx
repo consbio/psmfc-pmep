@@ -1,41 +1,32 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from 'rebass'
-
-import styled, { themeGet } from 'util/style'
-
-export const Wrapper = styled(Text).attrs({
-  textAlign: ['left', 'right'],
-})`
-  color: ${themeGet('colors.grey.600')};
-  font-size: 0.8rem;
-  /* padding: 0 1rem; */
-  line-height: 1.2;
-`
-
-export const Option = styled.span`
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 0.5em;
-
-  color: ${({ active }) =>
-    active ? themeGet('colors.highlight.500') : 'inherit'};
-
-  &:not(:first-child) {
-    padding-left: 0.5em;
-    border-left: 1px solid ${themeGet('colors.grey.400')};
-  }
-`
+import { Box, Text } from 'theme-ui'
 
 const SortBar = ({ index, options, onChange }) => (
-  <Wrapper>
+  <Box sx={{ color: 'grey.600', fontSize: '0.8rem', lineHeight: 1.2 }}>
     sort:
     {options.map(({ label }, idx) => (
-      <Option key={label} active={idx === index} onClick={() => onChange(idx)}>
+      <Text
+        as="span"
+        key={label}
+        onClick={() => onChange(idx)}
+        sx={{
+          cursor: 'pointer',
+          display: 'inline-block',
+          fontWeight: 'bold',
+          ml: '0.5em',
+          color: idx === index ? 'highlight.500' : 'inherit',
+          '&:not(:first-of-type)': {
+            pl: '0.5em',
+            borderLeft: '1px solid',
+            borderLeftColor: 'grey.400',
+          },
+        }}
+      >
         {label}
-      </Option>
+      </Text>
     ))}
-  </Wrapper>
+  </Box>
 )
 
 SortBar.propTypes = {
