@@ -116,9 +116,9 @@ module.exports = {
     primary: {
       cursor: 'pointer',
       color: '#FFF',
-      bg: 'primary.300',
+      bg: 'primary.500',
       '&:hover': {
-        bg: 'primary.500',
+        bg: 'primary.300',
       },
     },
     secondary: {

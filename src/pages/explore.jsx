@@ -7,7 +7,7 @@ import {
   Provider as CrossfilterProvider,
   FilteredMap,
 } from 'components/Crossfilter'
-import Layout from 'components/Layout'
+import { ClientOnly, Layout } from 'components/Layout'
 
 import Sidebar, { SidebarHeader } from 'components/Sidebar'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
@@ -73,12 +73,15 @@ const Explore = () => {
               </>
             )}
           </Sidebar>
-          <FilteredMap
-            bounds={bounds}
-            location={location}
-            selectedFeature={selectedId}
-            onSelectFeature={handleSelect}
-          />
+
+          <ClientOnly>
+            <FilteredMap
+              bounds={bounds}
+              location={location}
+              selectedFeature={selectedId}
+              onSelectFeature={handleSelect}
+            />
+          </ClientOnly>
         </Flex>
       </Layout>
     </CrossfilterProvider>

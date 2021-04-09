@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Text, Heading } from 'theme-ui'
 
 import { Link } from 'components/Link'
-import Layout from 'components/Layout'
+import { Layout } from 'components/Layout'
 
 const NotFoundPage = () => (
   <Layout title="404: Not found">

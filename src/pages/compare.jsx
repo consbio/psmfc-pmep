@@ -7,7 +7,7 @@ import {
   Provider as CrossfilterProvider,
   FilteredMap,
 } from 'components/Crossfilter'
-import Layout from 'components/Layout'
+import { ClientOnly, Layout } from 'components/Layout'
 import ExpandableParagraph from 'components/elements/ExpandableParagraph'
 import Sidebar, { SidebarHeader } from 'components/Sidebar'
 import EstuaryDetails from 'components/EstuaryDetails'
@@ -79,11 +79,13 @@ const Compare = () => {
             )}
           </Sidebar>
 
-          <FilteredMap
-            bounds={bounds}
-            selectedFeature={selectedId}
-            onSelectFeature={handleSelect}
-          />
+          <ClientOnly>
+            <FilteredMap
+              bounds={bounds}
+              selectedFeature={selectedId}
+              onSelectFeature={handleSelect}
+            />
+          </ClientOnly>
         </Flex>
       </Layout>
     </CrossfilterProvider>
